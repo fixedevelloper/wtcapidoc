@@ -2,8 +2,8 @@
 
 @section('content')
 
-    <h3 class="page-title">Post transfer bank</h3>
-    <h4 class="page-title">URL: <span class="text-success">api/wtc_transactions/bank</span></h4>
+    <h3 class="page-title">Post transfer mobil</h3>
+    <h4 class="page-title">URL: <span class="text-success">api/wtc_transactions/mobil</span></h4>
     <div class="row">
         <div class="col-md-7">
             <!-- TABLE HOVER -->
@@ -57,13 +57,6 @@
                             <td><code>Body</code></td>
                             <td><code>Required</code></td>
                             <td>Id of country where the money is transferred </td>
-                        </tr>
-                        <tr>
-                            <td>city_id</td>
-                            <td><code>integer</code></td>
-                            <td><code>Body</code></td>
-                            <td><code>Required</code></td>
-                            <td>Id of city where the money is transferred</td>
                         </tr>
                         <tr>
                             <td>operator</td>

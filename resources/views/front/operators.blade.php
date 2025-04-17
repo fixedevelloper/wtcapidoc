@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-md-7">
             <!-- TABLE HOVER -->
-            <div class="panel">
+            <div class="panel table-responsive">
                 <div class="panel-heading">
                     <h3 class="panel-title">Request</h3>
                 </div>
