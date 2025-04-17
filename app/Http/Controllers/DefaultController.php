@@ -55,7 +55,7 @@ class DefaultController extends Controller
     public function create_beneficiary(Request $request)
     {
 
-        return view('front.operators', [
+        return view('front.create_beneficiary', [
 
         ]);
     }
