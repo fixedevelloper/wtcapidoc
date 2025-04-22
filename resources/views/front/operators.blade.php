@@ -31,11 +31,11 @@
                             <td>Authentification key. Generate by the system. </td>
                         </tr>
                         <tr>
-                            <td>country_id</td>
-                            <td><code>string</code></td>
+                            <td>numCountry</td>
+                            <td><code>integer</code></td>
                             <td><code>Header</code></td>
                             <td><code>Required</code></td>
-                            <td>Id country </td>
+                            <td>Num of country </td>
                         </tr>
                         <tr>
                             <td>gateway</td>

@@ -31,18 +31,18 @@
                             <td>Authentification key. Generate by the system. </td>
                         </tr>
                         <tr>
-                            <td>sender_id</td>
+                            <td>numSender</td>
                             <td><code>integer</code></td>
                             <td><code>Body</code></td>
                             <td><code>Required</code></td>
-                            <td>ID sender </td>
+                            <td>Code of sender </td>
                         </tr>
                         <tr>
-                            <td>beneficiary_id</td>
+                            <td>numBeneficiary</td>
                             <td><code>integer</code></td>
                             <td><code>Body</code></td>
                             <td><code>Required</code></td>
-                            <td>ID beneficiary </td>
+                            <td>Code of beneficiary </td>
                         </tr>
                         <tr>
                             <td>amount</td>
@@ -52,11 +52,11 @@
                             <td>amount to transfer </td>
                         </tr>
                         <tr>
-                            <td>country_id</td>
+                            <td>numCountry</td>
                             <td><code>integer</code></td>
                             <td><code>Body</code></td>
                             <td><code>Required</code></td>
-                            <td>Id of country where the money is transferred </td>
+                            <td>Number code of country where the money is transferred </td>
                         </tr>
                         <tr>
                             <td>operator</td>
@@ -85,6 +85,13 @@
                             <td><code>Body</code></td>
                             <td><code>Required</code></td>
                             <td>origin of fonds</td>
+                        </tr>
+                        <tr>
+                            <td>phoneNumber</td>
+                            <td><code>string</code></td>
+                            <td><code>Body</code></td>
+                            <td><code>Required</code></td>
+                            <td>phoneNumber defined the area where the operation is to ocur</td>
                         </tr>
                         <tr>
                             <td>gateway</td>

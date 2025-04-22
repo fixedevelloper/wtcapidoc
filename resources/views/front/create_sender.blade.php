@@ -63,7 +63,7 @@
                             <td><code>string</code></td>
                             <td><code>Body</code></td>
                             <td><code>Required</code></td>
-                            <td>civility sender . Mr,Mme, Mlle </td>
+                            <td>civility sender . Maried,Single, Others </td>
                         </tr>
                         <tr>
                             <td>phone</td>
@@ -99,6 +99,13 @@
                             <td><code>Body</code></td>
                             <td><code>Required</code></td>
                             <td>Number of document </td>
+                        </tr>
+                        <tr>
+                            <td>date_birth</td>
+                            <td><code>string</code></td>
+                            <td><code>Body</code></td>
+                            <td><code>Required</code></td>
+                            <td>Date birth of sender </td>
                         </tr>
                         <tr>
                             <td>country</td>

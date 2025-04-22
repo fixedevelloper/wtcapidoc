@@ -101,11 +101,11 @@
                             <td>Code Iso2 of country beneficiary . EX: CM </td>
                         </tr>
                         <tr>
-                            <td>senderId</td>
+                            <td>numSender</td>
                             <td><code>string</code></td>
                             <td><code>Body</code></td>
                             <td><code>Required</code></td>
-                            <td>senderId ID of sender </td>
+                            <td>code sender of sender </td>
                         </tr>
 
                         </tbody>

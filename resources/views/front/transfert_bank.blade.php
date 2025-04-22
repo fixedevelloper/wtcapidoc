@@ -31,18 +31,18 @@
                             <td>Authentification key. Generate by the system. </td>
                         </tr>
                         <tr>
-                            <td>sender_id</td>
+                            <td>numSender</td>
                             <td><code>integer</code></td>
                             <td><code>Body</code></td>
                             <td><code>Required</code></td>
-                            <td>ID sender </td>
+                            <td>Code of sender </td>
                         </tr>
                         <tr>
-                            <td>beneficiary_id</td>
+                            <td>numBeneficiary</td>
                             <td><code>integer</code></td>
                             <td><code>Body</code></td>
                             <td><code>Required</code></td>
-                            <td>ID beneficiary </td>
+                            <td>Code of beneficiary </td>
                         </tr>
                         <tr>
                             <td>amount</td>
@@ -52,14 +52,14 @@
                             <td>amount to transfer </td>
                         </tr>
                         <tr>
-                            <td>country_id</td>
+                            <td>numCountry</td>
                             <td><code>integer</code></td>
                             <td><code>Body</code></td>
                             <td><code>Required</code></td>
-                            <td>Id of country where the money is transferred </td>
+                            <td>codeIso2 of country where the money is transferred </td>
                         </tr>
                         <tr>
-                            <td>city_id</td>
+                            <td>numCity</td>
                             <td><code>integer</code></td>
                             <td><code>Body</code></td>
                             <td><code>Required</code></td>
@@ -70,7 +70,7 @@
                             <td><code>string</code></td>
                             <td><code>Body</code></td>
                             <td><code>Required</code></td>
-                            <td>name of operator</td>
+                            <td>name of Bank to send money</td>
                         </tr>
                         <tr>
                             <td>raison_transaction</td>
@@ -99,6 +99,27 @@
                             <td><code>Body</code></td>
                             <td><code>Required</code></td>
                             <td>gateway defined the area where the operation is to ocur</td>
+                        </tr>
+                        <tr>
+                            <td>iban</td>
+                            <td><code>string</code></td>
+                            <td><code>Body</code></td>
+                            <td><code>Required</code></td>
+                            <td>iban defined the area where the operation is to ocur</td>
+                        </tr>
+                        <tr>
+                            <td>accountNumber</td>
+                            <td><code>string</code></td>
+                            <td><code>Body</code></td>
+                            <td><code>Required</code></td>
+                            <td>accountNumber defined the area where the operation is to ocur</td>
+                        </tr>
+                        <tr>
+                            <td>swift</td>
+                            <td><code>string</code></td>
+                            <td><code>Body</code></td>
+                            <td><code>Optional</code></td>
+                            <td>swift defined the area where the operation is to ocur</td>
                         </tr>
                         </tbody>
                     </table>
