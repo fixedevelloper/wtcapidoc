@@ -7,37 +7,33 @@ namespace App\Http\Controllers;
 
 
 use App\Services\RemoteApiService;
+use App\Services\RemoteSandboxApiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use function Illuminate\Foundation\Configuration\api;
 use function Illuminate\Routing\redirectToRoute;
 
-class SecureController extends Controller
+class SandboxController extends Controller
 {
 private $api;
     private $base_url;
 
     /**
-     * SecureController constructor.
-     * @param RemoteApiService $api
+     * sandboxController constructor.
+     * @param RemoteSandboxApiService $api
      */
-    public function __construct(RemoteApiService $api)
+    public function __construct(RemoteSandboxApiService $api)
     {
-        $this->base_url=config('app.API_DOMAINCONFIG').'api/';
+        $this->base_url=config('app.API_DOMAINCONFIG').'sandbox_api/';
         $this->api=$api;
     }
-    public function logout(Request $request)
+
+    public function sandboxLogin(Request $request)
     {
-        $this->api->clearToken();
-        if (session('mode')=='prod'){
-         return redirect()->route('secure.login');
-        }
-        return  redirect()->route('sandbox.login');
-    }
-    public function secureLogin(Request $request)
-    {
-        session(['mode' => 'prod']);
+        session(['mode' => 'sandbox']);
+
         if ($request->method()=='POST'){
+            logger('iccccc');
             $email=$request->get('email');
             $password=$request->get('password');
             $res= $this->api->login($email,$password);
@@ -45,16 +41,16 @@ private $api;
            if (!is_null($res)){
                notify()->success('Data has been saved successfully!');
 
-               return redirect()->route('secure.dashboard');
+               return redirect()->route('sandbox.dashboard');
            }
             notify()->error('An error has occurred please try again later.');
         }
 
-        return view('secure.auth.login', [
+        return view('sandbox.auth.login', [
 
         ]);
     }
-    public function secureRegister(Request $request)
+    public function sandboxRegister(Request $request)
     {
         if ($request->method()=='POST'){
             $email=$request->get('email');
@@ -75,20 +71,20 @@ private $api;
                 $res= $this->api->login($email,$password);
                 if (!is_null($res)){
                     notify()->success('Data has been saved successfully!');
-                    return redirect()->route('secure.dashboard');
+                    return redirect()->route('sandbox.dashboard');
                 }
             }
             notify()->error('An error has occurred please try again later.');
         }
 
-        return view('secure.auth.register', [
+        return view('sandbox.auth.register', [
 
         ]);
     }
     public function dashboard(Request $request)
     {
-
-        return view('secure.dashbord', [
+        $response = $this->api->get('transactions');
+        return view('sandbox.dashbord', [
 
         ]);
     }
@@ -101,14 +97,14 @@ private $api;
             $transactions=$data['data'];
             logger($transactions);
         }
-        return view('secure.transferList', [
+        return view('sandbox.transferList', [
             'transactions'=>$transactions
         ]);
     }
     public function make_mobil(Request $request)
     {
 
-        return view('secure.make_mobil', [
+        return view('sandbox.make_mobil', [
 
         ]);
     }
@@ -186,11 +182,11 @@ private $api;
             logger($resp);
             if ($resp->successful()) {
                 notify()->success('Data has been saved successfully!');
-                return redirect()->route('secure.transferList');
+                return redirect()->route('sandbox.transferList');
             }
             notify()->error('An error has occurred please try again later.');
         }
-        return view('secure.make_bank', [
+        return view('sandbox.make_bank', [
             'countries'=>$countries,
             'relactions'=>$relactions,
             'wallets'=>$wallet,
@@ -208,7 +204,7 @@ private $api;
             $data = $response->json();
             $senders=$data['data'];
         }
-        return view('secure.senders', [
+        return view('sandbox.senders', [
             'senders'=>$senders
         ]);
     }
@@ -239,11 +235,11 @@ private $api;
             $resp =  $this->api->post('senders',$body);
             if ($resp->successful()) {
                 notify()->success('Data has been saved successfully!');
-                return redirect()->route('secure.senders');
+                return redirect()->route('sandbox.senders');
             }
             notify()->error('An error has occurred please try again later.');
         }
-        return view('secure.addSender', [
+        return view('sandbox.addSender', [
             'countries'=>$countries
         ]);
     }
@@ -260,7 +256,7 @@ private $api;
            // notify()->success('Data has been saved successfully!');
         }
 
-        return view('secure.beneficiaries', [
+        return view('sandbox.beneficiaries', [
             'numSender'=>$request->get('numSender'),
             'beneficiaries'=>$beneficiaries
         ]);
@@ -295,11 +291,11 @@ private $api;
             logger($resp);
             if ($resp->successful()) {
                 notify()->success('Data has been saved successfully!');
-                return redirect()->route('secure.beneficiaries');
+                return redirect()->route('sandbox.beneficiaries');
             }
             notify()->error('An error has occurred please try again later.');
         }
-        return view('secure.addBeneficiary', [
+        return view('sandbox.addBeneficiary', [
             'countries'=>$countries,
             'senders'=>$senders
         ]);

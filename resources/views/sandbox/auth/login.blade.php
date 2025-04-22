@@ -16,7 +16,7 @@
     <link id="skin-default" rel="stylesheet" href="{{asset('assets/secure/css/theme.css')}}?ver=3.2.3">
     @notify_css
 </head>
-<body class="nk-body bg-white npc-general pg-auth">
+<body class="nk-body bg-white npc-general pg-auth dark-mode">
 <div class="nk-app-root">
     <!-- main @s -->
     <div class="nk-main ">
@@ -29,7 +29,7 @@
                         <div class="nk-content-body">
                             <div class="nk-block nk-block-middle nk-auth-body  wide-xs">
                                 <div class="brand-logo pb-4 text-center">
-                                    <a href="{{route('secure.login')}}" class="logo-link">
+                                    <a href="{{route('sandbox.login')}}" class="logo-link">
                                         <img class="logo-light logo-img logo-img-lg" src="{{asset('assets/img/Logo.png')}}" srcset="{{asset('assets/img/Logo.png')}} 2x" alt="logo">
                                         <img class="logo-dark logo-img logo-img-lg" src="{{asset('assets/img/Logo.png')}}" srcset="{{asset('assets/img/Logo.png')}} 2x" alt="logo-dark">
                                     </a>
@@ -44,7 +44,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <form method="POST">
+                                        <form method="POST" action="{{route('sandbox.login')}}">
                                             @csrf
                                             <div class="form-group">
                                                 <div class="form-label-group">
@@ -71,6 +71,15 @@
                                                 <button class="btn btn-lg btn-primary btn-block">Sign in</button>
                                             </div>
                                         </form>
+                                        <div class="form-note-s2 text-center pt-4"> New on our platform? <a href="{{route('sandbox.register')}}">Create an account</a>
+                                        </div>
+                                        <div class="text-center pt-4 pb-3">
+                                            <h6 class="overline-title overline-title-sap"><span>OR</span></h6>
+                                        </div>
+                                        <ul class="nav justify-center gx-4">
+                                            <li class="nav-item"><a class="link link-primary fw-normal py-2 px-3" href="#">Facebook</a></li>
+                                            <li class="nav-item"><a class="link link-primary fw-normal py-2 px-3" href="#">Google</a></li>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>

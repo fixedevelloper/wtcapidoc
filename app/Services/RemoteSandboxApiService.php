@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
 
-class RemoteApiService
+class RemoteSandboxApiService
 {
     private $base_url;
 
@@ -17,7 +17,7 @@ class RemoteApiService
      */
     public function __construct()
     {
-        $this->base_url=config('app.API_DOMAINCONFIG').'api';
+        $this->base_url=config('app.API_DOMAINCONFIG').'api_sandbox';
     }
 
 

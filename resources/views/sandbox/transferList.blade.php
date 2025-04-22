@@ -1,4 +1,4 @@
-@extends('secure.layout')
+@extends('sandbox.layout')
 @section('content')
 
                 <div class="nk-block-head nk-block-head-sm">
@@ -6,7 +6,7 @@
                         <div class="nk-block-head-content">
                             <h3 class="nk-block-title page-title">Transction History</h3>
                             <div class="nk-block-des text-soft">
-                                <p>You have total 937 orders.</p>
+                                <p>You have total {{count($transactions)}} items.</p>
                             </div>
                         </div><!-- .nk-block-head-content -->
                         <div class="nk-block-head-content">
@@ -16,8 +16,8 @@
                                         <a href="#" class="dropdown-toggle btn btn btn-primary" data-bs-toggle="dropdown"><em class="icon ni ni-plus"></em>Add transction</a>
                                         <div class="dropdown-menu dropdown-menu-end">
                                             <ul class="link-list-opt">
-                                                <li><a href="{{route('secure.make_mobil')}}"><span>Mobil</span></a></li>
-                                                <li><a href="{{route('secure.make_bank')}}"><span>Bank</span></a></li>
+                                                <li><a href="{{route('sandbox.make_mobil')}}"><span>Mobil</span></a></li>
+                                                <li><a href="{{route('sandbox.make_bank')}}"><span>Bank</span></a></li>
                                             </ul>
                                         </div>
                                     </div>

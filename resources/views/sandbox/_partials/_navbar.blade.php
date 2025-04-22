@@ -5,7 +5,7 @@
                 <a href="#" class="nk-nav-toggle nk-quick-nav-icon" data-target="sidebarMenu"><em class="icon ni ni-menu"></em></a>
             </div>
             <div class="nk-header-brand d-xl-none">
-                <a href="{{route('secure.dashboard')}}" class="logo-link">
+                <a href="{{route('sandbox.dashboard')}}" class="logo-link">
                     <img class="logo-light logo-img " src="{{asset('assets/img/Logo.png')}}" srcset="{{asset('assets/img/Logo.png')}} 2x" alt="logo">
                     <img class="logo-dark logo-img " src="{{asset('assets/img/Logo.png')}}" srcset="{{asset('assets/img/Logo.png')}} 2x" alt="logo-dark">
 
@@ -18,7 +18,7 @@
                             <em class="icon ni ni-card-view"></em>
                         </div>
                         <div class="nk-news-text">
-                            <p>MODE SANDBOX</p>
+                            <p>Mode {{session('mode')}}</p>
                             <em class="icon ni ni-external"></em>
                         </div>
                     </a>

@@ -10,13 +10,13 @@
     <!-- Fav Icon  -->
     <link rel="shortcut icon" href="{{asset('assets/img/icon.png')}}">
     <!-- Page Title  -->
-    <title>@yield('title')| WTC</title>
+    <title>Register| WTC</title>
     <!-- StyleSheets  -->
     <link rel="stylesheet" href="{{asset('assets/secure/css/dashlite.min.css')}}?ver=3.2.3">
     <link id="skin-default" rel="stylesheet" href="{{asset('assets/secure/css/theme.css')}}?ver=3.2.3">
     @notify_css
 </head>
-<body class="nk-body bg-white npc-general pg-auth">
+<body class="nk-body bg-white npc-general pg-auth dark-mode">
 <div class="nk-app-root">
     <!-- main @s -->
     <div class="nk-main ">
@@ -38,27 +38,37 @@
                                     <div class="card-inner card-inner-lg">
                                         <div class="nk-block-head">
                                             <div class="nk-block-head-content">
-                                                <h4 class="nk-block-title">Sign-In</h4>
+                                                <h4 class="nk-block-title">Register</h4>
                                                 <div class="nk-block-des">
-                                                    <p>Access the Wtc panel using your email and passcode.</p>
+                                                    <p>Create New WTC Account</p>
                                                 </div>
                                             </div>
                                         </div>
                                         <form method="POST">
                                             @csrf
                                             <div class="form-group">
-                                                <div class="form-label-group">
-                                                    <label class="form-label" for="default-01">Email or Username</label>
-                                                </div>
+                                                <label class="form-label" for="name">Name</label>
                                                 <div class="form-control-wrap">
-                                                    <input type="text" name="email" class="form-control form-control-lg" id="default-01" placeholder="Enter your email address or username">
+                                                    <input name="name" type="text" class="form-control form-control-lg" id="name" placeholder="Enter your name">
                                                 </div>
                                             </div>
-                                            <div class="form-group">
-                                                <div class="form-label-group">
-                                                    <label class="form-label" for="password">Passcode</label>
-                                                    <a class="link link-primary link-sm" href="#">Forgot Code?</a>
+                                            <div class="row">
+                                                <div class="form-group col-md-6">
+                                                    <label class="form-label" for="email">Email</label>
+                                                    <div class="form-control-wrap">
+                                                        <input name="email" type="text" class="form-control form-control-lg" id="email" placeholder="Enter your email address or username">
+                                                    </div>
                                                 </div>
+                                                <div class="form-group col-md-6">
+                                                    <label class="form-label" for="email">Phone</label>
+                                                    <div class="form-control-wrap">
+                                                        <input name="phone" type="text" class="form-control form-control-lg" id="email" placeholder="Enter your phone">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="form-label" for="password">Passcode</label>
                                                 <div class="form-control-wrap">
                                                     <a href="#" class="form-icon form-icon-right passcode-switch lg" data-target="password">
                                                         <em class="passcode-icon icon-show icon ni ni-eye"></em>
@@ -68,9 +78,24 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <button class="btn btn-lg btn-primary btn-block">Sign in</button>
+                                                <div class="custom-control custom-control-xs custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="checkbox">
+                                                    <label class="custom-control-label" for="checkbox">I agree to WTC <a href="#">Privacy Policy</a> &amp; <a href="#"> Terms.</a></label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <button class="btn btn-lg btn-primary btn-block">Register</button>
                                             </div>
                                         </form>
+                                        <div class="form-note-s2 text-center pt-4"> Already have an account? <a href="{{route('sandbox.login')}}"><strong>Sign in instead</strong></a>
+                                        </div>
+                                        <div class="text-center pt-4 pb-3">
+                                            <h6 class="overline-title overline-title-sap"><span>OR</span></h6>
+                                        </div>
+                                        <ul class="nav justify-center gx-8">
+                                            <li class="nav-item"><a class="link link-primary fw-normal py-2 px-3" href="#">Facebook</a></li>
+                                            <li class="nav-item"><a class="link link-primary fw-normal py-2 px-3" href="#">Google</a></li>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
