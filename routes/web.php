@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::domain('documentation.agensic.com')->group(function () {
+Route::domain('doc.agensic.com')->group(function () {
 
     Route::get('/', [DefaultController::class, 'home'])->name('home');
     Route::get('/countries', [DefaultController::class, 'country'])->name('countries');
