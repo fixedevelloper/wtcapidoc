@@ -84,9 +84,9 @@
     var configs={
         routes:{
             index: "{{\Illuminate\Support\Facades\URL::to('/')}}",
-            get_ajax_beneficiaries: "{{\Illuminate\Support\Facades\URL::route('secure.get_ajax_beneficiaries')}}",
-            get_ajax_cities: "{{\Illuminate\Support\Facades\URL::route('secure.get_ajax_cities')}}",
-            get_ajax_operators: "{{\Illuminate\Support\Facades\URL::route('secure.get_ajax_operators')}}",
+            get_ajax_beneficiaries: "{{\Illuminate\Support\Facades\URL::route('sandbox.get_ajax_beneficiaries')}}",
+            get_ajax_cities: "{{\Illuminate\Support\Facades\URL::route('sandbox.get_ajax_cities')}}",
+            get_ajax_operators: "{{\Illuminate\Support\Facades\URL::route('sandbox.get_ajax_operators')}}",
         }
     }
 </script>
