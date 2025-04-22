@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::domain(config('DOMAIN_DOCUMENTATION'))->group(function () {
+Route::domain('documentation.agensic.com')->group(function () {
 
     Route::get('/', [DefaultController::class, 'home'])->name('home');
     Route::get('/countries', [DefaultController::class, 'country'])->name('countries');
@@ -19,7 +19,7 @@ Route::domain(config('DOMAIN_DOCUMENTATION'))->group(function () {
     Route::get('/beneficiaries', [DefaultController::class, 'create_beneficiary'])->name('create_beneficiary');
 });
 
-Route::domain(config('DOMAIN_SANBOX'))->group(function () {
+Route::domain('secure.agensic.com')->group(function () {
     Route::match(["POST", "GET"], '/', [SecureController::class, 'secureLogin'])->name('secure.login');
     Route::match(["POST", "GET"], '/register', [SecureController::class, 'secureRegister'])->name('secure.register');
     Route::group(['middleware' => ['remote.api']], function () {
@@ -36,7 +36,7 @@ Route::domain(config('DOMAIN_SANBOX'))->group(function () {
         Route::match(["POST", "GET"], '/get_ajax_operators', [SecureController::class, 'getOperatorsAjax'])->name('secure.get_ajax_operators');
     });
 });
-Route::domain(config('DOMAIN_SECURE'))->group(function () {
+Route::domain('sandbox.agensic.com')->group(function () {
     Route::match(["POST", "GET"], '/', [SecureController::class, 'secureLogin'])->name('secure.login');
     Route::match(["POST", "GET"], '/register', [SecureController::class, 'secureRegister'])->name('secure.register');
     Route::group(['middleware' => ['remote.api']], function () {
