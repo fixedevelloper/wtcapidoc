@@ -59,7 +59,7 @@ class RemoteSandboxApiService
             'Accept' => 'application/json',];
 
         $fusion = array_merge($headers, $params);
-        return Http::withHeaders($fusion)->timeout(20)->get("$this->base_url/$endpoint");
+        return Http::withHeaders($fusion)->get("$this->base_url/$endpoint");
     }
 
     public function post($endpoint, array $data)

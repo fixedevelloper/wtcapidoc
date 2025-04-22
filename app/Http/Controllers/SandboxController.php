@@ -88,6 +88,19 @@ private $api;
 
         ]);
     }
+    public function profil(Request $request)
+    {
+        $response = $this->api->get('wtc_profile_partners');
+        $profile=[];
+        logger($response);
+        if ($response->successful()) {
+            $data = $response->json();
+            $profile = $data['data'];
+        }
+        return view('sandbox.profil', [
+            'profile'=>$profile
+        ]);
+    }
     public function transferList(Request $request)
     {
         $transactions=[];
@@ -184,7 +197,7 @@ private $api;
                 notify()->success('Data has been saved successfully!');
                 return redirect()->route('sandbox.transferList');
             }
-            notify()->error('An error has occurred please try again later.');
+            notify()->error($resp['error']['detail']);
         }
         return view('sandbox.make_bank', [
             'countries'=>$countries,

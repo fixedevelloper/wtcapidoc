@@ -184,12 +184,12 @@
                                             <div class="nk-tb-col nk-tb-col-tools">
                                                 <ul class="nk-tb-actions gx-1">
                                                     <li class="nk-tb-action-hidden">
-                                                        <a href="{{route('secure.beneficiaries',['numSender'=>$item['num']])}}" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Beneficiaries" data-bs-original-title="Beneficiaries">
+                                                        <a href="{{route('sandbox.beneficiaries',['numSender'=>$item['num']])}}" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Beneficiaries" data-bs-original-title="Beneficiaries">
                                                             <em class="icon ni ni-user-group-fill"></em>
                                                         </a>
                                                     </li>
                                                     <li class="nk-tb-action-hidden">
-                                                        <a href="{{route('secure.add.beneficiaries',['numSender'=>$item['num']])}}" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Add Beneficiary" data-bs-original-title="Add Beneficiary">
+                                                        <a href="{{route('sandbox.add.beneficiaries',['numSender'=>$item['num']])}}" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Add Beneficiary" data-bs-original-title="Add Beneficiary">
                                                             <em class="icon ni ni-plus-medi-fill"></em>
                                                         </a>
                                                     </li>
@@ -204,7 +204,7 @@
                                                             <div class="dropdown-menu dropdown-menu-end">
                                                                 <ul class="link-list-opt no-bdr">
                                                                     <li><a href="#"><em class="icon ni ni-eye"></em><span>View Details</span></a></li>
-                                                                    <li><a href="{{route('secure.beneficiaries',['numSender'=>$item['num']])}}"><em class="icon ni ni-user-group-fill"></em><span>Beneficiaries</span></a></li>
+                                                                    <li><a href="{{route('sandbox.beneficiaries',['numSender'=>$item['num']])}}"><em class="icon ni ni-user-group-fill"></em><span>Beneficiaries</span></a></li>
                                                                     <li><a href="#"><em class="icon ni ni-repeat"></em><span>Transaction</span></a></li>
                                                                 </ul>
                                                             </div>
@@ -218,7 +218,7 @@
 
                             </div><!-- .card-inner -->
                             <div class="card-inner">
-                                <ul class="pagination justify-content-center justify-content-md-start">
+                                {{--<ul class="pagination justify-content-center justify-content-md-start">
                                     <li class="page-item"><a class="page-link" href="#">Prev</a></li>
                                     <li class="page-item"><a class="page-link" href="#">1</a></li>
                                     <li class="page-item"><a class="page-link" href="#">2</a></li>
@@ -226,7 +226,7 @@
                                     <li class="page-item"><a class="page-link" href="#">6</a></li>
                                     <li class="page-item"><a class="page-link" href="#">7</a></li>
                                     <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                                </ul><!-- .pagination -->
+                                </ul>--}}
                             </div><!-- .card-inner -->
                         </div><!-- .card-inner-group -->
                     </div><!-- .card -->

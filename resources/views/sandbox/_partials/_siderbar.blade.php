@@ -39,7 +39,7 @@
                     </li>--}}
                     <li class="nk-menu-heading">
                         <h6 class="overline-title text-primary-alt">Transactions</h6>
-                    </li><!-- .nk-menu-item -->
+                    </li>
                     <li class="nk-menu-item">
                         <a href="{{route('sandbox.make_bank')}}" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-building"></em></span>
@@ -57,7 +57,16 @@
                             <span class="nk-menu-icon"><em class="icon ni ni-list-fill"></em></span>
                             <span class="nk-menu-text">List</span>
                         </a>
-                    </li><!-- .nk-menu-item -->
+                    </li>
+                    <li class="nk-menu-heading">
+                        <h6 class="overline-title text-primary-alt">Settings</h6>
+                    </li>
+                    <li class="nk-menu-item">
+                        <a href="{{route('sandbox.profil')}}" class="nk-menu-link">
+                            <span class="nk-menu-icon"><em class="icon ni ni-account-setting"></em></span>
+                            <span class="nk-menu-text">Account</span>
+                        </a>
+                    </li>
                 </ul><!-- .nk-menu -->
             </div><!-- .nk-sidebar-menu -->
         </div><!-- .nk-sidebar-content -->
