@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Route;
 
 
 
-/*Route::domain('doc.agensic.com')->group(function () {
+Route::domain('doc.agensic.com')->group(function () {
 
     Route::get('/', [DefaultController::class, 'home'])->name('home');
     Route::get('/countries', [DefaultController::class, 'country'])->name('countries');
@@ -18,10 +18,10 @@ use Illuminate\Support\Facades\Route;
     Route::get('/transfert/mobil', [DefaultController::class, 'transfert_mobil'])->name('transfert_mobil');
     Route::get('/senders', [DefaultController::class, 'create_sender'])->name('create_sender');
     Route::get('/beneficiaries', [DefaultController::class, 'create_beneficiary'])->name('create_beneficiary');
-});*/
+});
 
 
-//Route::domain('sandbox.agensic.com')->group(function () {
+Route::domain('sandbox.agensic.com')->group(function () {
     Route::match(["POST", "GET"], '/logout', [SecureController::class, 'logout'])->name('sandbox.logout');
 Route::match(["POST", "GET"], '/', [SandboxController::class, 'sandboxLogin'])->name('sandbox.login');
     Route::match(["POST", "GET"], '/register', [SandboxController::class, 'sandboxRegister'])->name('sandbox.register');
@@ -39,8 +39,8 @@ Route::match(["POST", "GET"], '/', [SandboxController::class, 'sandboxLogin'])->
         Route::match(["POST", "GET"], '/get_ajax_cities', [SandboxController::class, 'getCitiesAjax'])->name('sandbox.get_ajax_cities');
         Route::match(["POST", "GET"], '/get_ajax_operators', [SandboxController::class, 'getOperatorsAjax'])->name('sandbox.get_ajax_operators');
     });
-//});
-/*Route::domain('secure.agensic.com')->group(function () {
+});
+Route::domain('secure.agensic.com')->group(function () {
     Route::match(["POST", "GET"], '/', [SecureController::class, 'secureLogin'])->name('secure.login');
     Route::match(["POST", "GET"], '/register', [SecureController::class, 'secureRegister'])->name('secure.register');
     Route::group(['middleware' => ['remote.api']], function () {
@@ -56,4 +56,4 @@ Route::match(["POST", "GET"], '/', [SandboxController::class, 'sandboxLogin'])->
         Route::match(["POST", "GET"], '/get_ajax_cities', [SecureController::class, 'getCitiesAjax'])->name('secure.get_ajax_cities');
         Route::match(["POST", "GET"], '/get_ajax_operators', [SecureController::class, 'getOperatorsAjax'])->name('secure.get_ajax_operators');
     });
-});*/
+});
