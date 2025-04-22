@@ -123,4 +123,7 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
     'API_DOMAINCONFIG' => env('API_DOMAIN'),
+    'DOMAIN_DOCUMENTATION' => env('DOMAIN_DOCUMENTATION'),
+    'DOMAIN_SANBOX' => env('DOMAIN_SANBOX'),
+    'DOMAIN_SECURE' => env('DOMAIN_SECURE'),
 ];
