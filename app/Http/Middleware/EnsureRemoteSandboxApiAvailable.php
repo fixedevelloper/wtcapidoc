@@ -2,9 +2,11 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use App\Services\RemoteApiService;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class EnsureRemoteSandboxApiAvailable
@@ -16,10 +18,7 @@ class EnsureRemoteSandboxApiAvailable
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $api = app(RemoteApiService::class);
-        $token = $api->getToken();
-
-        if ($token) {
+        if (Auth::user() && (Auth::user()->user_type == User::CUSTOMER_TYPE)) {
             return $next($request);
         }
         notify()->error('Access forbidden','WTC session abort');

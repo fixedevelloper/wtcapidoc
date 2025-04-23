@@ -148,47 +148,38 @@
                                         <span>EW</span>
                                     </div>
                                     <div class="user-info">
-                                        <span class="tb-lead">{{$item['first_name']}} {{$item['last_name']}} <span class="dot dot-warning d-md-none ms-1"></span></span>
-                                        <span>{{$item['email']}}</span>
+                                        <span class="tb-lead">{{$item->first_name}} {{$item->last_name}} <span class="dot dot-warning d-md-none ms-1"></span></span>
+                                        <span>{{$item->email}}</span>
                                     </div>
                                 </div>
                             </div>
                             <div class="nk-tb-col tb-col-mb">
-                                <span class="tb-amount">{{$item['country']}} </span>
+                                <span class="tb-amount">{{$item->country}} </span>
                             </div>
                             <div class="nk-tb-col tb-col-md">
-                                <span>{{$item['phone']}}</span>
+                                <span>{{$item->phone}}</span>
                             </div>
                             <div class="nk-tb-col tb-col-sm">
-                                <span>{{$item['gender']}}</span>
+                                <span>{{$item->gender}}</span>
                             </div>
                             <div class="nk-tb-col tb-col-sm">
-                                <span>{{$item['civility']}}</span>
+                                <span>{{$item->civility}}</span>
                             </div>
                             <div class="nk-tb-col tb-col-md">
-                                <span>{{$item['occupation']}}</span>
+                                <span>{{$item->occupation}}</span>
                             </div>
                             <div class="nk-tb-col tb-col-md">
-                                <span>{{$item['identification_document']}}</span>
+                                <span>{{$item->identification_document}}</span>
                             </div>
                             <div class="nk-tb-col tb-col-md">
-                                <span>{{$item['num_document']}}</span>
+                                <span>{{$item->num_document}}</span>
                             </div>
                             <div class="nk-tb-col tb-col-md">
-                                <span>{{$item['expired_document']}}</span>
+                                <span>{{$item->expired_document}}</span>
                             </div>
                             <div class="nk-tb-col nk-tb-col-tools">
                                 <ul class="nk-tb-actions gx-1">
-                                    <li class="nk-tb-action-hidden">
-                                        <a href="{{route('sandbox.beneficiaries',['numSender'=>$item['num']])}}" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Beneficiaries" data-bs-original-title="Beneficiaries">
-                                            <em class="icon ni ni-user-group-fill"></em>
-                                        </a>
-                                    </li>
-                                    <li class="nk-tb-action-hidden">
-                                        <a href="{{route('sandbox.add.beneficiaries',['numSender'=>$item['num']])}}" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Add Beneficiary" data-bs-original-title="Add Beneficiary">
-                                            <em class="icon ni ni-plus-medi-fill"></em>
-                                        </a>
-                                    </li>
+
                                     <li class="nk-tb-action-hidden">
                                         <a href="#" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Details" data-bs-original-title="Details">
                                             <em class="icon ni ni-user-cross-fill"></em>
@@ -200,8 +191,7 @@
                                             <div class="dropdown-menu dropdown-menu-end">
                                                 <ul class="link-list-opt no-bdr">
                                                     <li><a href="#"><em class="icon ni ni-eye"></em><span>View Details</span></a></li>
-                                                    <li><a href="{{route('sandbox.beneficiaries',['numSender'=>$item['num']])}}"><em class="icon ni ni-user-group-fill"></em><span>Beneficiaries</span></a></li>
-                                                    <li><a href="#"><em class="icon ni ni-repeat"></em><span>Transaction</span></a></li>
+                                                  <li><a href="#"><em class="icon ni ni-repeat"></em><span>Transaction</span></a></li>
                                                 </ul>
                                             </div>
                                         </div>

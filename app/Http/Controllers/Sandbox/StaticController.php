@@ -1,89 +1,23 @@
 <?php
 
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Sandbox;
 
 
-
-
-use App\Services\RemoteApiService;
-use App\Services\RemoteSandboxApiService;
+use App\Http\Controllers\Controller;
+use App\Models\Beneficiary;
+use App\Models\Country;
+use App\Models\Customer;
+use App\Models\Sender;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
-use function Illuminate\Foundation\Configuration\api;
-use function Illuminate\Routing\redirectToRoute;
 
-class SandboxController extends Controller
+class StaticController extends Controller
 {
-private $api;
-    private $base_url;
-
-    /**
-     * sandboxController constructor.
-     * @param RemoteSandboxApiService $api
-     */
-    public function __construct(RemoteSandboxApiService $api)
-    {
-        $this->base_url=config('app.API_DOMAINCONFIG').'sandbox_api/';
-        $this->api=$api;
-    }
-
-    public function sandboxLogin(Request $request)
-    {
-        session(['mode' => 'sandbox']);
-
-        if ($request->method()=='POST'){
-            logger('iccccc');
-            $email=$request->get('email');
-            $password=$request->get('password');
-            $res= $this->api->login($email,$password);
-
-           if (!is_null($res)){
-               notify()->success('Data has been saved successfully!');
-
-               return redirect()->route('sandbox.dashboard');
-           }
-            notify()->error('An error has occurred please try again later.');
-        }
-
-        return view('sandbox.auth.login', [
-
-        ]);
-    }
-    public function sandboxRegister(Request $request)
-    {
-        if ($request->method()=='POST'){
-            $email=$request->get('email');
-            $password=$request->get('password');
-            $name=$request->get('name');
-            $phone=$request->get('phone');
-
-            $response= $this->api->post('wtc_partners',[
-                'phone'=>$phone,
-                'email'=>$email,
-                'name'=>$name,
-                'password'=>$password
-            ]);
-
-            if ($response->successful()) {
-                notify()->success('Data has been saved successfully!');
-
-                $res= $this->api->login($email,$password);
-                if (!is_null($res)){
-                    notify()->success('Data has been saved successfully!');
-                    return redirect()->route('sandbox.dashboard');
-                }
-            }
-            notify()->error('An error has occurred please try again later.');
-        }
-
-        return view('sandbox.auth.register', [
-
-        ]);
-    }
     public function dashboard(Request $request)
     {
-        $response = $this->api->get('transactions');
         return view('sandbox.dashbord', [
 
         ]);
@@ -103,15 +37,21 @@ private $api;
     }
     public function transferList(Request $request)
     {
-        $transactions=[];
-        $response = $this->api->get('transactions');
-        if ($response->successful()) {
-            $data = $response->json();
-            $transactions=$data['data'];
-            logger($transactions);
+        $auth=Auth::user();
+        $customer=Customer::query()->firstWhere(['user_id'=>$auth->id]);
+        $query_param = [];
+        $search = $request->search;
+        if ($request->has('search')) {
+            $items = Transaction::query()->where('name', 'like', "%$search%")
+                ->orWhere('iso', 'like', "%$search%");
+            $query_param = ['search' => $request['search']];
+        } else {
+            $items = new Transaction();
         }
+        $items = $items->where(['customer_id'=>$customer->id])->orderByDesc('created_at')->paginate(20)->appends($query_param);
+
         return view('sandbox.transferList', [
-            'transactions'=>$transactions
+            'transactions'=>$items
         ]);
     }
     public function make_mobil(Request $request)
@@ -131,26 +71,12 @@ private $api;
         $raisonTosend=[];
 
         $base=config('app.API_DOMAINCONFIG');
-        $response = $this->api->get('countries');
-        $responseSender = $this->api->get('senders');
+
         $responseOriginFond = Http::get($base.'wace_origin_fond.json');
         $responseRelation= Http::get($base.'wace_relaction.json');
         $responseRaisonSend = Http::get($base.'wace_raison_to_send.json');
-        $responseWallets = $this->api->get('gateways');
 
 
-        if ($response->successful()) {
-            $data = $response->json();
-            $countries=$data['data'];
-        }
-
-        if ($responseSender->successful()) {
-            $data = $responseSender->json();
-            $senders=$data['data'];
-        }
-        if ($responseWallets->successful()) {
-            $wallet=$responseWallets->json()['data'];
-        }
         if ($responseOriginFond->successful()) {
             $originFonds=$responseOriginFond->json()['data'];
         }
@@ -178,7 +104,7 @@ private $api;
                 'password.max' => 'Password must contain 14 characters',
             ]);
             $body=[
-              'countryCode'=>$request->get('countryCode'),
+                'countryCode'=>$request->get('countryCode'),
                 'gateway'=>$request->get('gateway'),
                 'operator'=>$request->get('operator'),
                 'numSender'=>$request->get('numSender'),
@@ -191,13 +117,8 @@ private $api;
                 'relation'=>$request->get('relation'),
                 'accountNumber'=>$request->get('accountNumber'),
             ];
-            $resp = $this->api->post('transactions/bank',$body);
-            logger($resp);
-            if ($resp->successful()) {
-                notify()->success('Data has been saved successfully!');
-                return redirect()->route('sandbox.transferList');
-            }
-            notify()->error($resp['error']['detail']);
+
+
         }
         return view('sandbox.make_bank', [
             'countries'=>$countries,
@@ -211,27 +132,29 @@ private $api;
 
     public function senders(Request $request)
     {
-        $senders=[];
-        $response = $this->api->get('senders');
-        if ($response->successful()) {
-            $data = $response->json();
-            $senders=$data['data'];
+        $auth=Auth::user();
+        $customer=Customer::query()->firstWhere(['user_id'=>$auth->id]);
+        $query_param = [];
+        $search = $request->search;
+        if ($request->has('search')) {
+            $items = Sender::query()->where('name', 'like', "%$search%")
+                ->orWhere('iso', 'like', "%$search%");
+            $query_param = ['search' => $request['search']];
+        } else {
+            $items = new Sender();
         }
+        $items = $items->where(['customer_id'=>$customer->id])->orderByDesc('created_at')->paginate(20)->appends($query_param);
+
         return view('sandbox.senders', [
-            'senders'=>$senders
+            'senders'=>$items
         ]);
     }
     public function addSender(Request $request)
     {
-        $countries=[];
-        $response =  $this->api->get('countries');
-        if ($response->successful()) {
-            $data = $response->json();
-            $countries=$data['data'];
-        }
+        $countries=Country::all();
         if ($request->method()=='POST'){
             $body=[
-              'first_name'=>$request->first_name,
+                'first_name'=>$request->first_name,
                 'last_name'=>$request->last_name,
                 'email'=>$request->email,
                 'date_birth'=>$request->date_birth,
@@ -245,12 +168,11 @@ private $api;
                 'expired_document'=>$request->expired_document,
 
             ];
-            $resp =  $this->api->post('senders',$body);
-            if ($resp->successful()) {
+           $sender= new Sender();
+           $sender->save($body);
                 notify()->success('Data has been saved successfully!');
                 return redirect()->route('sandbox.senders');
-            }
-            notify()->error('An error has occurred please try again later.');
+
         }
         return view('sandbox.addSender', [
             'countries'=>$countries
@@ -258,31 +180,26 @@ private $api;
     }
     public function beneficiaries(Request $request)
     {
-        $beneficiaries=[];
-        $response = $this->api->get('beneficiaries',[
-           'numSender'=> $request->get('numSender')
-        ]);
-
-        if ($response->successful()) {
-            $data = $response->json();
-            $beneficiaries=$data['data'];
-           // notify()->success('Data has been saved successfully!');
+        $auth=Auth::user();
+        $customer=Customer::query()->firstWhere(['user_id'=>$auth->id]);
+        $query_param = [];
+        $search = $request->search;
+        if ($request->has('search')) {
+            $items = Beneficiary::query()->where('name', 'like', "%$search%")
+                ->orWhere('iso', 'like', "%$search%");
+            $query_param = ['search' => $request['search']];
+        } else {
+            $items = new Beneficiary();
         }
+        $items = $items->where(['customer_id'=>$customer->id])->orderByDesc('created_at')->paginate(20)->appends($query_param);
 
         return view('sandbox.beneficiaries', [
-            'numSender'=>$request->get('numSender'),
-            'beneficiaries'=>$beneficiaries
+            'numSender'=>$request->get('code'),
+            'beneficiaries'=>$items
         ]);
     }
     public function addBeneficiaries(Request $request)
     {
-        $countries=[];
-        $senders=[];
-        $response = $this->api->get('countries');
-        if ($response->successful()) {
-            $data = $response->json();
-            $countries=$data['data'];
-        }
         if ($request->method()=='POST'){
             $body=[
                 'numSender'=>$request->get('numSender'),
@@ -309,8 +226,7 @@ private $api;
             notify()->error('An error has occurred please try again later.');
         }
         return view('sandbox.addBeneficiary', [
-            'countries'=>$countries,
-            'senders'=>$senders
+            'countries'=>Country::all(),
         ]);
     }
     public function getBeneficiaryAjax(Request $request)

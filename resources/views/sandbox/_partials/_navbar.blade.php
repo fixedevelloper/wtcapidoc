@@ -57,9 +57,9 @@
                                 </div>
                                 <div class="user-info d-none d-md-block">
                                     <div class="user-status">
-                                        {{session('name')}}
+                                        {{auth()->user()->name}}
                                     </div>
-                                    <div class="user-name dropdown-indicator">{{session('email')}}</div>
+                                    <div class="user-name dropdown-indicator"> {{auth()->user()->email}}</div>
                                 </div>
                             </div>
                         </a>

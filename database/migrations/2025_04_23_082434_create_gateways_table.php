@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('boissons', function (Blueprint $table) {
+        Schema::create('gateways', function (Blueprint $table) {
             $table->id();
             $table->string('name',244)->nullable(false);
-            $table->string('price',244)->nullable(false);
-            $table->integer('quantity')->default(0);
-            $table->date('date')->nullable(false);
-            $table->foreignId('type_boisson_id')->nullable()->constrained("type_boissons",'id')->nullOnDelete();
+            $table->string('code',244)->nullable(true);
+            $table->string('type',244)->nullable(true);
+            $table->string('payer_code',244)->nullable(true);
+            $table->foreignId('country_id')->nullable()->constrained("countries",'id')->nullOnDelete();
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('boissons');
+        Schema::dropIfExists('gateways');
     }
 };

@@ -11,7 +11,31 @@ class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
+    const ADMIN_TYPE = 0;
+    const CUSTOMER_TYPE = 1;
+    const VENDOR_TYPE = 2;
 
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
+
+
+    public function scopeAgent($query)
+    {
+        return $query->where('type', '=', 0);
+    }
+
+    public function scopeCustomer($query)
+    {
+        return $query->where('type', '=', 1);
+    }
     /**
      * The attributes that are mass assignable.
      *

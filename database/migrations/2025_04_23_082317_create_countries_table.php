@@ -11,8 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('stock_updates', function (Blueprint $table) {
+        Schema::create('countries', function (Blueprint $table) {
             $table->id();
+            $table->string('name',244)->nullable(false);
+            $table->string('codeIso',3)->nullable(false);
+            $table->string('codeIso2',2)->nullable(false);
+            $table->string('currency',244)->nullable(false);
+            $table->string('flag',244)->nullable(false);
             $table->timestamps();
         });
     }
@@ -22,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('stock_updates');
+        Schema::dropIfExists('countries');
     }
 };

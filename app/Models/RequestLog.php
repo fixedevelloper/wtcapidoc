@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class StockUpdate extends Model
+class RequestLog extends Model
 {
     //
 }

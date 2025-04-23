@@ -11,9 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('type_boissons', function (Blueprint $table) {
+        Schema::create('rates', function (Blueprint $table) {
             $table->id();
-            $table->string('name',244)->nullable(false);
+            $table->float('amount_begin',2)->nullable(false);
+            $table->float('amount_end',2)->nullable(false);
+            $table->float('value',2)->nullable(false);
+            $table->foreignId('country_id')->nullable()->constrained("countries",'id')->nullOnDelete();
             $table->timestamps();
         });
     }
@@ -23,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('type_boissons');
+        Schema::dropIfExists('rates');
     }
 };

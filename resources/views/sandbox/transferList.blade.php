@@ -149,7 +149,11 @@
                                                         <span>{{ substr($item['sender']['first_name'],0,1) }}{{ substr($item['sender']['last_name'],0,1) }}</span>
                                                     </div>
                                                     <div class="user-info">
-                                                        <span class="tb-lead">{{$item['sender']['first_name']}} {{$item['sender']['last_name']}} <span class="dot dot-warning d-md-none ms-1"></span></span>
+                                                        <span class="tb-lead">
+                                                            {{$item['sender']['first_name']}} {{$item['sender']['last_name']}}
+                                                            <span class="dot dot-warning d-md-none ms-1">
+
+                                                            </span></span>
                                                         <span>{{$item['sender']['email']}}</span>
                                                     </div>
                                                 </div>
@@ -164,7 +168,10 @@
                                                 <span>{{$item['amount']}}</span>
                                             </div>
                                             <div class="nk-tb-col tb-col-sm">
-                                                <span>{{$item['beneficiary']['first_name']}}</span>
+                                                <div class="user-info">
+                                                    <span class="tb-lead">{{$item['beneficiary']['first_name']}}</span>
+                                                    <span>{{$item['beneficiary']['last_name']}}</span>
+                                                </div>
                                             </div>
                                             <div class="nk-tb-col tb-col-md">
                                                 <span>{{$item['rate']}}</span>

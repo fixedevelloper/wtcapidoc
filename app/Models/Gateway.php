@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Entree extends Model
+class Gateway extends Model
 {
     //
 }

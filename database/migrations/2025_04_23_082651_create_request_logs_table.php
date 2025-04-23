@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('entrees', function (Blueprint $table) {
+        Schema::create('request_logs', function (Blueprint $table) {
             $table->id();
-            $table->integer('quantity')->default(0);
-            $table->date('date')->nullable(false);
-            $table->foreignId('boisson_id')->nullable()->constrained("boissons",'id')->nullOnDelete();
-            $table->foreignId('user_id')->nullable()->constrained("users",'id')->nullOnDelete();
+            $table->string('name',244)->nullable(true);
+            $table->string('status',244)->nullable(true);
+            $table->json('response')->nullable(true);
+            $table->foreignId('customer_id')->nullable()->constrained("customers",'id')->nullOnDelete();
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('entrees');
+        Schema::dropIfExists('request_logs');
     }
 };

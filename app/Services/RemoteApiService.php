@@ -13,7 +13,7 @@ class RemoteApiService
     private $base_url;
 
     /**
-     * SecureController constructor.
+     * SecurityAdminController constructor.
      */
     public function __construct()
     {
