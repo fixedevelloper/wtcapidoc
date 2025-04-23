@@ -63,7 +63,7 @@ Route::domain('secure.agensic.com')->group(function () {
     });
 });
 
-Route::domain('admin.agensic.com')->group(function () {
+Route::domain('manage.agensic.com')->group(function () {
     Route::match(["POST", "GET"], '/', [SecurityAdminController::class, 'adminLogin'])->name('admin.login');
     Route::match(["POST", "GET"], '/register', [SecurityAdminController::class, 'register'])->name('admin.register');
    // Route::group(['middleware' => ['remote.api']], function () {
