@@ -28,8 +28,8 @@ Route::domain('doc.agensic.com')->group(function () {
 
 Route::domain('sandbox.agensic.com')->group(function () {
     Route::match(["POST", "GET"], '/logout', [SecureController::class, 'logout'])->name('sandbox.logout');
-Route::match(["POST", "GET"], '/', [SecurityAdminController::class, 'sandboxLogin'])->name('sandbox.login');
-    Route::match(["POST", "GET"], '/register', [SecurityAdminController::class, 'register'])->name('sandbox.register');
+Route::match(["POST", "GET"], '/', [SecurityController::class, 'sandboxLogin'])->name('sandbox.login');
+    Route::match(["POST", "GET"], '/register', [SecurityController::class, 'register'])->name('sandbox.register');
     Route::group(['middleware' => ['sandbox.api']], function () {
         Route::match(["POST", "GET"], '/dashboard', [StaticController::class, 'dashboard'])->name('sandbox.dashboard');
         Route::match(["POST", "GET"], '/profil', [StaticController::class, 'profil'])->name('sandbox.profil');
