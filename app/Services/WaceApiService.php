@@ -14,13 +14,13 @@ class WaceApiService
     {
         $endpoint = 'api/v1/login';
         $arrayJson = [
-            "email" => config('WACEPAY_USERNAME'),
-            "password" => config('WACEPAY_PASSWORD')
+            "email" => config('app.WACEPAY_USERNAME'),
+            "password" => config('app.WACEPAY_PASSWORD')
         ];
         logger()->info($arrayJson);
         $response = $this->cURLAuth($endpoint, json_encode($arrayJson));
 
-        logger()->info($response);
+        logger()->info(json_encode($response));
         if ($response->status === 2000) {
             session(['wace_access_token' => $response->access_token]);
         }
@@ -149,7 +149,7 @@ class WaceApiService
         $curl = curl_init();
         // Request headers
         curl_setopt_array($curl, array(
-            CURLOPT_URL => config('WACEPAY_URL') . '/' . $endpoint,
+            CURLOPT_URL => config('app.WACEPAY_URL') . '/' . $endpoint,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -308,13 +308,14 @@ class WaceApiService
     protected function cURLAuth($url, $json)
     {
         // Create curl resource
-        $ch = curl_init(config('WACEPAY_URL') . '/' . $url);
+        $ch = curl_init(config('app.WACEPAY_URL') . '/' . $url);
 
         // Request headers
         $headers = array(
             'Accept' => 'application/json',
             'Content-Type:application/json',
         );
+
         // Return the transfer as a string
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_POST, 1);
@@ -333,7 +334,7 @@ class WaceApiService
         $curl = curl_init();
         // Request headers
         curl_setopt_array($curl, array(
-            CURLOPT_URL => config('WACEPAY_URL') . '/' . $url,
+            CURLOPT_URL => config('app.WACEPAY_URL') . '/' . $url,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,

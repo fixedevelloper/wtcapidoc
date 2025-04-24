@@ -81,7 +81,7 @@ class CreateGateway extends Command
                     'MTN', 'Orange'
                 ]
             ],
-            ['code' => 'CG',
+/*            ['code' => 'CG',
                 'method' => 'AGENSICPAY',
                 'carries' => [
                     'MTN', 'Airtel'
@@ -110,7 +110,7 @@ class CreateGateway extends Command
                 'carries' => [
                     'MOOV BENIN', 'MTN BENIN'
                 ]
-            ],
+            ],*/
         ];
 
         foreach ($countries as $code) {
