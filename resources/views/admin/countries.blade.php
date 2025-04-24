@@ -134,12 +134,9 @@
                                                 <a href="#" class="btn btn-sm btn-icon btn-trigger dropdown-toggle" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                                                 <div class="dropdown-menu dropdown-menu-end">
                                                     <ul class="link-list-opt no-bdr">
-                                                        <li><a href="#"><em class="icon ni ni-eye"></em><span>View Details</span></a></li>
-                                                        <li><a href="#"><em class="icon ni ni-repeat"></em><span>Orders</span></a></li>
-                                                        <li class="divider"></li>
-                                                        <li><a href="#"><em class="icon ni ni-shield-star"></em><span>Reset Pass</span></a></li>
-                                                        <li><a href="#"><em class="icon ni ni-shield-off"></em><span>Reset 2FA</span></a></li>
-                                                        <li><a href="#"><em class="icon ni ni-na"></em><span>Suspend User</span></a></li>
+                                                        <li><a href="#"><em class="icon ni ni-eye"></em><span>Edit</span></a></li>
+                                                        <li><a href="{{route('admin.addrates',['id'=>$item->id])}}"><em class="icon ni ni-percent"></em><span>Add rate</span></a></li>
+                                                        <li><a href="#"><em class="icon ni ni-building"></em><span>Add city</span></a></li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -152,15 +149,7 @@
                     </div><!-- .nk-tb-list -->
                 </div><!-- .card-inner -->
                 <div class="card-inner">
-                    <ul class="pagination justify-content-center justify-content-md-start">
-                        <li class="page-item"><a class="page-link" href="#">Prev</a></li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><span class="page-link"><em class="icon ni ni-more-h"></em></span></li>
-                        <li class="page-item"><a class="page-link" href="#">6</a></li>
-                        <li class="page-item"><a class="page-link" href="#">7</a></li>
-                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                    </ul><!-- .pagination -->
+                    {{$countries->links('vendor.pagination.custom-paginator')}}
                 </div><!-- .card-inner -->
             </div><!-- .card-inner-group -->
         </div><!-- .card -->

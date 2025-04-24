@@ -49,6 +49,11 @@
                                     <span class="nk-menu-icon"><em class="icon ni ni-user-group-fill"></em></span>
                                     <span class="nk-menu-text">Beneficiaries</span></a>
                             </li>
+                            <li class="nk-menu-item">
+                                <a href="{{route('admin.gateways')}}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-grid-add-c"></em></span>
+                                    <span class="nk-menu-text">Gateways</span></a>
+                            </li>
                         </ul><!-- .nk-menu-sub -->
                     </li><!-- .nk-menu-item -->
                     <li class="nk-menu-item has-sub">

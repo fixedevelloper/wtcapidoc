@@ -1,0 +1,149 @@
+<?php
+
+namespace App\Console\Commands;
+
+use App\Models\City;
+use App\Models\Country;
+use App\Models\Gateway;
+use App\Services\WaceApiService;
+use Illuminate\Console\Command;
+
+class CreateGateway extends Command
+{
+    protected $waceService;
+
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'app:create-gateway';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Command description';
+
+    /**
+     * CreateGateway constructor.
+     * @param $waceService
+     */
+    public function __construct(WaceApiService $waceService)
+    {
+        parent::__construct();
+        $this->waceService = $waceService;
+    }
+
+    /**
+     * Execute the console command.
+     */
+    public function handle()
+    {
+        $this->mobileGateway();
+        $this->bankGateway();
+
+    }
+
+    function bankGateway()
+    {
+        $countries = Country::all();
+        foreach ($countries as $country) {
+            $resp = $this->waceService->getPayercodeWacePay($country->codeIso2, $country->currency);
+            $payers = $resp->transaction;
+            if (count($payers) > 0) {
+                $code = $payers[0];
+                $banks = $this->waceService->getBankWacePay($country->codeIso2, $code->PayerCode);
+                foreach ($banks->data as $datum) {
+                    $gateway = Gateway::query()->firstWhere(['name' => $datum->BankName, 'country_id' => $country->id]);
+                    if (is_null($gateway)) {
+                        $gateway = new Gateway();
+                        $gateway->name = $datum->BankName;
+                        $gateway->code = $datum->BankCode;
+                        $gateway->method = 'WACEPAY';
+                        $gateway->type = 'BANK';
+                        $gateway->country_id = $country->id;
+                        $gateway->save();
+                    }
+                }
+                $this->createCity($code->PayerCode,$country->id);
+            }
+        }
+    }
+
+    function mobileGateway()
+    {
+        $countries = [
+            ['code' => 'CM',
+                'method' => 'AGENSICPAY',
+                'carries' => [
+                    'MTN', 'Orange'
+                ]
+            ],
+            ['code' => 'CG',
+                'method' => 'AGENSICPAY',
+                'carries' => [
+                    'MTN', 'Airtel'
+                ]
+            ],
+            ['code' => 'CD',
+                'method' => 'AGENSICPAY',
+                'carries' => [
+                    'Orange',
+                ]
+            ],
+            ['code' => 'SN',
+                'method' => 'PAYDUNYA',
+                'carries' => [
+                    'ORANGE MONEY SENEGAL', 'EXPRESSO SN', 'FREE MONEY SENEGAL', 'WAVE SENEGAL'
+                ]
+            ],
+            ['code' => 'SN',
+                'method' => 'PAYDUNYA',
+                'carries' => [
+                    'ORANGE MONEY SENEGAL', 'EXPRESSO SN', 'FREE MONEY SENEGAL', 'WAVE SENEGAL'
+                ]
+            ],
+            ['code' => 'BJ',
+                'method' => 'PAYDUNYA',
+                'carries' => [
+                    'MOOV BENIN', 'MTN BENIN'
+                ]
+            ],
+        ];
+
+        foreach ($countries as $code) {
+            $country = Country::query()->firstWhere(['codeIso2' => $code['code']]);
+            foreach ($code['carries'] as $carrier) {
+                $gateway = Gateway::query()->firstWhere(['country_id' => $country->id, 'name' => $carrier]);
+                if (is_null($gateway)) {
+                    $gateway = new Gateway();
+                    $gateway->name = $carrier;
+                    $gateway->method = $code['method'];
+                    $gateway->type = 'MOBIL';
+                    $gateway->country_id = $country->id;
+                    $gateway->save();
+                }
+            }
+
+        }
+
+
+    }
+    function createCity($codePayer,$country_id){
+        $response=$this->waceService->getTownWacePay($codePayer);
+        if (isset($response->messages)){
+            foreach ($response->messages as $message){
+                $city=City::query()->firstWhere(['country_id'=>$country_id,'name'=>$message->CityName]);
+                if (is_null($city)){
+                    $city=new City();
+                    $city->name=$message->CityName;
+                    $city->country_id=$country_id;
+                    $city->code=substr($message->CityName,0,3);
+                    $city->save();
+                }
+            }
+        }
+    }
+}

@@ -88,16 +88,11 @@
                                     <label class="custom-control-label" for="uid"></label>
                                 </div>
                             </div>
-                            <div class="nk-tb-col"><span class="sub-text">User</span></div>
-                            <div class="nk-tb-col tb-col-md"><span class="sub-text">Country</span></div>
-                            <div class="nk-tb-col tb-col-sm"><span class="sub-text">Email</span></div>
-                            <div class="nk-tb-col tb-col-md"><span class="sub-text">Phone</span></div>
-                            <div class="nk-tb-col tb-col-xxl"><span class="sub-text">Company</span></div>
-                            <div class="nk-tb-col tb-col-lg"><span class="sub-text">Balance</span></div>
-                            <div class="nk-tb-col tb-col-xxl"><span class="sub-text">Last Login</span></div>
-                            <div class="nk-tb-col"><span class="sub-text">Status</span></div>
-                            <div class="nk-tb-col nk-tb-col-tools text-end">
-                            </div>
+                            <div class="nk-tb-col"><span class="sub-text">Country</span></div>
+                            <div class="nk-tb-col tb-col-md"><span class="sub-text">Name</span></div>
+                            <div class="nk-tb-col tb-col-sm"><span class="sub-text">Type</span></div>
+                            <div class="nk-tb-col tb-col-md"><span class="sub-text">Method</span></div>
+                            <div class="nk-tb-col tb-col-xxl"><span class="sub-text">payer_code</span></div>
                         </div>
                         @foreach($gateways as $item)
                             <div class="nk-tb-item">
@@ -110,54 +105,24 @@
                                 <div class="nk-tb-col">
                                     <div class="user-card">
                                         <div class="user-avatar xs bg-primary">
-                                            <span>{{substr($item->user->name,0,2)}}</span>
+                                            <span><img src="{{ asset("storage/".$item->country->flag) }}" alt="avatar"  class="align-self-center pull-right img-50 blur-up lazyloaded"></span>
                                         </div>
                                         <div class="user-name">
-                                            <span class="tb-lead">{{$item->user->name}}</span>
+                                            <span class="tb-lead">{{$item->country->name}}</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="nk-tb-col tb-col-md">
-                                    <span>{{$item->country}}</span>
+                                    <span>{{$item->name}}</span>
                                 </div>
                                 <div class="nk-tb-col tb-col-sm">
-                                    <span>{{$item->user->email}}</span>
+                                    <span>{{$item->type}}</span>
                                 </div>
                                 <div class="nk-tb-col tb-col-md">
-                                    <span>{{$item->user->phone}}</span>
+                                    <span>{{$item->method}}</span>
                                 </div>
-                                <div class="nk-tb-col tb-col-xxl">
-                                    <span>{{$item->balance}}</span>
-                                </div>
-                                <div class="nk-tb-col tb-col-lg">
-                                    <ul class="list-status">
-                                        <li><em class="icon text-success ni ni-check-circle"></em> <span>Email</span></li>
-                                    </ul>
-                                </div>
-                                <div class="nk-tb-col tb-col-xxl">
-                                    <span>10 Feb 2020</span>
-                                </div>
-                                <div class="nk-tb-col">
-                                    <span class="tb-status text-success">Active</span>
-                                </div>
-                                <div class="nk-tb-col nk-tb-col-tools">
-                                    <ul class="nk-tb-actions gx-2">
-                                        <li>
-                                            <div class="drodown">
-                                                <a href="#" class="btn btn-sm btn-icon btn-trigger dropdown-toggle" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
-                                                <div class="dropdown-menu dropdown-menu-end">
-                                                    <ul class="link-list-opt no-bdr">
-                                                        <li><a href="#"><em class="icon ni ni-eye"></em><span>View Details</span></a></li>
-                                                        <li><a href="#"><em class="icon ni ni-repeat"></em><span>Orders</span></a></li>
-                                                        <li class="divider"></li>
-                                                        <li><a href="#"><em class="icon ni ni-shield-star"></em><span>Reset Pass</span></a></li>
-                                                        <li><a href="#"><em class="icon ni ni-shield-off"></em><span>Reset 2FA</span></a></li>
-                                                        <li><a href="#"><em class="icon ni ni-na"></em><span>Suspend User</span></a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
+                                <div class="nk-tb-col tb-col-md">
+                                    <span>{{$item->payer_code}}</span>
                                 </div>
                             </div>
                         @endforeach
@@ -165,15 +130,7 @@
                     </div><!-- .nk-tb-list -->
                 </div><!-- .card-inner -->
                 <div class="card-inner">
-                    <ul class="pagination justify-content-center justify-content-md-start">
-                        <li class="page-item"><a class="page-link" href="#">Prev</a></li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><span class="page-link"><em class="icon ni ni-more-h"></em></span></li>
-                        <li class="page-item"><a class="page-link" href="#">6</a></li>
-                        <li class="page-item"><a class="page-link" href="#">7</a></li>
-                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                    </ul><!-- .pagination -->
+                    {{$gateways->links('vendor.pagination.custom-paginator')}}
                 </div><!-- .card-inner -->
             </div><!-- .card-inner-group -->
         </div><!-- .card -->

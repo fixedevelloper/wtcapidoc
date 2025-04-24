@@ -134,7 +134,7 @@
                         @endforeach
 
                     </div><!-- .nk-tb-list -->
-                </div><!-- .card-inner -->
+                </div>
                 <div class="card-inner">
                     <ul class="pagination justify-content-center justify-content-md-start">
                         <li class="page-item"><a class="page-link" href="#">Prev</a></li>
@@ -149,4 +149,5 @@
             </div><!-- .card-inner-group -->
         </div><!-- .card -->
     </div>
+
 @endsection

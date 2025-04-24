@@ -4,21 +4,28 @@
 namespace App\Helpers;
 
 
-use App\Models\Category;
-use App\Models\User;
-use App\Models\Wallet;
-use App\Repositories\ProductRepository;
 use Carbon\Carbon;
+use http\Exception;
+use Jenssegers\Agent\Agent;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class Helper
 {
 
-    const PENDING="PENDING";
-    const PROCESSING="PROCESSING";
-    const CONFIRMED="CONFIRMED";
+    const STATUSSUCCESS     = 1;
+    const STATUSPENDING     = 2;
+    const STATUSHOLD        = 3;
+    const STATUSREJECTED    = 4;
+    const STATUSWAITING     = 5;
+    const STATUSFAILD       = 6;
+    const STATUSPROCESSING  = 7;
+    const TYPESANDBOX     = "SANDBOX";
+    const TYPESECURE     = "SECURE";
+    const METHODBANK    = "BANK";
+    const METHODMOBIL     = "MOBIL";
     const per_page=10;
     public static function str_slug($text){
         return strtolower(str_ireplace(" ","_",$text)) ;
@@ -100,5 +107,33 @@ class Helper
     public static function getAge($date){
         $le=Carbon::createFromFormat("Y-m-d",$date);
         return Carbon::now()->diffInYears($le);
+    }
+
+    public function insertDeviceManual($output,$id) {
+        $client_ip = request()->ip() ?? false;
+        $location = geoip()->getLocation($client_ip);
+        $agent = new Agent();
+        $mac = "";
+
+        DB::beginTransaction();
+        try{
+            DB::table("transaction_devices")->insert([
+                'transaction_id'=> $id,
+                'ip'            => $client_ip,
+                'mac'           => $mac,
+                'city'          => $location['city'] ?? "",
+                'country'       => $location['country'] ?? "",
+                'longitude'     => $location['lon'] ?? "",
+                'latitude'      => $location['lat'] ?? "",
+                'timezone'      => $location['timezone'] ?? "",
+                'browser'       => $agent->browser() ?? "",
+                'os'            => $agent->platform() ?? "",
+            ]);
+            DB::commit();
+        }catch(Exception $e) {
+            DB::rollBack();
+            $error = ['error'=>[__("Something went wrong! Please try again.")]];
+            return $error;
+        }
     }
 }

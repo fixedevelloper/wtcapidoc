@@ -63,7 +63,7 @@ Route::domain('secure.agensic.com')->group(function () {
     });
 });
 
-Route::domain('manage.agensic.com')->group(function () {
+//Route::domain('manage.agensic.com')->group(function () {
     Route::match(["POST", "GET"], '/', [SecurityAdminController::class, 'adminLogin'])->name('admin.login');
     Route::match(["POST", "GET"], '/register', [SecurityAdminController::class, 'register'])->name('admin.register');
    // Route::group(['middleware' => ['remote.api']], function () {
@@ -73,9 +73,10 @@ Route::match(["POST", "GET"], '/senders', [BasicController::class, 'senders'])->
 Route::match(["POST", "GET"], '/beneficiaries', [BasicController::class, 'beneficiaries'])->name('admin.beneficiaries');
 Route::match(["POST", "GET"], '/transactions', [TransactionController::class, 'transactions'])->name('admin.transactions');
 Route::match(["POST", "GET"], '/rates', [BasicController::class, 'rates'])->name('admin.rates');
+    Route::match(["POST", "GET"], '/countries/rate/{id}', [BasicController::class, 'addrates',])->name('admin.addrates');
 Route::match(["POST", "GET"], '/countries', [BasicController::class, 'countries'])->name('admin.countries');
 Route::match(["POST", "GET"], '/saveCountry', [BasicController::class, 'saveCountry'])->name('admin.saveCountry');
 Route::match(["POST", "GET"], '/cities', [BasicController::class, 'cities'])->name('admin.cities');
 Route::match(["POST", "GET"], '/gateways', [BasicController::class, 'gateways'])->name('admin.gateways');
     //});
-});
+//});

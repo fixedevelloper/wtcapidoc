@@ -141,6 +141,22 @@ class BasicController extends Controller
             'rates'=>$items
         ]);
     }
+    public function addrates(Request $request,$id)
+    {
+        if ($request->method()=='POST'){
+            $rate=new Rate();
+            $rate->amount_begin=$request->amount_begin;
+            $rate->amount_end=$request->amount_end;
+            $rate->value=$request->value;
+            $rate->country_id=$id;
+            $rate->save();
+        }
+        $rates=Rate::query()->where(['country_id'=>$id])->get();
+        return view('admin.add.rate', [
+            'rates'=>$rates,
+            'country'=>Country::query()->find($id)
+        ]);
+    }
     public function saveCountry(Request $request)
     {
         $country=new Country();

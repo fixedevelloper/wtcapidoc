@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name',244)->nullable(false);
             $table->string('code',244)->nullable(true);
+            $table->string('method',244)->nullable(true);
             $table->string('type',244)->nullable(true);
             $table->string('payer_code',244)->nullable(true);
             $table->foreignId('country_id')->nullable()->constrained("countries",'id')->nullOnDelete();
