@@ -56,7 +56,7 @@
 
                                         <select name="country" class="form-select js-select2 form-select-lg" id="default-06" data-ui="xl">
                                             @foreach($countries as $item)
-                                                <option value="{{$item['codeIso2']}}">{{$item['libelle']}}</option>
+                                                <option value="{{$item->codeIso2}}">{{$item->name}}</option>
                                             @endforeach
                                         </select>
 

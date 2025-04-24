@@ -51,24 +51,27 @@ class CreateGateway extends Command
         $countries = Country::all();
         foreach ($countries as $country) {
             $resp = $this->waceService->getPayercodeWacePay($country->codeIso2, $country->currency);
-            $payers = $resp->transaction;
-            if (count($payers) > 0) {
-                $code = $payers[0];
-                $banks = $this->waceService->getBankWacePay($country->codeIso2, $code->PayerCode);
-                foreach ($banks->data as $datum) {
-                    $gateway = Gateway::query()->firstWhere(['name' => $datum->BankName, 'country_id' => $country->id]);
-                    if (is_null($gateway)) {
-                        $gateway = new Gateway();
-                        $gateway->name = $datum->BankName;
-                        $gateway->code = $datum->BankCode;
-                        $gateway->method = 'WACEPAY';
-                        $gateway->type = 'BANK';
-                        $gateway->country_id = $country->id;
-                        $gateway->save();
+            if ($resp->status==='2000'){
+                $payers = $resp->transaction;
+                if (count($payers) > 0) {
+                    $code = $payers[0];
+                    $banks = $this->waceService->getBankWacePay($country->codeIso2, $code->PayerCode);
+                    foreach ($banks->data as $datum) {
+                        $gateway = Gateway::query()->firstWhere(['name' => $datum->BankName, 'country_id' => $country->id]);
+                        if (is_null($gateway)) {
+                            $gateway = new Gateway();
+                            $gateway->name = $datum->BankName;
+                            $gateway->code = $datum->BankCode;
+                            $gateway->method = 'WACEPAY';
+                            $gateway->type = 'BANK';
+                            $gateway->country_id = $country->id;
+                            $gateway->save();
+                        }
                     }
+                    $this->createCity($code->PayerCode,$country->id);
                 }
-                $this->createCity($code->PayerCode,$country->id);
             }
+
         }
     }
 
@@ -81,7 +84,7 @@ class CreateGateway extends Command
                     'MTN', 'Orange'
                 ]
             ],
-/*            ['code' => 'CG',
+           ['code' => 'CG',
                 'method' => 'AGENSICPAY',
                 'carries' => [
                     'MTN', 'Airtel'
@@ -99,10 +102,10 @@ class CreateGateway extends Command
                     'ORANGE MONEY SENEGAL', 'EXPRESSO SN', 'FREE MONEY SENEGAL', 'WAVE SENEGAL'
                 ]
             ],
-            ['code' => 'SN',
+            ['code' => 'CI',
                 'method' => 'PAYDUNYA',
                 'carries' => [
-                    'ORANGE MONEY SENEGAL', 'EXPRESSO SN', 'FREE MONEY SENEGAL', 'WAVE SENEGAL'
+                    'ORANGE MONEY CI','MTN CI','MOOV CI','WAVE CI'
                 ]
             ],
             ['code' => 'BJ',
@@ -110,7 +113,25 @@ class CreateGateway extends Command
                 'carries' => [
                     'MOOV BENIN', 'MTN BENIN'
                 ]
-            ],*/
+            ],
+            ['code' => 'BF',
+                'method' => 'PAYDUNYA',
+                'carries' => [
+                    'ORANGE MONEY BURKINA','MOOV BURKINA FASO'
+                ]
+            ],
+            ['code' => 'TG',
+                'method' => 'PAYDUNYA',
+                'carries' => [
+                    'T MONEY TOGO','MOOV TOGO'
+                ]
+            ],
+            ['code' => 'ML',
+                'method' => 'PAYDUNYA',
+                'carries' => [
+                    'MOOV ML'
+                ]
+            ],
         ];
 
         foreach ($countries as $code) {

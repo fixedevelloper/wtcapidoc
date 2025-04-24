@@ -5,7 +5,7 @@
             <div class="nk-block-head-content">
                 <h3 class="nk-block-title page-title">Beneficiaries List</h3>
                 <div class="nk-block-des text-soft">
-                    <p>You have total {{count($beneficiaries)}} orders.</p>
+                    <p>You have total {{count($beneficiaries)}} items.</p>
                 </div>
             </div><!-- .nk-block-head-content -->
             <div class="nk-block-head-content">
@@ -185,15 +185,7 @@
 
                 </div><!-- .card-inner -->
                 <div class="card-inner">
-                    <ul class="pagination justify-content-center justify-content-md-start">
-                        <li class="page-item"><a class="page-link" href="#">Prev</a></li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><span class="page-link"><em class="icon ni ni-more-h"></em></span></li>
-                        <li class="page-item"><a class="page-link" href="#">6</a></li>
-                        <li class="page-item"><a class="page-link" href="#">7</a></li>
-                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                    </ul><!-- .pagination -->
+                    {{$beneficiaries->links('vendor.pagination.custom-paginator')}}
                 </div><!-- .card-inner -->
             </div><!-- .card-inner-group -->
         </div><!-- .card -->

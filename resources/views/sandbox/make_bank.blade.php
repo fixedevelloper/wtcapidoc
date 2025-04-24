@@ -32,10 +32,10 @@
                                             <label class="form-label" for="sender">Choose Sender</label>
                                             <div class="form-control-wrap ">
                                                 <div class="form-control-select">
-                                                    <select name="numSender" class="form-control" id="sender">
+                                                    <select name="numSender" class="form-control" id="sende">
                                                         <option>Choose sender</option>
                                                         @foreach($senders as $item)
-                                                            <option value="{{$item['num']}}">{{$item['first_name']}} {{$item['last_name']}}</option>
+                                                            <option value="{{$item->id}}">{{$item->first_name}} {{$item->last_name}}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -47,7 +47,7 @@
                                                 <div class="form-control-select">
                                                     <select name="countryCode" class="form-control" id="country">
                                                         @foreach($countries as $item)
-                                                            <option value="{{$item['codeIso2']}}">{{$item['libelle']}}</option>
+                                                            <option value="{{$item->codeIso2}}">{{$item->name}}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -71,8 +71,10 @@
                                             <label class="form-label" for="beneficiary">Choose Beneficiary</label>
                                             <div class="form-control-wrap ">
                                                 <div class="form-control-select">
-                                                    <select name="numBeneficiary" class="form-control" id="beneficiary">
-
+                                                    <select name="numBeneficiary" class="form-control" id="beneficiar">
+                                                        @foreach($beneficiaries as $item)
+                                                            <option value="{{$item->id}}">{{$item->first_name}} {{$item->last_name}}</option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
@@ -114,10 +116,11 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="wallet">Choose wallet</label>
+                                    <label class="form-label" for="wallet">Choose Method</label>
                                     <div class="form-control-wrap ">
                                         <div class="form-control-select">
                                             <select name="gateway" class="form-control" id="wallet">
+                                                <option >Choose method</option>
                                                 @foreach($wallets as $item)
                                                     <option value="{{$item}}">{{$item}}</option>
                                                 @endforeach

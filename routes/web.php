@@ -63,7 +63,7 @@ Route::domain('secure.agensic.com')->group(function () {
     });
 });
 
-//Route::domain('manage.agensic.com')->group(function () {
+Route::domain('manage.agensic.com')->group(function () {
     Route::match(["POST", "GET"], '/', [SecurityAdminController::class, 'adminLogin'])->name('admin.login');
     Route::match(["POST", "GET"], '/register', [SecurityAdminController::class, 'register'])->name('admin.register');
    // Route::group(['middleware' => ['remote.api']], function () {
@@ -79,4 +79,4 @@ Route::match(["POST", "GET"], '/saveCountry', [BasicController::class, 'saveCoun
 Route::match(["POST", "GET"], '/cities', [BasicController::class, 'cities'])->name('admin.cities');
 Route::match(["POST", "GET"], '/gateways', [BasicController::class, 'gateways'])->name('admin.gateways');
     //});
-//});
+});

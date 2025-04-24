@@ -19,7 +19,10 @@ class Sender extends Model
       'civility',
       'gender',
       'expired_document',
-       ];
+      'code',
+      'address',
+      'city',
+'customer_id'       ];
 
     public function customer()
     {
@@ -28,5 +31,9 @@ class Sender extends Model
     public function currency(){
         $country=Country::query()->firstWhere(['codeIso2'=>$this->country]);
         return $country->currency;
+    }
+    public function country()
+    {
+        return $this->belongsTo(Country::class,'country_id','id');
     }
 }

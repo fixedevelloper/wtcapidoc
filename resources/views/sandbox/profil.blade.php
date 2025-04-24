@@ -26,14 +26,14 @@
                         <div class="data-item" data-bs-toggle="modal" data-bs-target="#profile-edit">
                             <div class="data-col">
                                 <span class="data-label">Full Name</span>
-                                <span class="data-value">{{$profile['name']}}</span>
+                                <span class="data-value">{{$profile->user->name}}</span>
                             </div>
                             <div class="data-col data-col-end"><span class="data-more"><em class="icon ni ni-forward-ios"></em></span></div>
                         </div><!-- data-item -->
                         <div class="data-item">
                             <div class="data-col">
                                 <span class="data-label">Email</span>
-                                <span class="data-value">{{$profile['email']}}</span>
+                                <span class="data-value">{{$profile->user->email}}</span>
                             </div>
                             <div class="data-col data-col-end"><span class="data-more disable"><em class="icon ni ni-lock-alt"></em></span></div>
                         </div><!-- data-item -->
@@ -54,7 +54,7 @@
                         <div class="data-item" data-bs-toggle="modal" data-bs-target="#profile-edit" data-tab-target="#address">
                             <div class="data-col">
                                 <span class="data-label">Address</span>
-                                <span class="data-value">-</span>
+                                <span class="data-value">{{$profile->address}}</span>
                             </div>
                             <div class="data-col data-col-end"><span class="data-more"><em class="icon ni ni-forward-ios"></em></span></div>
                         </div><!-- data-item -->
@@ -92,11 +92,11 @@
                                         <div class="card-inner">
                                             <div class="user-card">
                                                 <div class="user-avatar bg-primary">
-                                                    <span>{{strtoupper(substr($profile['name'],0,1))}}</span>
+                                                    <span>{{strtoupper(substr($profile['user']['name'],0,1))}}</span>
                                                 </div>
                                                 <div class="user-info">
-                                                    <span class="lead-text">{{$profile['name']}}</span>
-                                                    <span class="sub-text">{{$profile['email']}}</span>
+                                                    <span class="lead-text">{{$profile['user']['name']}}</span>
+                                                    <span class="sub-text">{{$profile['user']['email']}}</span>
                                                 </div>
                                                 <div class="user-action">
                                                     <div class="dropdown">
@@ -114,7 +114,7 @@
                                         <div class="card-inner">
                                             <div class="user-account-info py-0">
                                                 <h6 class="overline-title-alt">WTC Wallet Account</h6>
-                                                <div class="user-balance">{{$profile['balance']}} <small class="currency currency-btc">FCFA</small></div>
+                                                <div class="user-balance">{{$profile['balance_sandbox']}} <small class="currency currency-btc">FCFA</small></div>
                                                 <div class="user-balance-sub">Locked <span>0 <span class="currency currency-btc">FCFA</span></span></div>
                                             </div>
                                         </div><!-- .card-inner -->
