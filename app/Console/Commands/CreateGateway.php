@@ -51,7 +51,7 @@ class CreateGateway extends Command
         $countries = Country::all();
         foreach ($countries as $country) {
             $resp = $this->waceService->getPayercodeWacePay($country->codeIso2, $country->currency);
-            if ($resp->status==='2000'){
+            if ($resp->status==2000){
                 $payers = $resp->transaction;
                 if (count($payers) > 0) {
                     $code = $payers[0];
