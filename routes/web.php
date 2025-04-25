@@ -26,7 +26,7 @@ Route::domain('doc.agensic.com')->group(function () {
 });*/
 
 
-//Route::domain('sandbox.agensic.com')->group(function () {
+Route::domain('sandbox.agensic.com')->group(function () {
     Route::match(["POST", "GET"], '/logout', [SecureController::class, 'logout'])->name('sandbox.logout');
 Route::match(["POST", "GET"], '/', [SecurityController::class, 'sandboxLogin'])->name('sandbox.login');
     Route::match(["POST", "GET"], '/register', [SecurityController::class, 'register'])->name('sandbox.register');
@@ -45,8 +45,8 @@ Route::match(["POST", "GET"], '/', [SecurityController::class, 'sandboxLogin'])-
         Route::match(["POST", "GET"], '/get_ajax_operators', [StaticController::class, 'getOperatorsAjax'])->name('sandbox.get_ajax_operators');
         Route::match(["POST", "GET"], '/get_ajax_rate', [StaticController::class, 'getRateAjax'])->name('sandbox.get_ajax_rate');
     });
-//});
-/*Route::domain('secure.agensic.com')->group(function () {
+});
+Route::domain('secure.agensic.com')->group(function () {
     Route::match(["POST", "GET"], '/', [SecurityAdminController::class, 'secureLogin'])->name('secure.login');
     Route::match(["POST", "GET"], '/register', [SecurityAdminController::class, 'secureRegister'])->name('secure.register');
     Route::group(['middleware' => ['remote.api']], function () {
@@ -81,4 +81,4 @@ Route::match(["POST", "GET"], '/saveCountry', [BasicController::class, 'saveCoun
 Route::match(["POST", "GET"], '/cities', [BasicController::class, 'cities'])->name('admin.cities');
 Route::match(["POST", "GET"], '/gateways', [BasicController::class, 'gateways'])->name('admin.gateways');
     //});
-});*/
+});
