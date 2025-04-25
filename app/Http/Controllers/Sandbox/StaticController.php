@@ -145,7 +145,7 @@ class StaticController extends Controller
             $transaction->code=Helper::generatenumber();
             $transaction->number_transaction='wtc_'.Helper::generateTransactionNumber(20);
             $transaction->amount_total=$amount_total;
-            $transaction->rate=$rate['rate'];
+            $transaction->rate=$rate['costs'];
             $transaction->customer_id=$customer->id;
             $transaction->type=Helper::TYPESANDBOX;
             $transaction->method=Helper::METHODBANK;
@@ -326,7 +326,7 @@ class StaticController extends Controller
         $costs=$amount*($rate_country->cost*0.01);
         $value=$amount+floatval($rate_country->fixed_amount)+$costs;
         return[
-            'total'=>$value*$rate_country->rate,
+            'total'=>$amount*$rate_country->rate,
             'costs'=>$costs+$rate_country->fixed_amount,
             'total_local'=>$value,
             'rate'=>$rate_country->rate

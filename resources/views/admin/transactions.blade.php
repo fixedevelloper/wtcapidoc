@@ -93,7 +93,7 @@
                             <div class="nk-tb-col tb-col-md"><span class="sub-text">Amount Send</span></div>
                             <div class="nk-tb-col tb-col-lg"><span class="sub-text">Amount receive</span></div>
                             <div class="nk-tb-col tb-col-lg"><span class="sub-text">Beneficiary</span></div>
-                            <div class="nk-tb-col tb-col-md"><span class="sub-text">rate</span></div>
+                            <div class="nk-tb-col tb-col-md"><span class="sub-text">Total Fees &amp; Charges</span></div>
                             <div class="nk-tb-col tb-col-md"><span class="sub-text">Date</span></div>
                             <div class="nk-tb-col tb-col-md"><span class="sub-text">Mode</span></div>
                             <div class="nk-tb-col tb-col-md"><span class="sub-text">Status</span></div>
@@ -164,12 +164,13 @@
                                 <div class="nk-tb-col tb-col-mb">
                                     <span class="tb-amount">{{$item->gatewayItem->country->name}} </span>
                                 </div>
+                                <div class="nk-tb-col tb-col-sm">
+                                    <span>{{$item['amount']+$item['rate']}} XAF</span>
+                                </div>
                                 <div class="nk-tb-col tb-col-md">
                                     <span>{{$item['amount_total']}} {{$item->gatewayItem->country->name}}</span>
                                 </div>
-                                <div class="nk-tb-col tb-col-sm">
-                                    <span>{{$item['amount']}} XAF</span>
-                                </div>
+
                                 <div class="nk-tb-col tb-col-sm">
                                     <div class="user-info">
                                         <span class="tb-lead">{{$item['beneficiary']['first_name']}}</span>
@@ -177,7 +178,7 @@
                                     </div>
                                 </div>
                                 <div class="nk-tb-col tb-col-md">
-                                    <span>{{$item['rate']}}</span>
+                                    <span class="amount">{{$item['rate']}} XAF</span>
                                 </div>
                                 <div class="nk-tb-col tb-col-md">
                                     <span>{{$item['created_at']}}</span>
