@@ -265,7 +265,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="preview-list-right">
-                                                    <span class="text--success "><span id="will_send"></span> XAF</span>
+                                                    <span class="text--success "><span id="will_send"></span> <span id="will_send_currency"></span></span>
                                                 </div>
                                             </div>
                                             <div class="preview-list-item">
@@ -385,6 +385,7 @@
                         $('#payable').text(data.data['total_local'])
                         $('#will_send').text(data.data['total'])
                         $('#exchange_rate_currency').text($("select[name=countryCode] :selected").data('currency'))
+                        $('#will_send_currency').text($("select[name=countryCode] :selected").data('currency'))
 
                     },
                     error: function (err) {
