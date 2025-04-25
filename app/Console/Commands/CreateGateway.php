@@ -62,12 +62,13 @@ class CreateGateway extends Command
                             $gateway = new Gateway();
                             $gateway->name = $datum->BankName;
                             $gateway->code = $datum->BankCode;
-                            $gateway->payer_code=$code->PayerCode;
                             $gateway->method = 'WACEPAY';
                             $gateway->type = 'BANK';
                             $gateway->country_id = $country->id;
                             $gateway->save();
                         }
+                        $gateway->payer_code=$code->PayerCode;
+                        $gateway->save();
                     }
                     $this->createCity($code->PayerCode,$country->id);
                 }
