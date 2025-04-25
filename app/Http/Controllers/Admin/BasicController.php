@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Admin;
 
 
+use App\Helpers\Helper;
 use App\Helpers\UploadableTrait;
 use App\Http\Controllers\Controller;
 use App\Models\Beneficiary;
@@ -22,8 +23,9 @@ class BasicController extends Controller
     use UploadableTrait;
     public function dashboard(Request $request)
     {
+        $last_transactions=Transaction::query()->where(['type'=>Helper::TYPESANDBOX])->latest()->limit(5)->get();
         return view('admin.dashbord', [
-
+            'transactions'=>$last_transactions
         ]);
     }
     public function customers(Request $request)
@@ -144,17 +146,23 @@ class BasicController extends Controller
     public function addrates(Request $request,$id)
     {
         if ($request->method()=='POST'){
-            $rate=new Rate();
-            $rate->amount_begin=$request->amount_begin;
-            $rate->amount_end=$request->amount_end;
-            $rate->value=$request->value;
-            $rate->country_id=$id;
-            $rate->save();
+            $rate=Rate::query()->firstWhere(['customer_id'=>$id,'country_id'=>$request->countryCode]);
+            if (is_null($rate)){
+                $rate=new Rate();
+                $rate->rate=$request->rate;
+                $rate->cost=$request->cost;
+                $rate->fixed_amount=$request->fixed_amount;
+                $rate->customer_id=$id;
+                $rate->country_id=$request->countryCode;
+                $rate->save();
+            }
+            notify()->warning('This rate exits');
         }
-        $rates=Rate::query()->where(['country_id'=>$id])->get();
+        $rates=Rate::query()->where(['customer_id'=>$id])->get();
         return view('admin.add.rate', [
             'rates'=>$rates,
-            'country'=>Country::query()->find($id)
+            'customer'=>Customer::query()->find($id),
+            'countries'=>Country::all()
         ]);
     }
     public function saveCountry(Request $request)

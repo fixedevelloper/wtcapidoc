@@ -16,7 +16,7 @@
                             <li><a href="#" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li>
                             <li class="nk-block-tools-opt">
                                 <div class="">
-                                    <a href="#" class="btn btn-icon btn-primary"><em class="icon ni ni-plus"></em></a>
+                                    <a href="{{route('admin.add.customer')}}" class="btn btn-icon btn-primary"><em class="icon ni ni-plus"></em></a>
                                 </div>
                             </li>
                         </ul>
@@ -153,10 +153,8 @@
                                             <div class="dropdown-menu dropdown-menu-end">
                                                 <ul class="link-list-opt no-bdr">
                                                     <li><a href="#"><em class="icon ni ni-eye"></em><span>View Details</span></a></li>
-                                                    <li><a href="#"><em class="icon ni ni-repeat"></em><span>Orders</span></a></li>
+                                                    <li><a href="{{route('admin.addrates',['id'=>$item->id])}}"><em class="icon ni ni-repeat"></em><span>Rates</span></a></li>
                                                     <li class="divider"></li>
-                                                    <li><a href="#"><em class="icon ni ni-shield-star"></em><span>Reset Pass</span></a></li>
-                                                    <li><a href="#"><em class="icon ni ni-shield-off"></em><span>Reset 2FA</span></a></li>
                                                     <li><a href="#"><em class="icon ni ni-na"></em><span>Suspend User</span></a></li>
                                                 </ul>
                                             </div>

@@ -30,7 +30,7 @@ return new class extends Migration
             $table->string('accountNumber',244)->nullable(true);
             $table->string('gateway',244)->nullable(true);
             $table->string('wallet',244)->nullable(true)->comment('wallet de la transaction');
-            $table->string('city',2)->nullable(true);
+            $table->string('city',244)->nullable(true);
             $table->string('iban',244)->nullable(true);
             $table->string('swift',244)->nullable(true);
             $table->string('reference_partner',244)->nullable(true);

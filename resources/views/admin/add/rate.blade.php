@@ -3,7 +3,7 @@
     <div class="nk-block-head nk-block-head-sm">
         <div class="nk-block-between">
             <div class="nk-block-head-content">
-                <h3 class="nk-block-title page-title">Add rate {{$country->name}}</h3>
+                <h3 class="nk-block-title page-title">Add rate for {{$customer->user->name}}</h3>
                 <div class="nk-block-des text-soft">
                     <p>You have total {{count($rates)}} items.</p>
                 </div>
@@ -18,24 +18,36 @@
                         @csrf
                         <div class="row">
                             <div class="form-group col-md-3">
-                                <label class="form-label" for="default-01">Amount begin</label>
-                                <div class="form-control-wrap">
-                                    <input name="amount_begin" type="text" class="form-control" id="default-01" placeholder="mount begin">
+                                <label class="form-label" for="country">Choose Country</label>
+                                <div class="form-control-wrap ">
+                                    <div class="form-control-select">
+                                        <select name="countryCode" class="form-control" id="country">
+                                            @foreach($countries as $item)
+                                                <option value="{{$item->id}}">{{$item->name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group col-md-3">
-                                <label class="form-label" for="default-01">Amount End</label>
+                                <label class="form-label" for="rate">Rate</label>
                                 <div class="form-control-wrap">
-                                    <input name="amount_end" type="text" class="form-control" id="default-01" placeholder="mount begin">
+                                    <input name="rate" type="text" class="form-control" id="rate" placeholder="rate">
                                 </div>
                             </div>
-                            <div class="form-group col-md-3">
-                                <label class="form-label" for="default-01">Value</label>
+                            <div class="form-group col-md-2">
+                                <label class="form-label" for="default-01">Cost(%)</label>
                                 <div class="form-control-wrap">
-                                    <input name="value" type="text" class="form-control" id="default-01" placeholder="mount begin">
+                                    <input name="cost" type="text" class="form-control" id="default-01" placeholder="cost">
                                 </div>
                             </div>
-                            <div class="form-group col-md-3 mt-4">
+                            <div class="form-group col-md-2">
+                                <label class="form-label" for="fixed_amount">Fixed Amount</label>
+                                <div class="form-control-wrap">
+                                    <input name="fixed_amount" type="text" class="form-control" id="fixed_amount" placeholder="fixed_amount">
+                                </div>
+                            </div>
+                            <div class="form-group col-md-2 mt-4">
                                 <button class="btn btn-primary">Save</button>
                             </div>
                         </div>
@@ -53,9 +65,9 @@
                                 </div>
                             </div>
                             <div class="nk-tb-col tb-col-md"><span class="sub-text">Country</span></div>
-                            <div class="nk-tb-col tb-col-sm"><span class="sub-text">Amount Begin</span></div>
-                            <div class="nk-tb-col tb-col-md"><span class="sub-text">Amount end</span></div>
-                            <div class="nk-tb-col tb-col-xxl"><span class="sub-text">Value</span></div>
+                            <div class="nk-tb-col tb-col-sm"><span class="sub-text">fixed Amount</span></div>
+                            <div class="nk-tb-col tb-col-md"><span class="sub-text">Rate</span></div>
+                            <div class="nk-tb-col tb-col-xxl"><span class="sub-text">Costs</span></div>
                             <div class="nk-tb-col nk-tb-col-tools text-end">
                             </div>
                         </div>
@@ -71,14 +83,14 @@
                                     <span>{{$item->country->name}}</span>
                                 </div>
                                 <div class="nk-tb-col tb-col-md">
-                                    <span>{{$item->amount_begin}}</span>
+                                    <span>{{$item->fixed_amount}}</span>
                                 </div>
                                 <div class="nk-tb-col tb-col-sm">
-                                    <span>{{$item->amount_end}}</span>
+                                    <span>{{$item->rate}}</span>
                                 </div>
 
                                 <div class="nk-tb-col tb-col-xxl">
-                                    <span>{{$item->value}}</span>
+                                    <span>{{$item->cost}}</span>
                                 </div>
                                 <div class="nk-tb-col nk-tb-col-tools">
                                     <ul class="nk-tb-actions gx-2">

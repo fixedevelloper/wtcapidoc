@@ -87,6 +87,7 @@
             get_ajax_beneficiaries: "{{\Illuminate\Support\Facades\URL::route('sandbox.get_ajax_beneficiaries')}}",
             get_ajax_cities: "{{\Illuminate\Support\Facades\URL::route('sandbox.get_ajax_cities')}}",
             get_ajax_operators: "{{\Illuminate\Support\Facades\URL::route('sandbox.get_ajax_operators')}}",
+            get_ajax_rate: "{{\Illuminate\Support\Facades\URL::route('sandbox.get_ajax_rate')}}",
         }
     }
 </script>

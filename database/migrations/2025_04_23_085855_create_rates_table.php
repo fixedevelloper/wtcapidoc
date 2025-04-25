@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('rates', function (Blueprint $table) {
             $table->id();
-            $table->float('amount_begin',2)->nullable(false);
-            $table->float('amount_end',2)->nullable(false);
-            $table->float('value',2)->nullable(false);
+            $table->float('rate')->default(0.0);
+            $table->float('cost',2)->default(0.0);
+            $table->float('fixed_amount',2)->default(0.0);
+            $table->foreignId('customer_id')->nullable()->constrained("customers",'id')->nullOnDelete();
             $table->foreignId('country_id')->nullable()->constrained("countries",'id')->nullOnDelete();
             $table->timestamps();
         });

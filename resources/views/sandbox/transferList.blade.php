@@ -159,13 +159,13 @@
                                                 </div>
                                             </div>
                                             <div class="nk-tb-col tb-col-mb">
-                                                <span class="tb-amount">{{$item['country']}} </span>
+                                                <span class="tb-amount">{{$item->gatewayItem->country->name}} </span>
                                             </div>
                                             <div class="nk-tb-col tb-col-md">
-                                                <span>{{$item['amount_total']}}</span>
+                                                <span>{{$item['amount_total']}} {{$item->gatewayItem->country->currency}}</span>
                                             </div>
                                             <div class="nk-tb-col tb-col-sm">
-                                                <span>{{$item['amount']}}</span>
+                                                <span>{{$item['amount']}} XAF</span>
                                             </div>
                                             <div class="nk-tb-col tb-col-sm">
                                                 <div class="user-info">
@@ -177,42 +177,25 @@
                                                 <span>{{$item['rate']}}</span>
                                             </div>
                                             <div class="nk-tb-col tb-col-md">
-                                                <span>{{$item['date_transaction']}}</span>
+                                                <span>{{$item['created_at']}}</span>
                                             </div>
                                             <div class="nk-tb-col tb-col-md">
-                                                <span>{{$item['mode_transaction']}}</span>
+                                                <span>{{$item['method']}}</span>
                                             </div>
                                             <div class="nk-tb-col tb-col-md">
-                                                <span>{{$item['status']}}</span>
+                                                <span class="{{ $item->stringStatus->class }}">{{$item->stringStatus->value}}</span>
                                             </div>
                                             <div class="nk-tb-col tb-col-md">
-                                                <span>{{$item['operator']}}</span>
+                                                <span>{{$item['gatewayItem']['name']}}</span>
                                             </div>
                                             <div class="nk-tb-col nk-tb-col-tools">
                                                 <ul class="nk-tb-actions gx-1">
-                                                    <li class="nk-tb-action-hidden">
-                                                        <a href="{{route('sandbox.beneficiaries',['numSender'=>$item['num']])}}" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Beneficiaries" data-bs-original-title="Beneficiaries">
-                                                            <em class="icon ni ni-user-group-fill"></em>
-                                                        </a>
-                                                    </li>
-                                                    <li class="nk-tb-action-hidden">
-                                                        <a href="{{route('sandbox.add.beneficiaries',['numSender'=>$item['num']])}}" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Add Beneficiary" data-bs-original-title="Add Beneficiary">
-                                                            <em class="icon ni ni-plus-medi-fill"></em>
-                                                        </a>
-                                                    </li>
-                                                    <li class="nk-tb-action-hidden">
-                                                        <a href="#" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Details" data-bs-original-title="Details">
-                                                            <em class="icon ni ni-user-cross-fill"></em>
-                                                        </a>
-                                                    </li>
                                                     <li>
                                                         <div class="drodown">
                                                             <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                                                             <div class="dropdown-menu dropdown-menu-end">
                                                                 <ul class="link-list-opt no-bdr">
                                                                     <li><a href="#"><em class="icon ni ni-eye"></em><span>View Details</span></a></li>
-                                                                    <li><a href="{{route('sandbox.beneficiaries',['numSender'=>$item['num']])}}"><em class="icon ni ni-user-group-fill"></em><span>Beneficiaries</span></a></li>
-                                                                    <li><a href="#"><em class="icon ni ni-repeat"></em><span>Transaction</span></a></li>
                                                                 </ul>
                                                             </div>
                                                         </div>

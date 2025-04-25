@@ -43,6 +43,7 @@ Route::match(["POST", "GET"], '/', [SecurityController::class, 'sandboxLogin'])-
         Route::match(["POST", "GET"], '/get_ajax_beneficiaries', [StaticController::class, 'getBeneficiaryAjax'])->name('sandbox.get_ajax_beneficiaries');
         Route::match(["POST", "GET"], '/get_ajax_cities', [StaticController::class, 'getCitiesAjax'])->name('sandbox.get_ajax_cities');
         Route::match(["POST", "GET"], '/get_ajax_operators', [StaticController::class, 'getOperatorsAjax'])->name('sandbox.get_ajax_operators');
+        Route::match(["POST", "GET"], '/get_ajax_rate', [StaticController::class, 'getRateAjax'])->name('sandbox.get_ajax_rate');
     });
 });
 Route::domain('secure.agensic.com')->group(function () {
@@ -69,11 +70,12 @@ Route::domain('manage.agensic.com')->group(function () {
    // Route::group(['middleware' => ['remote.api']], function () {
         Route::match(["POST", "GET"], '/dashboard', [BasicController::class, 'dashboard'])->name('admin.dashboard');
 Route::match(["POST", "GET"], '/customers', [BasicController::class, 'customers'])->name('admin.customers');
+Route::match(["POST", "GET"], '/customers/add', [SecurityAdminController::class, 'create_customer_direct'])->name('admin.add.customer');
 Route::match(["POST", "GET"], '/senders', [BasicController::class, 'senders'])->name('admin.senders');
 Route::match(["POST", "GET"], '/beneficiaries', [BasicController::class, 'beneficiaries'])->name('admin.beneficiaries');
 Route::match(["POST", "GET"], '/transactions', [TransactionController::class, 'transactions'])->name('admin.transactions');
 Route::match(["POST", "GET"], '/rates', [BasicController::class, 'rates'])->name('admin.rates');
-    Route::match(["POST", "GET"], '/countries/rate/{id}', [BasicController::class, 'addrates',])->name('admin.addrates');
+    Route::match(["POST", "GET"], '/customers/rate/{id}', [BasicController::class, 'addrates',])->name('admin.addrates');
 Route::match(["POST", "GET"], '/countries', [BasicController::class, 'countries'])->name('admin.countries');
 Route::match(["POST", "GET"], '/saveCountry', [BasicController::class, 'saveCountry'])->name('admin.saveCountry');
 Route::match(["POST", "GET"], '/cities', [BasicController::class, 'cities'])->name('admin.cities');

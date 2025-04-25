@@ -105,4 +105,48 @@ class SecurityAdminController extends Controller
         }
         return view('admin.auth.register');
     }
+    public function create_customer_direct(Request $request)
+    {
+        if ($request->method() == "POST") {
+            $validator = Validator::make($request->all(), $rules = [
+                'email' => ['required', 'email'],
+                'name' => 'required',
+                'phone' => 'required',
+                'password' => 'required',
+                'address' => 'required',
+
+            ], $messages = [
+                'email.required' => 'Email field is required!',
+                'password.required' => 'password  is required!',
+                'first_name.required' => 'name  is required!',
+                'phone.required' => 'phone  is required!',
+            ]);
+            if ($validator->fails()) {
+                foreach ($validator->errors()->all() as $error) {
+                    notify()->error($error);
+                }
+                return redirect()->back()
+                    ->withErrors($validator)->with(['message' => $messages])
+                    ->withInput();
+            }
+
+            $user=new User();
+            $user->name=$request->name;
+            $user->email=$request->email;
+            $user->password=bcrypt($request->password);
+            $user->user_type=User::CUSTOMER_TYPE;
+            $user->save();
+            $customer=new Customer();
+            $customer->phone=$request->phone;
+            $customer->address=$request->address;
+            $customer->wtc_sandbox_private_key='wtc_private_sandbox'.Helper::generatApiKey();
+            $customer->wtc_sandbox_secret_key='wtc_secret_sandbox'.Helper::generatApiKey();
+            $customer->user_id=$user->id;
+            $customer->save();
+
+            notify()->success("Customer save successfull", 'Request success', ["success loggedIn"]);
+            return redirect()->route('admin.customers');
+        }
+        return view('admin.add.customerAdd');
+    }
 }

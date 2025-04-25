@@ -11,11 +11,14 @@ use App\Models\City;
 use App\Models\Country;
 use App\Models\Customer;
 use App\Models\Gateway;
+use App\Models\Rate;
 use App\Models\Sender;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Validator;
 
 class StaticController extends Controller
 {
@@ -94,10 +97,10 @@ class StaticController extends Controller
             $relactions = $responseRelation->json()['data'];
         }
         if ($request->method() == 'POST') {
-            $request->validate([
+            $validator = Validator::make($request->all(), [
                 'countryCode' => 'required',
-                'gateway' => 'required',
-                'operator' => 'required',
+                'wallet' => 'required',
+                'gateway_id' => 'required',
                 'numSender' => 'required',
                 'numBeneficiary' => 'required',
                 'numCity' => 'required',
@@ -110,22 +113,49 @@ class StaticController extends Controller
                 'amount' => 'Password must contain 4 characters',
                 'password.max' => 'Password must contain 14 characters',
             ]);
-            $body = [
-                'countryCode' => $request->get('countryCode'),
-                'gateway' => $request->get('gateway'),
-                'operator' => $request->get('operator'),
-                'numSender' => $request->get('numSender'),
-                'numBeneficiary' => $request->get('numBeneficiary'),
-                'numCity' => $request->get('numCity'),
-                'amount' => $request->get('amount'),
-                'raison_transaction' => $request->get('raison_transaction'),
-                'origin_fond' => $request->get('origin_fond'),
-                'iban' => $request->get('iban'),
-                'relation' => $request->get('relation'),
-                'accountNumber' => $request->get('accountNumber'),
-            ];
+            if ($validator->fails()) {
+                // Utilisez notify pour afficher les erreurs
+                foreach ($validator->errors()->all() as $error) {
+                    notify()->error($error);
+                }
 
-
+                return redirect()->back()->withInput();
+            }
+            $amount=$request->get('amount');
+            $rate=$this->calculRate($request->countryCode,$customer->id,$amount);
+            $amount_total=$rate['total'];
+            if ($customer->balance_sandbox<$rate['total_local']){
+                notify()->error('Balance Insufficient');
+                return redirect()->back()->withInput();
+            }
+            DB::beginTransaction();
+            $transaction=new Transaction();
+            $transaction->sender_id=$request->get('numSender');
+            $transaction->relation=$request->get('relation');
+            $transaction->origin_fond=$request->get('origin_fond');
+            $transaction->motif_send=$request->get('raison_transaction');
+            $transaction->accountNumber=$request->get('accountNumber');
+            $transaction->wallet=$request->get('wallet');
+            $transaction->iban=$request->get('iban');
+            $transaction->beneficiary_id=$request->get('beneficiary_id');
+            $transaction->gateway_id=$request->get('gateway_id');
+            $transaction->beneficiary_id=$request->get('numBeneficiary');
+            $transaction->city=$request->get('numCity');
+            $transaction->amount=$request->get('amount');
+            $transaction->code=Helper::generatenumber();
+            $transaction->number_transaction='wtc_'.Helper::generateTransactionNumber(20);
+            $transaction->amount_total=$amount_total;
+            $transaction->rate=$rate['rate'];
+            $transaction->customer_id=$customer->id;
+            $transaction->type=Helper::TYPESANDBOX;
+            $transaction->method=Helper::METHODBANK;
+            $transaction->status=Helper::STATUSPENDING;
+            $transaction->save();
+            $customer->balance_sandbox-=$rate['total_local'];
+            $customer->save();
+            DB::commit();
+            notify()->success('Data has been saved successfully!');
+            return redirect()->route('sandbox.transferList');
         }
         return view('sandbox.make_bank', [
             'countries' => $countries,
@@ -270,11 +300,36 @@ class StaticController extends Controller
 
         return response()->json(['data' => $cities, 'status' => true]);
     }
+    public function getRateAjax(Request $request)
+    {
+        $auth = Auth::user();
+        $customer = Customer::query()->firstWhere(['user_id' => $auth->id]);
+
+        return response()->json(['data' => $this->calculRate($request->country_id,$customer->id,$request->amount), 'status' => true]);
+    }
 
     public function getOperatorsAjax(Request $request)
     {
-        $gateways = Gateway::query()->where(['method'=>$request->get('method'),'country_id'=>$request->get('country_id')])->get();
+        if ($request->get('method') === 'AGENSICPAY_ALL') {
+            $getway = 'WACEPAY';
+        } elseif ($request->get('method') === 'AGENSICPAY_XAF') {
+            $getway = 'AGENSICPAY';
+        } else {
+            $getway = 'PAYDUNYA';
+        }
+        $gateways = Gateway::query()->where(['method'=>$getway,'country_id'=>$request->get('country_id')])->get();
 
         return response()->json(['data' => $gateways, 'status' => true]);
+    }
+    function calculRate($country_id,$customer_id,$amount){
+        $rate_country=Rate::query()->firstWhere(['customer_id'=>$customer_id,'country_id'=>$country_id]);
+        $costs=$amount*($rate_country->cost*0.01);
+        $value=$amount+floatval($rate_country->fixed_amount)+$costs;
+        return[
+            'total'=>$value*$rate_country->rate,
+            'costs'=>$costs+$rate_country->fixed_amount,
+            'total_local'=>$value,
+            'rate'=>$rate_country->rate
+        ];
     }
 }

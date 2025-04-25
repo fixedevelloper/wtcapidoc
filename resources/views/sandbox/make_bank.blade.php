@@ -10,6 +10,15 @@
             </div><!-- .nk-block-head-content -->
         </div><!-- .nk-block-between -->
     </div>
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <div class="nk-block">
         <div class="card card-bordered card-stretch">
             <div class="card-inner-group">
@@ -47,7 +56,7 @@
                                                 <div class="form-control-select">
                                                     <select name="countryCode" class="form-control" id="country">
                                                         @foreach($countries as $item)
-                                                            <option value="{{$item->codeIso2}}">{{$item->name}}</option>
+                                                            <option data-currency="{{$item->currency}}" value="{{$item->id}}">{{$item->name}}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -116,11 +125,11 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="wallet">Choose Method</label>
+                                    <label class="form-label" for="wallet">Choose Wallet</label>
                                     <div class="form-control-wrap ">
                                         <div class="form-control-select">
-                                            <select name="gateway" class="form-control" id="wallet">
-                                                <option >Choose method</option>
+                                            <select name="wallet" class="form-control" id="wallet">
+                                                <option >Choose wallet</option>
                                                 @foreach($wallets as $item)
                                                     <option value="{{$item}}">{{$item}}</option>
                                                 @endforeach
@@ -132,7 +141,7 @@
                                     <label class="form-label" for="operator">Choose operator</label>
                                     <div class="form-control-wrap ">
                                         <div class="form-control-select">
-                                            <select name="operator" class="form-control" id="operator">
+                                            <select name="gateway_id" class="form-control" id="operator">
                                             </select>
                                         </div>
                                     </div>
@@ -210,7 +219,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="preview-list-right">
-                                                    <span class="request-amount"><span id="exchange_rate_text">1 XAF  =  1XAF</span></span>
+                                                    <span class="request-amount"><span>1 XAF  =  <span id="exchange_rate_text"></span> <span id="exchange_rate_currency"></span></span></span>
                                                 </div>
                                             </div>
                                         {{--    <div class="preview-list-item">
@@ -240,7 +249,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="preview-list-right">
-                                                    <span class="fees">0.00 XAF</span>
+                                                    <span class="fees" ><span id="fees">0.00 </span> XAF</span>
                                                 </div>
                                             </div>
 
@@ -256,7 +265,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="preview-list-right">
-                                                    <span class="text--success ">8.50 XAF</span>
+                                                    <span class="text--success "><span id="will_send"></span> XAF</span>
                                                 </div>
                                             </div>
                                             <div class="preview-list-item">
@@ -271,7 +280,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="preview-list-right">
-                                                    <span class="text--warning last">10.00 XAF</span>
+                                                    <span class="text--warning last"><span id="payable"></span> XAF</span>
                                                 </div>
                                             </div>
 
@@ -323,13 +332,13 @@
                     type: "GET",
                     dataType: "JSON",
                     data: {
-                        'numCountry': $('#country').val()
+                        'country_id': $('#country').val()
                     },
                     success: function (data) {
                         $('#city').html('')
                         $('#city').append('<option>Choose city</option>')
                         $.each(data.data, function (index, item) {
-                            $('#city').append('<option value="'+item["num"]+'">'+item["libelle"]+'</option>')
+                            $('#city').append('<option value="'+item["name"]+'">'+item["name"]+'</option>')
                         })
                     },
                     error: function (err) {
@@ -344,13 +353,13 @@
                     type: "GET",
                     dataType: "JSON",
                     data: {
-                        'numCountry': $('#country').val(),
-                        'gateway': $('#wallet').val()
+                        'country_id': $('#country').val(),
+                        'method': $('#wallet').val()
                     },
                     success: function (data) {
                         $('#operator').html('')
                         $.each(data.data, function (index, item) {
-                            $('#operator').append('<option value="'+item["name"]+'">'+item["name"]+'</option>')
+                            $('#operator').append('<option value="'+item["id"]+'">'+item["name"]+'</option>')
                         })
                     },
                     error: function (err) {
@@ -360,6 +369,28 @@
             })
             $('#amount').keyup(function () {
                 $('#amount_text').text($('#amount').val())
+                $.ajax({
+                    url: configs.routes.get_ajax_rate,
+                    type: "GET",
+                    dataType: "JSON",
+                    data: {
+                        'country_id': $('#country').val(),
+                        'amount': $('#amount').val()
+                    },
+                    success: function (data) {
+                        console.log(data['rate'])
+
+                        $('#exchange_rate_text').text(data.data['rate'])
+                        $('#fees').text(data.data['costs'])
+                        $('#payable').text(data.data['total_local'])
+                        $('#will_send').text(data.data['total'])
+                        $('#exchange_rate_currency').text($("select[name=countryCode] :selected").data('currency'))
+
+                    },
+                    error: function (err) {
+                        alert("An error ocurred while loading data ...");
+                    }
+                });
 
             })
         })
