@@ -145,7 +145,7 @@
                             <div class="nk-tb-col">
                                 <div class="user-card">
                                     <div class="user-avatar">
-                                        <span>EW</span>
+                                        <span>{{strtoupper(substr($item->first_name,0,1))}}{{strtoupper(substr($item->last_name,0,1))}}</span>
                                     </div>
                                     <div class="user-info">
                                         <span class="tb-lead">{{$item->first_name}} {{$item->last_name}} <span class="dot dot-warning d-md-none ms-1"></span></span>

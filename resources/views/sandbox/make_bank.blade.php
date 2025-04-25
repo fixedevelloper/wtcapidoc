@@ -38,11 +38,10 @@
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="form-label" for="sender">Choose Sender</label>
+                                            <label class="form-label" for="sende">Choose Sender</label>
                                             <div class="form-control-wrap ">
                                                 <div class="form-control-select">
-                                                    <select name="numSender" class="form-control" id="sende">
-                                                        <option>Choose sender</option>
+                                                    <select required name="numSender" class="form-control" id="sende">
                                                         @foreach($senders as $item)
                                                             <option value="{{$item->id}}">{{$item->first_name}} {{$item->last_name}}</option>
                                                         @endforeach
@@ -54,7 +53,7 @@
                                             <label class="form-label" for="country">Choose Country</label>
                                             <div class="form-control-wrap ">
                                                 <div class="form-control-select">
-                                                    <select name="countryCode" class="form-control" id="country">
+                                                    <select required name="countryCode" class="form-control" id="country">
                                                         @foreach($countries as $item)
                                                             <option data-currency="{{$item->currency}}" value="{{$item->id}}">{{$item->name}}</option>
                                                         @endforeach
@@ -66,7 +65,7 @@
                                             <label class="form-label" for="default-06">Origin fond</label>
                                             <div class="form-control-wrap ">
                                                 <div class="form-control-select">
-                                                    <select name="origin_fond" class="form-control" id="default-06">
+                                                    <select required name="origin_fond" class="form-control" id="default-06">
                                                         @foreach($originFonds as $item)
                                                             <option value="{{$item['name']}}">{{$item['name']}}</option>
                                                         @endforeach
@@ -92,7 +91,7 @@
                                             <label class="form-label" for="city">Choose City</label>
                                             <div class="form-control-wrap ">
                                                 <div class="form-control-select">
-                                                    <select name="numCity" class="form-control" id="city">
+                                                    <select required name="numCity" class="form-control" id="city">
                                                     </select>
                                                 </div>
                                             </div>
@@ -116,7 +115,7 @@
                                     <label class="form-label" for="default-06">Relation</label>
                                     <div class="form-control-wrap ">
                                         <div class="form-control-select">
-                                            <select name="relation" class="form-control" id="default-06">
+                                            <select required name="relation" class="form-control" id="default-06">
                                                 @foreach($relactions as $item)
                                                     <option value="{{$item['name']}}">{{$item['name']}}</option>
                                                 @endforeach
@@ -128,7 +127,7 @@
                                     <label class="form-label" for="wallet">Choose Wallet</label>
                                     <div class="form-control-wrap ">
                                         <div class="form-control-select">
-                                            <select name="wallet" class="form-control" id="wallet">
+                                            <select required name="wallet" class="form-control" id="wallet">
                                                 <option >Choose wallet</option>
                                                 @foreach($wallets as $item)
                                                     <option value="{{$item}}">{{$item}}</option>
@@ -138,10 +137,10 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="operator">Choose operator</label>
+                                    <label class="form-label" for="operator">Choose bank</label>
                                     <div class="form-control-wrap ">
                                         <div class="form-control-select">
-                                            <select name="gateway_id" class="form-control" id="operator">
+                                            <select required name="gateway_id" class="form-control" id="operator">
                                             </select>
                                         </div>
                                     </div>
@@ -378,12 +377,11 @@
                         'amount': $('#amount').val()
                     },
                     success: function (data) {
-                        console.log(data['rate'])
 
-                        $('#exchange_rate_text').text(data.data['rate'])
-                        $('#fees').text(data.data['costs'])
-                        $('#payable').text(data.data['total_local'])
-                        $('#will_send').text(data.data['total'])
+                        $('#exchange_rate_text').text(data.data['value']['rate'])
+                        $('#fees').text(data.data['value']['costs'])
+                        $('#payable').text(data.data['value']['total_local'])
+                        $('#will_send').text(data.data['value']['total'])
                         $('#exchange_rate_currency').text($("select[name=countryCode] :selected").data('currency'))
                         $('#will_send_currency').text($("select[name=countryCode] :selected").data('currency'))
 

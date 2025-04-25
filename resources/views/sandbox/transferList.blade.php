@@ -162,10 +162,10 @@
                                                 <span class="tb-amount">{{$item->gatewayItem->country->name}} </span>
                                             </div>
                                             <div class="nk-tb-col tb-col-sm">
-                                                <span>{{$item['amount']+$item['rate']}} XAF</span>
+                                                <span>{{number_format($item['amount']+$item['rate'],2)}} XAF</span>
                                             </div>
                                             <div class="nk-tb-col tb-col-md">
-                                                <span>{{$item['amount_total']}} {{$item->gatewayItem->country->currency}}</span>
+                                                <span>{{number_format($item['amount_total'],2)}} {{$item->gatewayItem->country->currency}}</span>
                                             </div>
 
                                             <div class="nk-tb-col tb-col-sm">
@@ -175,7 +175,7 @@
                                                 </div>
                                             </div>
                                             <div class="nk-tb-col tb-col-md">
-                                                <span class="amount">{{$item['rate']}} XAF</span>
+                                                <span class="amount">{{number_format($item['rate'],2)}} XAF</span>
                                             </div>
                                             <div class="nk-tb-col tb-col-md">
                                                 <span>{{$item['created_at']}}</span>

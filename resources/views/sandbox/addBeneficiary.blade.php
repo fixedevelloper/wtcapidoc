@@ -40,93 +40,95 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <div class="form-control-wrap">
-                                        <input type="text" name="first_name" class="form-control form-control-outlined form-control-lg" id="outlined" placeholder="First name">
-                                        <label class="form-label-outlined" for="outlined">First name</label>
+                                        <input required type="text" name="first_name" class="form-control form-control-outlined form-control-lg" id="first_name" placeholder="First name">
+                                        <label class="form-label-outlined" for="first_name">First name</label>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="form-control-wrap">
-                                        <input type="text" name="email" class="form-control form-control-outlined form-control-lg" id="outlined" placeholder="Email" data-ui="xl">
-                                        <label class="form-label-outlined" for="outlined">Email</label>
+                                        <input required type="email" name="email" class="form-control form-control-outlined form-control-lg" id="email" placeholder="Email" data-ui="xl">
+                                        <label class="form-label-outlined" for="email">Email</label>
                                     </div>
                                 </div>
                                 <div class="form-group">
 
                                     <div class="form-control-wrap ">
 
-                                        <select name="country" class="form-select js-select2 form-select-lg" id="default-06" data-ui="xl">
+                                        <select name="country" class="form-select js-select2 form-select-lg" id="country" data-ui="xl">
                                             @foreach($countries as $item)
                                                 <option value="{{$item->codeIso2}}">{{$item->name}}</option>
                                             @endforeach
                                         </select>
 
-                                        <label class="form-label-outlined" for="default-06">Choose Country</label>
+                                        <label class="form-label-outlined" for="country">Choose Country</label>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="form-control-wrap">
-                                        <input type="text" name="zipcode" class="form-control form-control-outlined form-control-lg" id="outlined" placeholder="Zipcode" data-ui="xl">
-                                        <label class="form-label-outlined" for="outlined">Zipcode</label>
+                                        <input required type="text" name="zipcode" class="form-control form-control-outlined form-control-lg" id="zipcode" placeholder="Zipcode" data-ui="xl">
+                                        <label class="form-label-outlined" for="zipcode">Zipcode</label>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="form-control-wrap">
-                                        <input type="text" name="num_document" class="form-control form-control-outlined form-control-lg" id="outlined" placeholder="N° Document" data-ui="xl">
+                                        <input required type="text" name="num_document" class="form-control form-control-outlined form-control-lg" id="outlined" placeholder="N° Document" data-ui="xl">
                                         <label class="form-label-outlined" for="outlined">N° Document</label>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="form-control-wrap">
-                                        <input type="date" name="expired_document" class="form-control form-control-outlined form-control-lg" id="outlined" placeholder="Expired Document" data-ui="xl">
-                                        <label class="form-label-outlined" for="outlined">Expired Document</label>
+                                        <input required type="date" min="{{date('Y-m-d')}}" name="expired_document"
+                                               class="form-control form-control-outlined form-control-lg" id="expired_document" placeholder="Expired Document" data-ui="xl">
+                                        <label class="form-label-outlined" for="expired_document">Expired Document</label>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <div class="form-control-wrap">
-                                        <input type="text" name="last_name" class="form-control form-control-outlined form-control-lg" id="outlined" placeholder="Last name">
+                                        <input required type="text" name="last_name" class="form-control form-control-outlined form-control-lg" id="outlined" placeholder="Last name">
                                         <label class="form-label-outlined" for="outlined">Last name</label>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="form-control-wrap">
-                                        <input type="text" name="phone" class="form-control form-control-outlined form-control-lg" id="outlined" placeholder="Phone">
-                                        <label class="form-label-outlined" for="outlined">Phone</label>
+                                        <input required type="text" name="phone" class="form-control form-control-outlined form-control-lg" id="phone" placeholder="Phone">
+                                        <label class="form-label-outlined" for="phone">Phone</label>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="form-control-wrap">
-                                        <select name="gender" class="form-select js-select2 form-select-lg" data-ui="xl" id="outlined-select">
+                                        <select name="gender" class="form-select js-select2 form-select-lg" data-ui="xl" id="gender-select">
                                             <option value="M">Male</option>
                                             <option value="F">Female</option>
                                         </select>
-                                        <label class="form-label-outlined" for="outlined-select">Gender</label>
+                                        <label class="form-label-outlined" for="gender-select">Gender</label>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="form-control-wrap">
-                                        <select name="civility" class="form-select js-select2 form-select-lg" data-ui="xl" id="outlined-select">
+                                        <select name="civility" class="form-select js-select2 form-select-lg" data-ui="xl" id="civility-select">
                                             <option value="Maried">Maried</option>
                                             <option value="Single">Single</option>
                                             <option value="Others">Others</option>
                                         </select>
-                                        <label class="form-label-outlined" for="outlined-select">Civility</label>
+                                        <label class="form-label-outlined" for="civility-select">Civility</label>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="form-control-wrap">
-                                        <select name="identification_document" class="form-select js-select2 form-select-lg" data-ui="xl" id="outlined-select">
+                                        <select name="identification_document" class="form-select js-select2 form-select-lg" data-ui="xl" id="identification_document-select">
                                             <option value="PP">Passport</option>
                                             <option value="CNI">ID card</option>
                                         </select>
-                                        <label class="form-label-outlined" for="outlined-select">Identification document</label>
+                                        <label class="form-label-outlined" for="identification_document-select">Identification document</label>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="form-control-wrap">
-                                        <input type="date" name="date_birth" class="form-control form-control-outlined form-control-lg" id="outlined" placeholder="Date birth" data-ui="xl">
-                                        <label class="form-label-outlined" for="outlined">Date birth</label>
+                                        <input required type="date" max="{{date('Y-m-d')}}" name="date_birth"
+                                               class="form-control form-control-outlined form-control-lg" id="date_birth" placeholder="Date birth" data-ui="xl">
+                                        <label class="form-label-outlined" for="date_birth">Date birth</label>
                                     </div>
                                 </div>
                             </div>

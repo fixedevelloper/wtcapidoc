@@ -326,6 +326,12 @@ class StaticController extends Controller
         $costs=$amount*($rate_country->cost*0.01);
         $value=$amount+floatval($rate_country->fixed_amount)+$costs;
         return[
+            'value'=>[
+                'total'=>number_format($amount*$rate_country->rate,2),
+                'costs'=>number_format($costs+$rate_country->fixed_amount,2),
+                'total_local'=>number_format($value,2),
+                'rate'=>number_format($rate_country->rate,2)
+            ],
             'total'=>$amount*$rate_country->rate,
             'costs'=>$costs+$rate_country->fixed_amount,
             'total_local'=>$value,
