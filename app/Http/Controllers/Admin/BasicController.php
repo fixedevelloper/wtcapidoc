@@ -179,4 +179,16 @@ class BasicController extends Controller
         $country->save();
         return redirect()->route('admin.countries');
     }
+    public function sender_detail(Request $request,$code)
+    {
+        return view('admin.add.sender_detail', [
+            'sender'=>Sender::query()->firstWhere(['code'=>$code])
+        ]);
+    }
+    public function beneficiary_detail(Request $request,$code)
+    {
+        return view('admin.add.beneficiary_detail', [
+            'beneficiary'=>Beneficiary::query()->firstWhere(['code'=>$code])
+        ]);
+    }
 }

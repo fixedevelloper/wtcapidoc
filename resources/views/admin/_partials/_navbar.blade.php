@@ -79,7 +79,7 @@
                                     <span class="nk-menu-text">Complete</span></a>
                             </li>
                             <li class="nk-menu-item">
-                                <a href="{{route('admin.transactions')}}" class="nk-menu-link">
+                                <a href="{{route('admin.transaction_sandbox')}}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-list-thumb"></em></span>
                                     <span class="nk-menu-text">Sandbox</span></a>
                             </li>
@@ -103,11 +103,11 @@
 
                                     <span class="nk-menu-text">Cities</span></a>
                             </li>
-                            <li class="nk-menu-item">
+                         {{--   <li class="nk-menu-item">
                                 <a href="{{route('admin.rates')}}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-percent"></em></span>
                                     <span class="nk-menu-text">Rates</span></a>
-                            </li>
+                            </li>--}}
                         </ul><!-- .nk-menu-sub -->
                     </li><!-- .nk-menu-item -->
                 </ul><!-- .nk-menu -->

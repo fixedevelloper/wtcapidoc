@@ -245,7 +245,12 @@ class StaticController extends Controller
             'beneficiaries' => $items
         ]);
     }
-
+    public function transaction_detail(Request $request,$numero_identifiant)
+    {
+        return view('sandbox.transaction-detail', [
+           'transaction'=>Transaction::query()->firstWhere(['number_transaction'=>$numero_identifiant])
+        ]);
+    }
     public function addBeneficiaries(Request $request)
     {
         $auth = Auth::user();

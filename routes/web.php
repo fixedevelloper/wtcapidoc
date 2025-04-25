@@ -11,7 +11,7 @@ use App\Http\Controllers\SecureController;
 use Illuminate\Support\Facades\Route;
 
 
-/*
+
 Route::domain('doc.agensic.com')->group(function () {
 
     Route::get('/', [DefaultController::class, 'home'])->name('home');
@@ -23,7 +23,7 @@ Route::domain('doc.agensic.com')->group(function () {
     Route::get('/transfert/mobil', [DefaultController::class, 'transfert_mobil'])->name('transfert_mobil');
     Route::get('/senders', [DefaultController::class, 'create_sender'])->name('create_sender');
     Route::get('/beneficiaries', [DefaultController::class, 'create_beneficiary'])->name('create_beneficiary');
-});*/
+});
 
 
 Route::domain('sandbox.agensic.com')->group(function () {
@@ -36,6 +36,7 @@ Route::match(["POST", "GET"], '/', [SecurityController::class, 'sandboxLogin'])-
         Route::match(["POST", "GET"], '/make_bank', [StaticController::class, 'make_bank'])->name('sandbox.make_bank');
         Route::match(["POST", "GET"], '/make_mobil', [StaticController::class, 'make_mobil'])->name('sandbox.make_mobil');
         Route::match(["POST", "GET"], '/transfer_list', [StaticController::class, 'transferList'])->name('sandbox.transferList');
+        Route::match(["POST", "GET"], '/transfer_list/detail/{numero_identifiant}', [StaticController::class, 'transaction_detail'])->name('sandbox.transaction_detail');
         Route::match(["POST", "GET"], '/sandboxsenders', [StaticController::class, 'senders'])->name('sandbox.senders');
         Route::match(["POST", "GET"], '/sandboxsenders/add', [StaticController::class, 'addSender'])->name('sandbox.add.senders');
         Route::match(["POST", "GET"], '/sandboxbeneficiaries/add', [StaticController::class, 'addBeneficiaries'])->name('sandbox.add.beneficiaries');
@@ -74,11 +75,16 @@ Route::match(["POST", "GET"], '/customers/add', [SecurityAdminController::class,
 Route::match(["POST", "GET"], '/senders', [BasicController::class, 'senders'])->name('admin.senders');
 Route::match(["POST", "GET"], '/beneficiaries', [BasicController::class, 'beneficiaries'])->name('admin.beneficiaries');
 Route::match(["POST", "GET"], '/transactions', [TransactionController::class, 'transactions'])->name('admin.transactions');
-Route::match(["POST", "GET"], '/rates', [BasicController::class, 'rates'])->name('admin.rates');
+Route::match(["POST", "GET"], '/transaction_sandbox', [TransactionController::class, 'transaction_sandbox'])->name('admin.transaction_sandbox');
+    Route::match(["POST", "GET"], '/transactions/detail/{numero_identifiant}', [TransactionController::class, 'transaction_detail'])->name('admin.transaction_detail');
+
+    Route::match(["POST", "GET"], '/rates', [BasicController::class, 'rates'])->name('admin.rates');
     Route::match(["POST", "GET"], '/customers/rate/{id}', [BasicController::class, 'addrates',])->name('admin.addrates');
 Route::match(["POST", "GET"], '/countries', [BasicController::class, 'countries'])->name('admin.countries');
 Route::match(["POST", "GET"], '/saveCountry', [BasicController::class, 'saveCountry'])->name('admin.saveCountry');
 Route::match(["POST", "GET"], '/cities', [BasicController::class, 'cities'])->name('admin.cities');
 Route::match(["POST", "GET"], '/gateways', [BasicController::class, 'gateways'])->name('admin.gateways');
+Route::match(["POST", "GET"], '/senders/detail/{code}', [BasicController::class, 'sender_detail'])->name('admin.sender_detail');
+Route::match(["POST", "GET"], '/beneficiaries/detail/{code}', [BasicController::class, 'beneficiary_detail'])->name('admin.beneficiary_detail');
     //});
 });
