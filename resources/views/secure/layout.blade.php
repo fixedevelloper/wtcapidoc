@@ -10,14 +10,14 @@
     <!-- Fav Icon  -->
     <link rel="shortcut icon" href="{{asset('assets/img/icon.png')}}">
     <!-- Page Title  -->
-    <title>@yield('title')| WTC</title>
+    <title>@yield('title')|WTC</title>
     <!-- StyleSheets  -->
     <link rel="stylesheet" href="{{asset('assets/secure/css/dashlite.min.css')}}?ver=3.2.3">
     <link id="skin-default" rel="stylesheet" href="{{asset('assets/secure/css/theme.css')}}?ver=3.2.3">
     @notify_css
 </head>
 
-<body class="nk-body bg-lighter npc-general has-sidebar ">
+<body class="nk-body bg-lighter npc-default has-sidebar no-touch nk-nio-theme">
 <div class="nk-app-root">
     <!-- main @s -->
     <div class="nk-main ">
@@ -87,6 +87,7 @@
             get_ajax_beneficiaries: "{{\Illuminate\Support\Facades\URL::route('secure.get_ajax_beneficiaries')}}",
             get_ajax_cities: "{{\Illuminate\Support\Facades\URL::route('secure.get_ajax_cities')}}",
             get_ajax_operators: "{{\Illuminate\Support\Facades\URL::route('secure.get_ajax_operators')}}",
+            get_ajax_rate: "{{\Illuminate\Support\Facades\URL::route('secure.get_ajax_rate')}}",
         }
     }
 </script>

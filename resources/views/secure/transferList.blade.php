@@ -6,7 +6,7 @@
                         <div class="nk-block-head-content">
                             <h3 class="nk-block-title page-title">Transction History</h3>
                             <div class="nk-block-des text-soft">
-                                <p>You have total 937 orders.</p>
+                                <p>You have total {{count($transactions)}} items.</p>
                             </div>
                         </div><!-- .nk-block-head-content -->
                         <div class="nk-block-head-content">
@@ -90,7 +90,7 @@
                                         <div class="nk-tb-col tb-col-md"><span class="sub-text">Amount Send</span></div>
                                         <div class="nk-tb-col tb-col-lg"><span class="sub-text">Amount receive</span></div>
                                         <div class="nk-tb-col tb-col-lg"><span class="sub-text">Beneficiary</span></div>
-                                        <div class="nk-tb-col tb-col-md"><span class="sub-text">rate</span></div>
+                                        <div class="nk-tb-col tb-col-md"><span class="sub-text">Total Fees &amp; Charges</span></div>
                                         <div class="nk-tb-col tb-col-md"><span class="sub-text">Date</span></div>
                                         <div class="nk-tb-col tb-col-md"><span class="sub-text">Mode</span></div>
                                         <div class="nk-tb-col tb-col-md"><span class="sub-text">Status</span></div>
@@ -149,63 +149,54 @@
                                                         <span>{{ substr($item['sender']['first_name'],0,1) }}{{ substr($item['sender']['last_name'],0,1) }}</span>
                                                     </div>
                                                     <div class="user-info">
-                                                        <span class="tb-lead">{{$item['sender']['first_name']}} {{$item['sender']['last_name']}} <span class="dot dot-warning d-md-none ms-1"></span></span>
+                                                        <span class="tb-lead">
+                                                            {{$item['sender']['first_name']}} {{$item['sender']['last_name']}}
+                                                            <span class="dot dot-warning d-md-none ms-1">
+
+                                                            </span></span>
                                                         <span>{{$item['sender']['email']}}</span>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="nk-tb-col tb-col-mb">
-                                                <span class="tb-amount">{{$item['country']}} </span>
-                                            </div>
-                                            <div class="nk-tb-col tb-col-md">
-                                                <span>{{$item['amount_total']}}</span>
+                                                <span class="tb-amount">{{$item->gatewayItem->country->name}} </span>
                                             </div>
                                             <div class="nk-tb-col tb-col-sm">
-                                                <span>{{$item['amount']}}</span>
+                                                <span>{{number_format($item['amount']+$item['rate'],2)}} XAF</span>
                                             </div>
+                                            <div class="nk-tb-col tb-col-md">
+                                                <span>{{number_format($item['amount_total'],2)}} {{$item->gatewayItem->country->currency}}</span>
+                                            </div>
+
                                             <div class="nk-tb-col tb-col-sm">
-                                                <span>{{$item['beneficiary']['first_name']}}</span>
+                                                <div class="user-info">
+                                                    <span class="tb-lead">{{$item['beneficiary']['first_name']}}</span>
+                                                    <span>{{$item['beneficiary']['last_name']}}</span>
+                                                </div>
                                             </div>
                                             <div class="nk-tb-col tb-col-md">
-                                                <span>{{$item['rate']}}</span>
+                                                <span class="amount">{{number_format($item['rate'],2)}} XAF</span>
                                             </div>
                                             <div class="nk-tb-col tb-col-md">
-                                                <span>{{$item['date_transaction']}}</span>
+                                                <span>{{$item['created_at']}}</span>
                                             </div>
                                             <div class="nk-tb-col tb-col-md">
-                                                <span>{{$item['mode_transaction']}}</span>
+                                                <span>{{$item['method']}}</span>
                                             </div>
                                             <div class="nk-tb-col tb-col-md">
-                                                <span>{{$item['status']}}</span>
+                                                <span class="{{ $item->stringStatus->class }}">{{$item->stringStatus->value}}</span>
                                             </div>
                                             <div class="nk-tb-col tb-col-md">
-                                                <span>{{$item['operator']}}</span>
+                                                <span>{{$item['gatewayItem']['name']}}</span>
                                             </div>
                                             <div class="nk-tb-col nk-tb-col-tools">
                                                 <ul class="nk-tb-actions gx-1">
-                                                    <li class="nk-tb-action-hidden">
-                                                        <a href="{{route('secure.beneficiaries',['numSender'=>$item['num']])}}" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Beneficiaries" data-bs-original-title="Beneficiaries">
-                                                            <em class="icon ni ni-user-group-fill"></em>
-                                                        </a>
-                                                    </li>
-                                                    <li class="nk-tb-action-hidden">
-                                                        <a href="{{route('secure.add.beneficiaries',['numSender'=>$item['num']])}}" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Add Beneficiary" data-bs-original-title="Add Beneficiary">
-                                                            <em class="icon ni ni-plus-medi-fill"></em>
-                                                        </a>
-                                                    </li>
-                                                    <li class="nk-tb-action-hidden">
-                                                        <a href="#" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Details" data-bs-original-title="Details">
-                                                            <em class="icon ni ni-user-cross-fill"></em>
-                                                        </a>
-                                                    </li>
                                                     <li>
                                                         <div class="drodown">
                                                             <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                                                             <div class="dropdown-menu dropdown-menu-end">
                                                                 <ul class="link-list-opt no-bdr">
-                                                                    <li><a href="#"><em class="icon ni ni-eye"></em><span>View Details</span></a></li>
-                                                                    <li><a href="{{route('secure.beneficiaries',['numSender'=>$item['num']])}}"><em class="icon ni ni-user-group-fill"></em><span>Beneficiaries</span></a></li>
-                                                                    <li><a href="#"><em class="icon ni ni-repeat"></em><span>Transaction</span></a></li>
+                                                                    <li><a href="{{route('sandbox.transaction_detail',['numero_identifiant'=>$item['number_transaction']])}}"><em class="icon ni ni-eye"></em><span>View Details</span></a></li>
                                                                 </ul>
                                                             </div>
                                                         </div>
@@ -218,15 +209,7 @@
 
                             </div><!-- .card-inner -->
                             <div class="card-inner">
-                                <ul class="pagination justify-content-center justify-content-md-start">
-                                    <li class="page-item"><a class="page-link" href="#">Prev</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                    <li class="page-item"><span class="page-link"><em class="icon ni ni-more-h"></em></span></li>
-                                    <li class="page-item"><a class="page-link" href="#">6</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">7</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                                </ul><!-- .pagination -->
+                                {{$transactions->links('vendor.pagination.custom-paginator')}}
                             </div><!-- .card-inner -->
                         </div><!-- .card-inner-group -->
                     </div><!-- .card -->

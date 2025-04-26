@@ -3,6 +3,7 @@
 use App\Http\Middleware\EnsureIsAdmin;
 use App\Http\Middleware\EnsureRemoteApiAvailable;
 use App\Http\Middleware\EnsureRemoteSandboxApiAvailable;
+use App\Http\Middleware\LogFilteredApiRequests;
 use App\Http\Middleware\VerifyCustomerJwt;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -18,6 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
     $middleware->alias([
 
+        'logs.api' => LogFilteredApiRequests::class,
         'remote.api' => EnsureRemoteApiAvailable::class,
         'sandbox.api' => EnsureRemoteSandboxApiAvailable::class,
         'isAdmin' => EnsureIsAdmin::class,

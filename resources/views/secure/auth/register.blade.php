@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <!-- Fav Icon  -->
-    <link rel="shortcut icon" href="./images/favicon.png">
+    <link rel="shortcut icon" href="{{asset('assets/img/icon.png')}}">
     <!-- Page Title  -->
     <title>Register| WTC</title>
     <!-- StyleSheets  -->
@@ -16,7 +16,7 @@
     <link id="skin-default" rel="stylesheet" href="{{asset('assets/secure/css/theme.css')}}?ver=3.2.3">
     @notify_css
 </head>
-<body class="nk-body bg-white npc-general pg-auth">
+<body class="nk-body bg-white npc-general pg-auth dark-mode">
 <div class="nk-app-root">
     <!-- main @s -->
     <div class="nk-main ">
@@ -29,7 +29,7 @@
                         <div class="nk-content-body">
                             <div class="nk-block nk-block-middle nk-auth-body  wide-xs">
                                 <div class="brand-logo pb-4 text-center">
-                                    <a href="{{route('secure.login')}}" class="logo-link">
+                                    <a href="{{route('sandbox.login')}}" class="logo-link">
                                         <img class="logo-light logo-img logo-img-lg" src="{{asset('assets/img/Logo.png')}}" srcset="{{asset('assets/img/Logo.png')}} 2x" alt="logo">
                                         <img class="logo-dark logo-img logo-img-lg" src="{{asset('assets/img/Logo.png')}}" srcset="{{asset('assets/img/Logo.png')}} 2x" alt="logo-dark">
                                     </a>
@@ -87,7 +87,7 @@
                                                 <button class="btn btn-lg btn-primary btn-block">Register</button>
                                             </div>
                                         </form>
-                                        <div class="form-note-s2 text-center pt-4"> Already have an account? <a href="{{route('secure.login')}}"><strong>Sign in instead</strong></a>
+                                        <div class="form-note-s2 text-center pt-4"> Already have an account? <a href="{{route('sandbox.login')}}"><strong>Sign in instead</strong></a>
                                         </div>
                                         <div class="text-center pt-4 pb-3">
                                             <h6 class="overline-title overline-title-sap"><span>OR</span></h6>

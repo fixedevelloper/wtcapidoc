@@ -8,6 +8,7 @@ use App\Models\Customer;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Exception;
+use Illuminate\Support\Facades\Session;
 
 class VerifyCustomerJwt
 {
@@ -37,7 +38,7 @@ class VerifyCustomerJwt
             if (! $customer || ! $publicKey) {
                 throw new Exception('Customer not found or missing public key');
             }
-
+            Session::put('customer_id',$customerId);
             // Vérification du token avec la clé publique
             $decoded = JWT::decode($token, new Key($publicKey, 'RS256'));
 

@@ -1,4 +1,4 @@
-<div class="nk-header nk-header-fixed is-light">
+<div class="nk-header nk-header-fixed is-theme">
     <div class="container-fluid">
         <div class="nk-header-wrap">
             <div class="nk-menu-trigger d-xl-none ms-n1">
@@ -18,7 +18,7 @@
                             <em class="icon ni ni-card-view"></em>
                         </div>
                         <div class="nk-news-text">
-                            <p>MODE SANDBOX</p>
+                            <p>Mode {{session('mode')}}</p>
                             <em class="icon ni ni-external"></em>
                         </div>
                     </a>
@@ -57,9 +57,9 @@
                                 </div>
                                 <div class="user-info d-none d-md-block">
                                     <div class="user-status">
-                                        {{session('name')}}
+                                        {{auth()->user()->name}}
                                     </div>
-                                    <div class="user-name dropdown-indicator">{{session('email')}}</div>
+                                    <div class="user-name dropdown-indicator"> {{auth()->user()->email}}</div>
                                 </div>
                             </div>
                         </a>
@@ -77,14 +77,13 @@
                             </div>
                             <div class="dropdown-inner">
                                 <ul class="link-list">
-                                    <li><a href="#"><em class="icon ni ni-user-alt"></em><span>View Profile</span></a></li>
-                                    <li><a href="#"><em class="icon ni ni-setting-alt"></em><span>Account Setting</span></a></li>
+                                    <li><a href="{{route('secure.profil')}}"><em class="icon ni ni-user-alt"></em><span>View Profile</span></a></li>
                                   <li><a class="dark-switch" href="#"><em class="icon ni ni-moon"></em><span>Dark Mode</span></a></li>
                                 </ul>
                             </div>
                             <div class="dropdown-inner">
                                 <ul class="link-list">
-                                    <li><a href="{{route('sandbox.logout')}}"><em class="icon ni ni-signout"></em><span>Sign out</span></a></li>
+                                    <li><a href="{{route('secure.logout')}}"><em class="icon ni ni-signout"></em><span>Sign out</span></a></li>
                                 </ul>
                             </div>
                         </div>

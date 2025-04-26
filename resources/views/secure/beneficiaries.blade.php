@@ -5,7 +5,7 @@
             <div class="nk-block-head-content">
                 <h3 class="nk-block-title page-title">Beneficiaries List</h3>
                 <div class="nk-block-des text-soft">
-                    <p>You have total 937 orders.</p>
+                    <p>You have total {{count($beneficiaries)}} items.</p>
                 </div>
             </div><!-- .nk-block-head-content -->
             <div class="nk-block-head-content">
@@ -142,11 +142,11 @@
                                 <div class="nk-tb-col">
                                     <div class="user-card">
                                         <div class="user-avatar">
-                                            <span>EW</span>
+                                            <span>{{strtoupper(substr($item->first_name,0,1))}}{{strtoupper(substr($item->last_name,0,1))}}</span>
                                         </div>
                                         <div class="user-info">
-                                            <span class="tb-lead">{{$item['first_name']}} {{$item['last_name']}} <span class="dot dot-warning d-md-none ms-1"></span></span>
-                                            <span>{{$item['email']}}</span>
+                                            <span class="tb-lead">{{$item->first_name}} {{$item->last_name}} <span class="dot dot-warning d-md-none ms-1"></span></span>
+                                            <span>{{$item->email}}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -167,28 +167,12 @@
                                 </div>
                                 <div class="nk-tb-col nk-tb-col-tools">
                                     <ul class="nk-tb-actions gx-1">
-                                        <li class="nk-tb-action-hidden">
-                                            <a href="#" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Wallet" data-bs-original-title="Wallet">
-                                                <em class="icon ni ni-wallet-fill"></em>
-                                            </a>
-                                        </li>
-                                        <li class="nk-tb-action-hidden">
-                                            <a href="#" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Send Email" data-bs-original-title="Send Email">
-                                                <em class="icon ni ni-mail-fill"></em>
-                                            </a>
-                                        </li>
-                                        <li class="nk-tb-action-hidden">
-                                            <a href="#" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Suspend" data-bs-original-title="Suspend">
-                                                <em class="icon ni ni-user-cross-fill"></em>
-                                            </a>
-                                        </li>
                                         <li>
                                             <div class="drodown">
                                                 <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                                                 <div class="dropdown-menu dropdown-menu-end">
                                                     <ul class="link-list-opt no-bdr">
                                                         <li><a href="#"><em class="icon ni ni-eye"></em><span>View Details</span></a></li>
-                                                        <li><a href="#"><em class="icon ni ni-repeat"></em><span>Transaction</span></a></li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -199,18 +183,10 @@
                         @endforeach
                     </div>
 
-                </div><!-- .card-inner -->
+                </div>
                 <div class="card-inner">
-                    <ul class="pagination justify-content-center justify-content-md-start">
-                        <li class="page-item"><a class="page-link" href="#">Prev</a></li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><span class="page-link"><em class="icon ni ni-more-h"></em></span></li>
-                        <li class="page-item"><a class="page-link" href="#">6</a></li>
-                        <li class="page-item"><a class="page-link" href="#">7</a></li>
-                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                    </ul><!-- .pagination -->
-                </div><!-- .card-inner -->
+                    {{$beneficiaries->links('vendor.pagination.custom-paginator')}}
+                </div>
             </div><!-- .card-inner-group -->
         </div><!-- .card -->
     </div>

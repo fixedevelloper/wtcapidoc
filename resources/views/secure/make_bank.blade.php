@@ -10,6 +10,15 @@
             </div><!-- .nk-block-head-content -->
         </div><!-- .nk-block-between -->
     </div>
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <div class="nk-block">
         <div class="card card-bordered card-stretch">
             <div class="card-inner-group">
@@ -29,13 +38,12 @@
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="form-label" for="sender">Choose Sender</label>
+                                            <label class="form-label" for="sende">Choose Sender</label>
                                             <div class="form-control-wrap ">
                                                 <div class="form-control-select">
-                                                    <select name="numSender" class="form-control" id="sender">
-                                                        <option>Choose sender</option>
+                                                    <select required name="numSender" class="form-control" id="sende">
                                                         @foreach($senders as $item)
-                                                            <option value="{{$item['num']}}">{{$item['first_name']}} {{$item['last_name']}}</option>
+                                                            <option value="{{$item->id}}">{{$item->first_name}} {{$item->last_name}}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -45,9 +53,9 @@
                                             <label class="form-label" for="country">Choose Country</label>
                                             <div class="form-control-wrap ">
                                                 <div class="form-control-select">
-                                                    <select name="countryCode" class="form-control" id="country">
+                                                    <select required name="countryCode" class="form-control" id="country">
                                                         @foreach($countries as $item)
-                                                            <option value="{{$item['codeIso2']}}">{{$item['libelle']}}</option>
+                                                            <option data-currency="{{$item->currency}}" value="{{$item->id}}">{{$item->name}}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -57,7 +65,7 @@
                                             <label class="form-label" for="default-06">Origin fond</label>
                                             <div class="form-control-wrap ">
                                                 <div class="form-control-select">
-                                                    <select name="origin_fond" class="form-control" id="default-06">
+                                                    <select required name="origin_fond" class="form-control" id="default-06">
                                                         @foreach($originFonds as $item)
                                                             <option value="{{$item['name']}}">{{$item['name']}}</option>
                                                         @endforeach
@@ -71,8 +79,10 @@
                                             <label class="form-label" for="beneficiary">Choose Beneficiary</label>
                                             <div class="form-control-wrap ">
                                                 <div class="form-control-select">
-                                                    <select name="numBeneficiary" class="form-control" id="beneficiary">
-
+                                                    <select name="numBeneficiary" class="form-control" id="beneficiar">
+                                                        @foreach($beneficiaries as $item)
+                                                            <option value="{{$item->id}}">{{$item->first_name}} {{$item->last_name}}</option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
@@ -81,7 +91,7 @@
                                             <label class="form-label" for="city">Choose City</label>
                                             <div class="form-control-wrap ">
                                                 <div class="form-control-select">
-                                                    <select name="numCity" class="form-control" id="city">
+                                                    <select required name="numCity" class="form-control" id="city">
                                                     </select>
                                                 </div>
                                             </div>
@@ -105,7 +115,7 @@
                                     <label class="form-label" for="default-06">Relation</label>
                                     <div class="form-control-wrap ">
                                         <div class="form-control-select">
-                                            <select name="relation" class="form-control" id="default-06">
+                                            <select required name="relation" class="form-control" id="default-06">
                                                 @foreach($relactions as $item)
                                                     <option value="{{$item['name']}}">{{$item['name']}}</option>
                                                 @endforeach
@@ -114,10 +124,11 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="wallet">Choose wallet</label>
+                                    <label class="form-label" for="wallet">Choose Wallet</label>
                                     <div class="form-control-wrap ">
                                         <div class="form-control-select">
-                                            <select name="gateway" class="form-control" id="wallet">
+                                            <select required name="wallet" class="form-control" id="wallet">
+                                                <option >Choose wallet</option>
                                                 @foreach($wallets as $item)
                                                     <option value="{{$item}}">{{$item}}</option>
                                                 @endforeach
@@ -126,10 +137,10 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="operator">Choose operator</label>
+                                    <label class="form-label" for="operator">Choose bank</label>
                                     <div class="form-control-wrap ">
                                         <div class="form-control-select">
-                                            <select name="operator" class="form-control" id="operator">
+                                            <select required name="gateway_id" class="form-control" id="operator">
                                             </select>
                                         </div>
                                     </div>
@@ -142,7 +153,7 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text" id="inputGroup-sizing-lg"><em class="icon ni ni-inbox"></em></span>
                                                 </div>
-                                                <input name="iban" type="text" id="iban" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm">
+                                                <input required name="iban" type="text" id="iban" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm">
                                             </div>
                                         </div>
                                     </div>
@@ -153,7 +164,7 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text" id="inputGroup-sizing-lg"><em class="icon ni ni-account-setting"></em></span>
                                                 </div>
-                                                <input name="accountNumber" type="text" id="account_number" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm">
+                                                <input required name="accountNumber" type="text" id="account_number" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm">
                                             </div>
                                         </div>
                                     </div>
@@ -164,7 +175,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text" id="inputGroup-sizing-lg"><em class="icon ni ni-money"></em></span>
                                         </div>
-                                        <input name="amount" type="text" id="amount" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm">
+                                        <input required name="amount" type="text" id="amount" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm">
                                     </div>
                                 </div>
 
@@ -207,10 +218,10 @@
                                                     </div>
                                                 </div>
                                                 <div class="preview-list-right">
-                                                    <span class="request-amount"><span id="exchange_rate_text">1 XAF  =  1XAF</span></span>
+                                                    <span class="request-amount"><span>1 XAF  =  <span id="exchange_rate_text"></span> <span id="exchange_rate_currency"></span></span></span>
                                                 </div>
                                             </div>
-                                            <div class="preview-list-item">
+                                        {{--    <div class="preview-list-item">
                                                 <div class="preview-list-left">
                                                     <div class="preview-list-user-wrapper">
                                                         <div class="preview-list-user-icon">
@@ -224,7 +235,7 @@
                                                 <div class="preview-list-right">
                                                     <span class="conversion"><span id="conversion_text">1</span> XAF</span>
                                                 </div>
-                                            </div>
+                                            </div>--}}
                                             <div class="preview-list-item">
                                                 <div class="preview-list-left">
                                                     <div class="preview-list-user-wrapper">
@@ -237,7 +248,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="preview-list-right">
-                                                    <span class="fees">0.00 EUR</span>
+                                                    <span class="fees" ><span id="fees">0.00 </span> XAF</span>
                                                 </div>
                                             </div>
 
@@ -248,12 +259,12 @@
                                                             <i class="las la-money-check-alt"></i>
                                                         </div>
                                                         <div class="preview-list-user-content">
-                                                            <span class="">Will Get</span>
+                                                            <span class="">Will Send</span>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="preview-list-right">
-                                                    <span class="text--success ">8.50 EUR</span>
+                                                    <span class="text--success "><span id="will_send"></span> <span id="will_send_currency"></span></span>
                                                 </div>
                                             </div>
                                             <div class="preview-list-item">
@@ -268,10 +279,12 @@
                                                     </div>
                                                 </div>
                                                 <div class="preview-list-right">
-                                                    <span class="text--warning last">10.00 XAF</span>
+                                                    <span class="text--warning last"><span id="payable"></span> XAF</span>
                                                 </div>
                                             </div>
+
                                         </div>
+                                        <div class="mt-3 mb-3 text-danger text-md-center">Notice: You are in a test environment</div>
                                     </div>
                                 </div>
 
@@ -318,13 +331,13 @@
                     type: "GET",
                     dataType: "JSON",
                     data: {
-                        'numCountry': $('#country').val()
+                        'country_id': $('#country').val()
                     },
                     success: function (data) {
                         $('#city').html('')
                         $('#city').append('<option>Choose city</option>')
                         $.each(data.data, function (index, item) {
-                            $('#city').append('<option value="'+item["num"]+'">'+item["libelle"]+'</option>')
+                            $('#city').append('<option value="'+item["name"]+'">'+item["name"]+'</option>')
                         })
                     },
                     error: function (err) {
@@ -339,13 +352,13 @@
                     type: "GET",
                     dataType: "JSON",
                     data: {
-                        'numCountry': $('#country').val(),
-                        'gateway': $('#wallet').val()
+                        'country_id': $('#country').val(),
+                        'method': $('#wallet').val()
                     },
                     success: function (data) {
                         $('#operator').html('')
                         $.each(data.data, function (index, item) {
-                            $('#operator').append('<option value="'+item["name"]+'">'+item["name"]+'</option>')
+                            $('#operator').append('<option value="'+item["id"]+'">'+item["name"]+'</option>')
                         })
                     },
                     error: function (err) {
@@ -355,6 +368,30 @@
             })
             $('#amount').keyup(function () {
                 $('#amount_text').text($('#amount').val())
+                $.ajax({
+                    url: configs.routes.get_ajax_rate,
+                    type: "GET",
+                    dataType: "JSON",
+                    data: {
+                        'country_id': $('#country').val(),
+                        'amount': $('#amount').val()
+                    },
+                    success: function (data) {
+                        if (data.data['status']===0){
+                            toastr.error('unauthorized for this country', '503!')
+                        }
+                        $('#exchange_rate_text').text(data.data['value']['rate'])
+                        $('#fees').text(data.data['value']['costs'])
+                        $('#payable').text(data.data['value']['total_local'])
+                        $('#will_send').text(data.data['value']['total'])
+                        $('#exchange_rate_currency').text($("select[name=countryCode] :selected").data('currency'))
+                        $('#will_send_currency').text($("select[name=countryCode] :selected").data('currency'))
+
+                    },
+                    error: function (err) {
+                        alert("An error ocurred while loading data ...");
+                    }
+                });
 
             })
         })

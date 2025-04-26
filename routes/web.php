@@ -6,8 +6,9 @@ use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\DefaultController;
 use App\Http\Controllers\Sandbox\SecurityController;
 use App\Http\Controllers\Sandbox\StaticController;
-use App\Http\Controllers\SandboxOldController;
-use App\Http\Controllers\SecureController;
+use App\Http\Controllers\Secure\SecuritySecureController;
+use App\Http\Controllers\Secure\StaticSecureController;
+
 use Illuminate\Support\Facades\Route;
 
 
@@ -27,7 +28,7 @@ Route::domain('doc.agensic.com')->group(function () {
 
 
 Route::domain('sandbox.agensic.com')->group(function () {
-    Route::match(["POST", "GET"], '/logout', [SecureController::class, 'logout'])->name('sandbox.logout');
+    Route::match(["POST", "GET"], '/logout', [SecurityController::class, 'logout'])->name('sandbox.logout');
 Route::match(["POST", "GET"], '/', [SecurityController::class, 'sandboxLogin'])->name('sandbox.login');
     Route::match(["POST", "GET"], '/register', [SecurityController::class, 'register'])->name('sandbox.register');
     Route::group(['middleware' => ['sandbox.api']], function () {
@@ -47,23 +48,27 @@ Route::match(["POST", "GET"], '/', [SecurityController::class, 'sandboxLogin'])-
         Route::match(["POST", "GET"], '/get_ajax_rate', [StaticController::class, 'getRateAjax'])->name('sandbox.get_ajax_rate');
     });
 });
-Route::domain('secure.agensic.com')->group(function () {
-    Route::match(["POST", "GET"], '/', [SecurityAdminController::class, 'secureLogin'])->name('secure.login');
-    Route::match(["POST", "GET"], '/register', [SecurityAdminController::class, 'secureRegister'])->name('secure.register');
+//Route::domain('secure.agensic.com')->group(function () {
+    Route::match(["POST", "GET"], '/', [SecuritySecureController::class, 'secureLogin'])->name('secure.login');
+    Route::match(["POST", "GET"], '/register', [SecuritySecureController::class, 'secureRegister'])->name('secure.register');
+Route::match(["POST", "GET"], '/logout', [SecuritySecureController::class, 'logout'])->name('secure.logout');
     Route::group(['middleware' => ['remote.api']], function () {
-        Route::match(["POST", "GET"], '/dashboard', [SecurityAdminController::class, 'dashboard'])->name('secure.dashboard');
-        Route::match(["POST", "GET"], '/make_bank', [SecurityAdminController::class, 'make_bank'])->name('secure.make_bank');
-        Route::match(["POST", "GET"], '/make_mobil', [SecurityAdminController::class, 'make_mobil'])->name('secure.make_mobil');
-        Route::match(["POST", "GET"], '/transfer_list', [SecurityAdminController::class, 'transferList'])->name('secure.transferList');
-        Route::match(["POST", "GET"], '/securesenders', [SecurityAdminController::class, 'senders'])->name('secure.senders');
-        Route::match(["POST", "GET"], '/securesenders/add', [SecurityAdminController::class, 'addSender'])->name('secure.add.senders');
-        Route::match(["POST", "GET"], '/securebeneficiaries/add', [SecurityAdminController::class, 'addBeneficiaries'])->name('secure.add.beneficiaries');
-        Route::match(["POST", "GET"], '/securebeneficiaries', [SecurityAdminController::class, 'beneficiaries'])->name('secure.beneficiaries');
-        Route::match(["POST", "GET"], '/get_ajax_beneficiaries', [SecurityAdminController::class, 'getBeneficiaryAjax'])->name('secure.get_ajax_beneficiaries');
-        Route::match(["POST", "GET"], '/get_ajax_cities', [SecurityAdminController::class, 'getCitiesAjax'])->name('secure.get_ajax_cities');
-        Route::match(["POST", "GET"], '/get_ajax_operators', [SecurityAdminController::class, 'getOperatorsAjax'])->name('secure.get_ajax_operators');
+        Route::match(["POST", "GET"], '/profil', [StaticSecureController::class, 'profil'])->name('secure.profil');
+        Route::match(["POST", "GET"], '/dashboard', [StaticSecureController::class, 'dashboard'])->name('secure.dashboard');
+        Route::match(["POST", "GET"], '/make_bank', [StaticSecureController::class, 'make_bank'])->name('secure.make_bank');
+        Route::match(["POST", "GET"], '/make_mobil', [StaticSecureController::class, 'make_mobil'])->name('secure.make_mobil');
+        Route::match(["POST", "GET"], '/transfer_list', [StaticSecureController::class, 'transferList'])->name('secure.transferList');
+        Route::match(["POST", "GET"], '/securesenders', [StaticSecureController::class, 'senders'])->name('secure.senders');
+        Route::match(["POST", "GET"], '/transfer_list/detail/{numero_identifiant}', [StaticSecureController::class, 'transaction_detail'])->name('secure.transaction_detail');
+        Route::match(["POST", "GET"], '/securesenders/add', [StaticSecureController::class, 'addSender'])->name('secure.add.senders');
+        Route::match(["POST", "GET"], '/securebeneficiaries/add', [StaticSecureController::class, 'addBeneficiaries'])->name('secure.add.beneficiaries');
+        Route::match(["POST", "GET"], '/securebeneficiaries', [StaticSecureController::class, 'beneficiaries'])->name('secure.beneficiaries');
+        Route::match(["POST", "GET"], '/get_ajax_beneficiaries', [StaticSecureController::class, 'getBeneficiaryAjax'])->name('secure.get_ajax_beneficiaries');
+        Route::match(["POST", "GET"], '/get_ajax_cities', [StaticSecureController::class, 'getCitiesAjax'])->name('secure.get_ajax_cities');
+        Route::match(["POST", "GET"], '/get_ajax_operators', [StaticSecureController::class, 'getOperatorsAjax'])->name('secure.get_ajax_operators');
+        Route::match(["POST", "GET"], '/get_ajax_rate', [StaticSecureController::class, 'getRateAjax'])->name('secure.get_ajax_rate');
     });
-});
+//});
 
 Route::domain('manage.agensic.com')->group(function () {
     Route::match(["POST", "GET"], '/', [SecurityAdminController::class, 'adminLogin'])->name('admin.login');

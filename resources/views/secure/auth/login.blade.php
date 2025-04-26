@@ -44,7 +44,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <form method="POST">
+                                        <form method="POST" action="{{route('secure.login')}}">
                                             @csrf
                                             <div class="form-group">
                                                 <div class="form-label-group">

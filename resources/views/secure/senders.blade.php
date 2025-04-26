@@ -5,7 +5,7 @@
             <div class="nk-block-head-content">
                 <h3 class="nk-block-title page-title">Senders List</h3>
                 <div class="nk-block-des text-soft">
-                    <p>You have total 937 orders.</p>
+                    <p>You have total {{count($senders)}} items.</p>
                 </div>
             </div><!-- .nk-block-head-content -->
             <div class="nk-block-head-content">
@@ -145,50 +145,41 @@
                             <div class="nk-tb-col">
                                 <div class="user-card">
                                     <div class="user-avatar">
-                                        <span>EW</span>
+                                        <span>{{strtoupper(substr($item->first_name,0,1))}}{{strtoupper(substr($item->last_name,0,1))}}</span>
                                     </div>
                                     <div class="user-info">
-                                        <span class="tb-lead">{{$item['first_name']}} {{$item['last_name']}} <span class="dot dot-warning d-md-none ms-1"></span></span>
-                                        <span>{{$item['email']}}</span>
+                                        <span class="tb-lead">{{$item->first_name}} {{$item->last_name}} <span class="dot dot-warning d-md-none ms-1"></span></span>
+                                        <span>{{$item->email}}</span>
                                     </div>
                                 </div>
                             </div>
                             <div class="nk-tb-col tb-col-mb">
-                                <span class="tb-amount">{{$item['country']}} </span>
+                                <span class="tb-amount">{{$item->country}} </span>
                             </div>
                             <div class="nk-tb-col tb-col-md">
-                                <span>{{$item['phone']}}</span>
+                                <span>{{$item->phone}}</span>
                             </div>
                             <div class="nk-tb-col tb-col-sm">
-                                <span>{{$item['gender']}}</span>
+                                <span>{{$item->gender}}</span>
                             </div>
                             <div class="nk-tb-col tb-col-sm">
-                                <span>{{$item['civility']}}</span>
+                                <span>{{$item->civility}}</span>
                             </div>
                             <div class="nk-tb-col tb-col-md">
-                                <span>{{$item['occupation']}}</span>
+                                <span>{{$item->occupation}}</span>
                             </div>
                             <div class="nk-tb-col tb-col-md">
-                                <span>{{$item['identification_document']}}</span>
+                                <span>{{$item->identification_document}}</span>
                             </div>
                             <div class="nk-tb-col tb-col-md">
-                                <span>{{$item['num_document']}}</span>
+                                <span>{{$item->num_document}}</span>
                             </div>
                             <div class="nk-tb-col tb-col-md">
-                                <span>{{$item['expired_document']}}</span>
+                                <span>{{$item->expired_document}}</span>
                             </div>
                             <div class="nk-tb-col nk-tb-col-tools">
                                 <ul class="nk-tb-actions gx-1">
-                                    <li class="nk-tb-action-hidden">
-                                        <a href="{{route('secure.beneficiaries',['numSender'=>$item['num']])}}" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Beneficiaries" data-bs-original-title="Beneficiaries">
-                                            <em class="icon ni ni-user-group-fill"></em>
-                                        </a>
-                                    </li>
-                                    <li class="nk-tb-action-hidden">
-                                        <a href="{{route('secure.add.beneficiaries',['numSender'=>$item['num']])}}" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Add Beneficiary" data-bs-original-title="Add Beneficiary">
-                                            <em class="icon ni ni-plus-medi-fill"></em>
-                                        </a>
-                                    </li>
+
                                     <li class="nk-tb-action-hidden">
                                         <a href="#" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Details" data-bs-original-title="Details">
                                             <em class="icon ni ni-user-cross-fill"></em>
@@ -200,8 +191,7 @@
                                             <div class="dropdown-menu dropdown-menu-end">
                                                 <ul class="link-list-opt no-bdr">
                                                     <li><a href="#"><em class="icon ni ni-eye"></em><span>View Details</span></a></li>
-                                                    <li><a href="{{route('secure.beneficiaries',['numSender'=>$item['num']])}}"><em class="icon ni ni-user-group-fill"></em><span>Beneficiaries</span></a></li>
-                                                    <li><a href="#"><em class="icon ni ni-repeat"></em><span>Transaction</span></a></li>
+                                                  <li><a href="#"><em class="icon ni ni-repeat"></em><span>Transaction</span></a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -214,15 +204,7 @@
 
                 </div><!-- .card-inner -->
                 <div class="card-inner">
-                    <ul class="pagination justify-content-center justify-content-md-start">
-                        <li class="page-item"><a class="page-link" href="#">Prev</a></li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><span class="page-link"><em class="icon ni ni-more-h"></em></span></li>
-                        <li class="page-item"><a class="page-link" href="#">6</a></li>
-                        <li class="page-item"><a class="page-link" href="#">7</a></li>
-                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                    </ul><!-- .pagination -->
+                    {{$senders->links('vendor.pagination.custom-paginator')}}
                 </div><!-- .card-inner -->
             </div><!-- .card-inner-group -->
         </div><!-- .card -->

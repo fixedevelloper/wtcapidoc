@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Http\Controllers\Sandbox;
+namespace App\Http\Controllers\Secure;
 
 
 use App\Helpers\Helper;
@@ -20,11 +20,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 
-class StaticController extends Controller
+class StaticSecureController extends Controller
 {
     public function dashboard(Request $request)
     {
-        return view('sandbox.dashbord', [
+        return view('secure.dashbord', [
 
         ]);
     }
@@ -33,7 +33,7 @@ class StaticController extends Controller
     {
         $profile=Customer::query()->firstWhere(['user_id'=>\auth()->user()->id]);
         logger($profile);
-        return view('sandbox.profil', [
+        return view('secure.profil', [
             'profile' => $profile
         ]);
     }
@@ -51,9 +51,9 @@ class StaticController extends Controller
         } else {
             $items = new Transaction();
         }
-        $items = $items->where(['customer_id' => $customer->id,'type'=>Helper::TYPESANDBOX])->orderByDesc('created_at')->paginate(20)->appends($query_param);
+        $items = $items->where(['customer_id' => $customer->id,'type'=>Helper::TYPESECURE])->orderByDesc('created_at')->paginate(20)->appends($query_param);
 
-        return view('sandbox.transferList', [
+        return view('secure.transferList', [
             'transactions' => $items
         ]);
     }
@@ -121,7 +121,7 @@ class StaticController extends Controller
                 return redirect()->back()->withInput();
             }
             $amount_total=$rate['total'];
-            if ($customer->balance_sandbox<$rate['total_local']){
+            if ($customer->balance<$rate['total_local']){
                 notify()->error('Balance Insufficient');
                 return redirect()->back()->withInput();
             }
@@ -144,17 +144,17 @@ class StaticController extends Controller
             $transaction->amount_total=$amount_total;
             $transaction->rate=$rate['costs'];
             $transaction->customer_id=$customer->id;
-            $transaction->type=Helper::TYPESANDBOX;
+            $transaction->type=Helper::TYPESECURE;
             $transaction->method=Helper::METHODMOBIL;
             $transaction->status=Helper::STATUSPENDING;
             $transaction->save();
-            $customer->balance_sandbox-=$rate['total_local'];
+            $customer->balance-=$rate['total_local'];
             $customer->save();
             DB::commit();
             notify()->success('Data has been saved successfully!');
-            return redirect()->route('sandbox.transferList');
+            return redirect()->route('secure.transferList');
         }
-        return view('sandbox.make_mobil', [
+        return view('secure.make_mobil', [
             'countries' => $countries,
             'beneficiaries' => $beneficiaries,
             'relactions' => $relactions,
@@ -226,7 +226,7 @@ class StaticController extends Controller
                 return redirect()->back()->withInput();
             }
             $amount_total=$rate['total'];
-            if ($customer->balance_sandbox<$rate['total_local']){
+            if ($customer->balance<$rate['total_local']){
                 notify()->error('Balance Insufficient');
                 return redirect()->back()->withInput();
             }
@@ -249,17 +249,17 @@ class StaticController extends Controller
             $transaction->amount_total=$amount_total;
             $transaction->rate=$rate['costs'];
             $transaction->customer_id=$customer->id;
-            $transaction->type=Helper::TYPESANDBOX;
+            $transaction->type=Helper::TYPESECURE;
             $transaction->method=Helper::METHODBANK;
             $transaction->status=Helper::STATUSPENDING;
             $transaction->save();
-            $customer->balance_sandbox-=$rate['total_local'];
+            $customer->balance-=$rate['total_local'];
             $customer->save();
             DB::commit();
             notify()->success('Data has been saved successfully!');
-            return redirect()->route('sandbox.transferList');
+            return redirect()->route('secure.transferList');
         }
-        return view('sandbox.make_bank', [
+        return view('secure.make_bank', [
             'countries' => $countries,
             'beneficiaries' => $beneficiaries,
             'relactions' => $relactions,
@@ -285,7 +285,7 @@ class StaticController extends Controller
         }
         $items = $items->where(['customer_id' => $customer->id])->orderByDesc('created_at')->paginate(20)->appends($query_param);
 
-        return view('sandbox.senders', [
+        return view('secure.senders', [
             'senders' => $items
         ]);
     }
@@ -319,10 +319,10 @@ class StaticController extends Controller
             $sender = new Sender($body);
             $sender->save($body);
             notify()->success('Data has been saved successfully!');
-            return redirect()->route('sandbox.senders');
+            return redirect()->route('secure.senders');
 
         }
-        return view('sandbox.addSender', [
+        return view('secure.addSender', [
             'countries' => $countries
         ]);
     }
@@ -342,14 +342,14 @@ class StaticController extends Controller
         }
         $items = $items->where(['customer_id' => $customer->id])->orderByDesc('created_at')->paginate(20)->appends($query_param);
 
-        return view('sandbox.beneficiaries', [
+        return view('secure.beneficiaries', [
             'numSender' => $request->get('code'),
             'beneficiaries' => $items
         ]);
     }
     public function transaction_detail(Request $request,$numero_identifiant)
     {
-        return view('sandbox.transaction-detail', [
+        return view('secure.transaction-detail', [
            'transaction'=>Transaction::query()->firstWhere(['number_transaction'=>$numero_identifiant])
         ]);
     }
@@ -380,9 +380,9 @@ class StaticController extends Controller
             $beneficiary = new Beneficiary($body);
             $beneficiary->save($body);
             notify()->success('Data has been saved successfully!');
-            return redirect()->route('sandbox.beneficiaries');
+            return redirect()->route('secure.beneficiaries');
         }
-        return view('sandbox.addBeneficiary', [
+        return view('secure.addBeneficiary', [
             'countries' => Country::all(),
         ]);
     }

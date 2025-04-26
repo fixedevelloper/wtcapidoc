@@ -17,15 +17,17 @@ Route::middleware('customer.jwt')->group(function () {
             'customer' => $request->customer
         ]);
     });
-    Route::get('/transaction/status', [TransactionApiController::class, 'getTransaction']);
-    Route::post('/transactions/bank', [TransactionApiController::class, 'postBankTransaction']);
-    Route::get('/banks', [CustomerApiController::class, 'getBanks']);
-    Route::get('/countries', [CustomerApiController::class, 'getCountries']);
-    Route::get('/cities', [CustomerApiController::class, 'getCities']);
-    Route::get('/senders', [CustomerApiController::class, 'getSenders']);
-    Route::get('/senders/detail', [CustomerApiController::class, 'getSender']);
-    Route::get('/beneficiaries', [CustomerApiController::class, 'getBeneficiaries']);
-    Route::get('/beneficiaries/detail', [CustomerApiController::class, 'getBeneficiary']);
+    Route::group(['middleware' => ['logs.api']], function () {
+        Route::get('/transaction/status', [TransactionApiController::class, 'getTransaction']);
+        Route::post('/transactions/bank', [TransactionApiController::class, 'postBankTransaction']);
+        Route::get('/banks', [CustomerApiController::class, 'getBanks']);
+        Route::get('/countries', [CustomerApiController::class, 'getCountries']);
+        Route::get('/cities', [CustomerApiController::class, 'getCities']);
+        Route::get('/senders', [CustomerApiController::class, 'getSenders']);
+        Route::get('/senders/detail', [CustomerApiController::class, 'getSender']);
+        Route::get('/beneficiaries', [CustomerApiController::class, 'getBeneficiaries']);
+        Route::get('/beneficiaries/detail', [CustomerApiController::class, 'getBeneficiary']);
+    });
 });
 
 
