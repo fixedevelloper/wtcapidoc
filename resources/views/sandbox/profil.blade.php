@@ -65,18 +65,25 @@
                         </div>
                         <div class="data-item">
                             <div class="data-col">
-                                <span class="data-label">Api key</span>
-                                <span class="data-value">{{$profile['wtc_key']}}</span>
+                                <span class="data-label">Private key</span>
+                                <span class="data-value">{{$profile['wtc_sandbox_private_key']}}</span>
                             </div>
                             <div class="data-col data-col-end"><a href="#" class="link link-primary">Copy</a></div>
                         </div><!-- data-item -->
                         <div class="data-item">
                             <div class="data-col">
-                                <span class="data-label">Api url</span>
-                                <span class="data-value">XXX/api_sandbox/</span>
+                                <span class="data-label">Secret key</span>
+                                <span class="data-value">{{$profile['wtc_sandbox_secret_key']}}</span>
                             </div>
                             <div class="data-col data-col-end"><a href="#" class="link link-primary">Copy</a></div>
-                        </div><!-- data-item -->
+                        </div>
+                        <div class="data-item">
+                            <div class="data-col">
+                                <span class="data-label">Url sandbox</span>
+                                <span class="data-value">https://sandbox.agensic.com</span>
+                            </div>
+                            <div class="data-col data-col-end"><a href="#" class="link link-primary">Copy</a></div>
+                        </div>
                         <div class="data-item">
                             <div class="data-col">
                                 <span class="data-label">Documentation</span>

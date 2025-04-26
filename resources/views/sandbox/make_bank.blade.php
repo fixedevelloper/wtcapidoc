@@ -377,7 +377,9 @@
                         'amount': $('#amount').val()
                     },
                     success: function (data) {
-
+                        if (data.data['status']===0){
+                            toastr.error('unauthorized for this country', '503!')
+                        }
                         $('#exchange_rate_text').text(data.data['value']['rate'])
                         $('#fees').text(data.data['value']['costs'])
                         $('#payable').text(data.data['value']['total_local'])

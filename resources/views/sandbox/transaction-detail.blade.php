@@ -81,6 +81,14 @@
                                 <div class="data-value">{{$transaction['method']}} </div>
                             </div>
                         </li>
+                        @if($transaction['method']==\App\Helpers\Helper::METHODMOBIL)
+                            <li class="data-item">
+                                <div class="data-col">
+                                    <div class="data-label">Account Number</div>
+                                    <div class="data-value">{{$transaction['accountNumber']}} </div>
+                                </div>
+                            </li>
+                        @endif
                         @if($transaction['method']==\App\Helpers\Helper::METHODBANK)
                         <li class="data-item">
                             <div class="data-col">

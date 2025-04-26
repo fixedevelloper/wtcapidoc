@@ -58,14 +58,112 @@ class StaticController extends Controller
         ]);
     }
 
+
     public function make_mobil(Request $request)
     {
+        $auth = Auth::user();
+        $customer = Customer::query()->firstWhere(['user_id' => $auth->id]);
+        $senders = Sender::query()->where(['customer_id'=>$customer->id])->get();
+        $beneficiaries = Beneficiary::query()->where(['customer_id'=>$customer->id])->get();
+        $wallet = [];
+        $countries = Country::all();
+        $originFonds = [];
+        $relactions = [];
+        $raisonTosend = [];
 
+        $base = config('app.API_DOMAINCONFIG');
+
+        $responseOriginFond = Http::get($base . 'wace_origin_fond.json');
+        $responseRelation = Http::get($base . 'wace_relaction.json');
+        $responseRaisonSend = Http::get($base . 'wace_raison_to_send.json');
+
+        $gateways = [
+            'AGENSICPAY_XAF', 'AGENSICPAY_XOF'
+        ];
+        if ($responseOriginFond->successful()) {
+            $originFonds = $responseOriginFond->json()['data'];
+        }
+        if ($responseRaisonSend->successful()) {
+            $raisonTosend = $responseRaisonSend->json()['data'];
+        }
+        if ($responseRelation->successful()) {
+            $relactions = $responseRelation->json()['data'];
+        }
+        if ($request->method() == 'POST') {
+            $validator = Validator::make($request->all(), [
+                'countryCode' => 'required',
+                'wallet' => 'required',
+                'gateway_id' => 'required',
+                'numSender' => 'required',
+                'numBeneficiary' => 'required',
+                'numCity' => 'required',
+                'amount' => 'required',
+                'raison_transaction' => 'required',
+                'origin_fond' => 'required',
+                'relation' => 'required',
+                'accountNumber' => 'required',
+            ], [
+                'amount' => 'Password must contain 4 characters',
+                'password.max' => 'Password must contain 14 characters',
+            ]);
+            if ($validator->fails()) {
+                // Utilisez notify pour afficher les erreurs
+                foreach ($validator->errors()->all() as $error) {
+                    notify()->error($error);
+                }
+
+                return redirect()->back()->withInput();
+            }
+            $amount=$request->get('amount');
+            $rate=$this->calculRate($request->countryCode,$customer->id,$amount);
+            if ($rate['status']==0){
+                notify()->error('unauthorized for this country');
+                return redirect()->back()->withInput();
+            }
+            $amount_total=$rate['total'];
+            if ($customer->balance_sandbox<$rate['total_local']){
+                notify()->error('Balance Insufficient');
+                return redirect()->back()->withInput();
+            }
+            DB::beginTransaction();
+            $transaction=new Transaction();
+            $transaction->sender_id=$request->get('numSender');
+            $transaction->relation=$request->get('relation');
+            $transaction->origin_fond=$request->get('origin_fond');
+            $transaction->motif_send=$request->get('raison_transaction');
+            $transaction->accountNumber=$request->get('accountNumber');
+            $transaction->wallet=$request->get('wallet');
+            $transaction->iban=$request->get('iban');
+            $transaction->beneficiary_id=$request->get('beneficiary_id');
+            $transaction->gateway_id=$request->get('gateway_id');
+            $transaction->beneficiary_id=$request->get('numBeneficiary');
+            $transaction->city=$request->get('numCity');
+            $transaction->amount=$request->get('amount');
+            $transaction->code=Helper::generatenumber();
+            $transaction->number_transaction='wtc_'.Helper::generateTransactionNumber(20);
+            $transaction->amount_total=$amount_total;
+            $transaction->rate=$rate['costs'];
+            $transaction->customer_id=$customer->id;
+            $transaction->type=Helper::TYPESANDBOX;
+            $transaction->method=Helper::METHODMOBIL;
+            $transaction->status=Helper::STATUSPENDING;
+            $transaction->save();
+            $customer->balance_sandbox-=$rate['total_local'];
+            $customer->save();
+            DB::commit();
+            notify()->success('Data has been saved successfully!');
+            return redirect()->route('sandbox.transferList');
+        }
         return view('sandbox.make_mobil', [
-
+            'countries' => $countries,
+            'beneficiaries' => $beneficiaries,
+            'relactions' => $relactions,
+            'wallets' => $gateways,
+            'originFonds' => $originFonds,
+            'senders' => $senders,
+            'raisons' => $raisonTosend,
         ]);
     }
-
     public function make_bank(Request $request)
     {
         $auth = Auth::user();
@@ -123,6 +221,10 @@ class StaticController extends Controller
             }
             $amount=$request->get('amount');
             $rate=$this->calculRate($request->countryCode,$customer->id,$amount);
+            if ($rate['status']==0){
+                notify()->error('unauthorized for this country');
+                return redirect()->back()->withInput();
+            }
             $amount_total=$rate['total'];
             if ($customer->balance_sandbox<$rate['total_local']){
                 notify()->error('Balance Insufficient');
@@ -328,9 +430,15 @@ class StaticController extends Controller
     }
     function calculRate($country_id,$customer_id,$amount){
         $rate_country=Rate::query()->firstWhere(['customer_id'=>$customer_id,'country_id'=>$country_id]);
+        if (is_null($rate_country)){
+            return [
+                'status'=>0
+            ];
+        }
         $costs=$amount*($rate_country->cost*0.01);
         $value=$amount+floatval($rate_country->fixed_amount)+$costs;
         return[
+            'status'=>1,
             'value'=>[
                 'total'=>number_format($amount*$rate_country->rate,2),
                 'costs'=>number_format($costs+$rate_country->fixed_amount,2),

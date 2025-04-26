@@ -2,6 +2,8 @@
 
 
 use App\Http\Controllers\Sandbox\api\AuthApiController;
+use App\Http\Controllers\Sandbox\api\CustomerApiController;
+use App\Http\Controllers\Sandbox\api\TransactionApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,6 +17,15 @@ Route::middleware('customer.jwt')->group(function () {
             'customer' => $request->customer
         ]);
     });
+    Route::get('/transaction/status', [TransactionApiController::class, 'getTransaction']);
+    Route::post('/transactions/bank', [TransactionApiController::class, 'postBankTransaction']);
+    Route::get('/banks', [CustomerApiController::class, 'getBanks']);
+    Route::get('/countries', [CustomerApiController::class, 'getCountries']);
+    Route::get('/cities', [CustomerApiController::class, 'getCities']);
+    Route::get('/senders', [CustomerApiController::class, 'getSenders']);
+    Route::get('/senders/detail', [CustomerApiController::class, 'getSender']);
+    Route::get('/beneficiaries', [CustomerApiController::class, 'getBeneficiaries']);
+    Route::get('/beneficiaries/detail', [CustomerApiController::class, 'getBeneficiary']);
 });
 
 
