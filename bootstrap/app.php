@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Middleware\EnsureIsAdmin;
 use App\Http\Middleware\EnsureRemoteApiAvailable;
 use App\Http\Middleware\EnsureRemoteSandboxApiAvailable;
+use App\Http\Middleware\VerifyCustomerJwt;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -18,6 +20,8 @@ return Application::configure(basePath: dirname(__DIR__))
 
         'remote.api' => EnsureRemoteApiAvailable::class,
         'sandbox.api' => EnsureRemoteSandboxApiAvailable::class,
+        'isAdmin' => EnsureIsAdmin::class,
+        'customer.jwt' => VerifyCustomerJwt::class,
     ]);
 })
     ->withExceptions(function (Exceptions $exceptions) {
