@@ -10,10 +10,19 @@ use App\Models\Customer;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
 class SecurityController extends Controller
 {
+    public function logout(Request $request)
+    {        Auth::guard('web')->logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect()->back();
+    }
     public function sandboxLogin(Request $request)
     {
         session(['mode' => 'sandbox']);
@@ -106,5 +115,19 @@ class SecurityController extends Controller
             return redirect()->route('sandbox.dashboard',['putrezasetup'=>$user->unique_number]);
         }
         return view('sandbox.auth.register');
+    }
+    public function sandboxAutoLogin(Request $request)
+    {
+
+        Auth::guard('web')->logout();
+
+            if (Auth::attempt(['email' => Session::get('auth_email'), 'password' => Session::get('auth_password')], $request->remember)) {
+                notify()->success("Authentication successful", 'Request success', ["Success loggedIn"]);
+                $request->session()->regenerate();
+                return redirect()->route('secure.dashboard');
+            }
+            notify()->error("User not found or User not activate", 'Request failed', ["Failed loggedIn"]);
+            return redirect()->route('secure.login');
+
     }
 }

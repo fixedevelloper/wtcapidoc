@@ -14,6 +14,7 @@ use App\Models\Gateway;
 use App\Models\Rate;
 use App\Models\Sender;
 use App\Models\Transaction;
+use App\Services\WaceApiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -22,6 +23,17 @@ use Illuminate\Support\Facades\Validator;
 
 class StaticSecureController extends Controller
 {
+    protected $waceService;
+
+    /**
+     * StaticSecureController constructor.
+     * @param $waceService
+     */
+    public function __construct(WaceApiService $waceService)
+    {
+        $this->waceService = $waceService;
+    }
+
     public function dashboard(Request $request)
     {
         return view('secure.dashbord', [
@@ -253,8 +265,18 @@ class StaticSecureController extends Controller
             $transaction->method=Helper::METHODBANK;
             $transaction->status=Helper::STATUSPENDING;
             $transaction->save();
-            $customer->balance-=$rate['total_local'];
-            $customer->save();
+            $response= $this->waceService->sendTransaction($transaction);
+            if ($response['status'] !==2000){
+                $transaction->status=Helper::STATUSFAILD;
+                notify()->error('Balance Insufficient');
+                return redirect()->route('secure.transferList');
+            }else{
+                $transaction->reference_partner=$response['reference'];
+                $transaction->status=Helper::STATUSPROCESSING;
+                $customer->balance-=$rate['total_local'];
+                $customer->save();
+            }
+            $transaction->save();
             DB::commit();
             notify()->success('Data has been saved successfully!');
             return redirect()->route('secure.transferList');

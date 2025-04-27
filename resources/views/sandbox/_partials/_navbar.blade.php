@@ -24,6 +24,14 @@
                     </a>
                 </div>
             </div><!-- .nk-header-news -->
+            <div class="nk-header-center">
+                <a href="{{route('sandbox.dashboard')}}">
+                <div class="custom-control custom-control-lg custom-switch">
+                    <input type="checkbox" class="custom-control-input" id="switch_sandbox">
+                    <label class="custom-control-label text-white" for="customSwitch2">Switch to secure mode</label>
+                </div>
+                </a>
+            </div>
             <div class="nk-header-tools">
                 <ul class="nk-quick-nav">
                     <li class="dropdown language-dropdown d-none d-sm-block me-n1">

@@ -55,8 +55,12 @@ class SecuritySecureController extends Controller
         ]);
     }
     public function logout(Request $request)
-    {
+    {        Auth::guard('web')->logout();
 
-        return  redirect()->route('sandbox.login');
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect()->back();
     }
 }

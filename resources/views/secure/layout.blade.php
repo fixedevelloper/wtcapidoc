@@ -90,6 +90,9 @@
             get_ajax_rate: "{{\Illuminate\Support\Facades\URL::route('secure.get_ajax_rate')}}",
         }
     }
+    $('#switch_sandbox').change(function () {
+        window.location.href='{{route('sandbox.dashboard')}}'
+    })
 </script>
 @notify_js
 @notify_render

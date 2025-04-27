@@ -14,6 +14,15 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 class SecurityAdminController extends Controller
 {
+    public function logout(Request $request)
+    {        Auth::guard('web')->logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect()->back();
+    }
     public function adminLogin(Request $request)
     {
         if ($request->method() == "POST") {
