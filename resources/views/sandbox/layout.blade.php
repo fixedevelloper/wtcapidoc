@@ -91,7 +91,7 @@
         }
     }
     $('#switch_secure').change(function () {
-        window.location.href='{{route('sandbox.dashboard')}}'
+        window.location.href='{{route('secure.dashboard')}}'
     })
 </script>
 @notify_js
