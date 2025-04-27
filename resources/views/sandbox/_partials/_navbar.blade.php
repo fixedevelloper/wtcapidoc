@@ -25,7 +25,7 @@
                 </div>
             </div><!-- .nk-header-news -->
             <div class="nk-header-center">
-                <a href="{{route('sandbox.dashboard')}}">
+                <a href="{{route('secure.dashboard')}}">
                 <div class="custom-control custom-control-lg custom-switch">
                     <input type="checkbox" class="custom-control-input" id="switch_sandbox">
                     <label class="custom-control-label text-white" for="customSwitch2">Switch to secure mode</label>
