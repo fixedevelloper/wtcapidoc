@@ -33,6 +33,10 @@ class WaceApiService
             $sender = $this->getCreateSender($transaction);
             $beneficiaryReponse = $this->createBeneficiary($transaction, $sender->sender->Code);
             if ($beneficiaryReponse->status !== 2000) {
+                return [
+                    "status" => $beneficiaryReponse->status,
+                    "data" => $beneficiaryReponse->status
+                ];
                 throw new NotAcceptableHttpException($beneficiaryReponse->message);
             }
             $bank = [
@@ -263,7 +267,7 @@ class WaceApiService
             "pep" => false,
             "updateIfExist" => true
         ];
-      logger()->info("##############DataCustomer################");
+       logger()->info("##############DataCustomer################");
         logger()->info(json_encode($sender));
         $res = $this->cURL($endpoint, json_encode($sender));
         logger()->info(json_encode($res));
@@ -293,7 +297,11 @@ class WaceApiService
             "sender_code" => $code,
             "updateIfExist" => true
         ];
-        return $this->cURL($endpoint, json_encode($beneficiary));
+        logger()->info("##############DataBeneficiary################");
+        logger()->info(json_encode($beneficiary_));
+        $response=$this->cURL($endpoint, json_encode($beneficiary));
+        logger($response);
+        return $this->cURL($endpoint, json_encode($response));
     }
 
     public function validateTransaction($reference)
