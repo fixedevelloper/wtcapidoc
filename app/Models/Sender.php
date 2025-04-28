@@ -32,8 +32,4 @@ class Sender extends Model
         $country=Country::query()->firstWhere(['codeIso2'=>$this->country]);
         return $country->currency;
     }
-    public function country()
-    {
-        return $this->belongsTo(Country::class,'country_id','id');
-    }
 }
