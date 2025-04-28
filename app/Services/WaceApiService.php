@@ -47,7 +47,7 @@ class WaceApiService
                 "amountToPaid" => $transaction->amount_total,
                 "senderCode" => $sender->sender->Code,
                 "beneficiaryCode" => $beneficiaryReponse->beneficiary->Code,
-                "sendingCurrency" => $transaction->sender->currency,
+                "sendingCurrency" => 'XAF',
                 "bankAccount" => $transaction->accountnumber,
                 "bankName" => $transaction->gateway,
                 "bankSwCode" => $transaction->swift,
