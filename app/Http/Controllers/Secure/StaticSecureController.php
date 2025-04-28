@@ -283,7 +283,6 @@ class StaticSecureController extends Controller
                 notify()->error('Balance Insufficient');
                 return redirect()->back()->withInput();
             }
-
             DB::commit();
             notify()->success('Data has been saved successfully!');
             return redirect()->route('secure.transferList');

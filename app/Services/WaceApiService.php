@@ -35,9 +35,8 @@ class WaceApiService
             if ($beneficiaryReponse->status !== 2000) {
                 return [
                     "status" => $beneficiaryReponse->status,
-                    "data" => $beneficiaryReponse->status
+                    "message" => $beneficiaryReponse->messages
                 ];
-                throw new NotAcceptableHttpException($beneficiaryReponse->message);
             }
             $bank = [
                 'businessType' => 'P2P',
