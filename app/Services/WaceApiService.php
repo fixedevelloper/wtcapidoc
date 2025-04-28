@@ -32,7 +32,8 @@ class WaceApiService
 
             $sender = $this->getCreateSender($transaction);
             $beneficiaryReponse = $this->createBeneficiary($transaction, $sender->sender->Code);
-            if ($beneficiaryReponse->status !== 2000) {
+            if ($beneficiaryReponse->status != 2000) {
+
                 return [
                     "status" => $beneficiaryReponse->status,
                     "message" => $beneficiaryReponse->status
