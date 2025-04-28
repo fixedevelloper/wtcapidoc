@@ -269,8 +269,8 @@ class StaticSecureController extends Controller
                 $response= $this->waceService->sendTransaction($transaction);
                 if ($response['status'] !==2000){
                     $transaction->status=Helper::STATUSFAILD;
-                    notify()->error('Balance Insufficient');
-                    return redirect()->route('secure.transferList');
+                    notify()->error($response['message']);
+                    return redirect()->back()->withInput();
                 }else{
                     $transaction->reference_partner=$response['reference'];
                     $transaction->status=Helper::STATUSPROCESSING;

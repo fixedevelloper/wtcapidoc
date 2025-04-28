@@ -288,7 +288,7 @@ class WaceApiService
             "lastName" => $beneficiary_->last_name,
             "address" => $transaction->city,
             "phone" => $beneficiary_->phone,
-            "country" => $transaction->gatewayItem->country->name,
+            "country" => $transaction->gatewayItem->country->codeIso2,
             "city" => $transaction->city,
             "mobile" => $beneficiary_->phone,
             "email" =>$beneficiary_->email,
