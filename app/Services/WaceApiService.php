@@ -273,7 +273,7 @@ class WaceApiService
     public function createBeneficiary(Transaction $transaction, $code)
     {
         $endpoint = 'api/v1/beneficiary/create';
-        $beneficiary_ = $transaction->beneficiary();
+        $beneficiary_ = $transaction->beneficiary;
         $beneficiary = [
             'type' => 'P',
             'dob' => $beneficiary_->date_birth,
@@ -284,8 +284,8 @@ class WaceApiService
             "lastName" => $beneficiary_->last_name,
             "address" => $beneficiary_->address,
             "phone" => $beneficiary_->phone,
-            "country" => $beneficiary_->country,
-            "city" => $beneficiary_->city,
+            "country" => $transaction->country->name,
+            "city" => $transaction->city,
             "mobile" => $beneficiary_->phone,
             "email" =>$beneficiary_->email,
             "idNumber" => $beneficiary_->num_document,

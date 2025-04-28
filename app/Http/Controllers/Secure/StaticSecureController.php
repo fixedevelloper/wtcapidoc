@@ -281,7 +281,7 @@ class StaticSecureController extends Controller
             }catch (\Exception $exception){
                 logger($exception->getMessage());
                 notify()->error('Balance Insufficient');
-                return redirect()->back();
+                return redirect()->back()->withInput();
             }
 
             DB::commit();
