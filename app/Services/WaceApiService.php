@@ -37,26 +37,26 @@ class WaceApiService
             }
             $bank = [
                 'businessType' => 'P2P',
-                "payoutCountry" => $transaction->gateway()->country->codeIso2,
+                "payoutCountry" => $transaction->gatewayItem->country->codeIso2,
                 "payoutCity" => $transaction->city,
-                "receiveCurrency" => $transaction->gateway()->country->currency,
+                "receiveCurrency" => $transaction->gatewayItem->country->currency,
                 "amountToPaid" => $transaction->amount_total,
                 "senderCode" => $sender->sender->Code,
                 "beneficiaryCode" => $beneficiaryReponse->beneficiary->Code,
-                "sendingCurrency" => $transaction->sender->currency(),
+                "sendingCurrency" => $transaction->sender->currency,
                 "bankAccount" => $transaction->accountnumber,
                 "bankName" => $transaction->gateway,
                 "bankSwCode" => $transaction->swift,
                 "bankBranch" => '',
-                "fromCountry" => $transaction->customer()->country,
-                "payerCode" => $transaction->gateway()->payer_code,
+                "fromCountry" => $transaction->customer->country,
+                "payerCode" => $transaction->gatewayItem->payer_code,
                 "originFund" => $transaction->origin_fond,
                 "reason" => $transaction->motif_send,
                 "relation" => $transaction->relation,
             ];
             logger("##################wace body request###########################" . json_encode($bank));
             $res = $this->cURL($endpoint, json_encode($bank));
-        logger("##################wace body response###########################" . json_encode($res));
+            logger("##################wace body response###########################" . json_encode($res));
             if ($res->status != 2000) {
                 return [
                     "status" => $res->status,
