@@ -265,18 +265,25 @@ class StaticSecureController extends Controller
             $transaction->method=Helper::METHODBANK;
             $transaction->status=Helper::STATUSPENDING;
             $transaction->save();
-            $response= $this->waceService->sendTransaction($transaction);
-            if ($response['status'] !==2000){
-                $transaction->status=Helper::STATUSFAILD;
+            try {
+                $response= $this->waceService->sendTransaction($transaction);
+                if ($response['status'] !==2000){
+                    $transaction->status=Helper::STATUSFAILD;
+                    notify()->error('Balance Insufficient');
+                    return redirect()->route('secure.transferList');
+                }else{
+                    $transaction->reference_partner=$response['reference'];
+                    $transaction->status=Helper::STATUSPROCESSING;
+                    $customer->balance-=$rate['total_local'];
+                    $customer->save();
+                }
+                $transaction->save();
+            }catch (\Exception $exception){
+                logger($exception->getMessage());
                 notify()->error('Balance Insufficient');
-                return redirect()->route('secure.transferList');
-            }else{
-                $transaction->reference_partner=$response['reference'];
-                $transaction->status=Helper::STATUSPROCESSING;
-                $customer->balance-=$rate['total_local'];
-                $customer->save();
+                return redirect()->back();
             }
-            $transaction->save();
+
             DB::commit();
             notify()->success('Data has been saved successfully!');
             return redirect()->route('secure.transferList');
@@ -333,8 +340,8 @@ class StaticSecureController extends Controller
                 'gender' => $request->gender,
                 'expired_document' => $request->expired_document,
                 'code' => Helper::generatenumber(),
-                'address' => '',
-                'city' => '',
+                'address' => $request->address,
+                'city' => $request->numCity,
                 'customer_id' => $customer->id
 
             ];

@@ -238,7 +238,7 @@ class WaceApiService
     public function getCreateSender(Transaction $transaction)
     {
         $endpoint = 'api/v1/sender/create';
-        $sender = $transaction->sender();
+        $sender = $transaction->sender;
         $sender = [
             'type' => 'P',
             'dob' => $sender->date_birth,
@@ -251,8 +251,8 @@ class WaceApiService
             "city" => $sender->city,
             "gender" => $sender->gender,
             "civility" => $sender->civility,
-            "idNumber" => $sender->identification_document,
-            'idType'=>$sender->first_name,
+            "idNumber" => $sender->num_document,
+            'idType'=>$sender->identification_document,
             "occupation" =>$sender->occupation,
             "state" => "",
             "nationality" => $sender->country,

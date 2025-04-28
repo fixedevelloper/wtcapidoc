@@ -311,8 +311,8 @@ class StaticController extends Controller
                 'gender' => $request->gender,
                 'expired_document' => $request->expired_document,
                 'code' => Helper::generatenumber(),
-                'address' => '',
-                'city' => '',
+                'address' => $request->address,
+                'city' => $request->numCity,
                 'customer_id' => $customer->id
 
             ];
@@ -374,7 +374,8 @@ class StaticController extends Controller
                 'expired_document' => $request->expired_document,
                 'code' => Helper::generatenumber(),
                 'address' => '',
-                'city' => '','occupation'=>'',
+                'city' => '',
+                'occupation'=>'',
                 'customer_id' => $customer->id
             ];
             $beneficiary = new Beneficiary($body);

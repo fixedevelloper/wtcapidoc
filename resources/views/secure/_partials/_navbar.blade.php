@@ -19,19 +19,18 @@
                         </div>
                         <div class="nk-news-text">
                             <p>Mode {{session('mode')}}</p>
-                            <em class="icon ni ni-external"></em>
                         </div>
                     </a>
 
                 </div>
             </div><!-- .nk-header-news -->
             <div class="nk-header-center">
-                <a href="{{route('secure.dashboard')}}">
+
                 <div class="custom-control custom-control-lg custom-switch">
-                    <input type="checkbox" class="custom-control-input" id="switch_secure">
+                    <input checked type="checkbox" class="custom-control-input" id="switch_secure">
                     <label class="custom-control-label text-white" for="customSwitch2">Switch to sandbox mode</label>
                 </div>
-                </a>
+
             </div>
             <div class="nk-header-tools">
 
