@@ -269,7 +269,7 @@ class StaticSecureController extends Controller
                 $response= $this->waceService->sendTransaction($transaction);
                 if ($response['status'] !==2000){
                     $transaction->status=Helper::STATUSFAILD;
-                    notify()->error($response['message']);
+                    notify()->error('Internal error');
                     return redirect()->back()->withInput();
                 }else{
                     $transaction->reference_partner=$response['reference'];
