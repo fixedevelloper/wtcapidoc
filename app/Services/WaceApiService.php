@@ -35,7 +35,7 @@ class WaceApiService
             if ($beneficiaryReponse->status !== 2000) {
                 return [
                     "status" => $beneficiaryReponse->status,
-                    "message" => $beneficiaryReponse->messages
+                    "message" => $beneficiaryReponse->status
                 ];
             }
             $bank = [
