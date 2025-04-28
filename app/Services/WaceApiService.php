@@ -64,7 +64,7 @@ class WaceApiService
             if ($res->status != 2000) {
                 return [
                     "status" => $res->status,
-                    "message" => $res->messages
+                    "message" => $res->message
                 ];
             }
             $valid = $this->validateTransaction($res->transaction->reference);

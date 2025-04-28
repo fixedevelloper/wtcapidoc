@@ -265,6 +265,9 @@ class StaticSecureController extends Controller
             $transaction->method=Helper::METHODBANK;
             $transaction->status=Helper::STATUSPENDING;
             $transaction->save();
+            $customer->balance-=$rate['total_local'];
+            $customer->save();
+            DB::commit();
             try {
                 $response= $this->waceService->sendTransaction($transaction);
                 if ($response['status'] !==2000){
@@ -274,8 +277,7 @@ class StaticSecureController extends Controller
                 }else{
                     $transaction->reference_partner=$response['reference'];
                     $transaction->status=Helper::STATUSPROCESSING;
-                    $customer->balance-=$rate['total_local'];
-                    $customer->save();
+
                 }
                 $transaction->save();
             }catch (\Exception $exception){
@@ -283,7 +285,7 @@ class StaticSecureController extends Controller
                 notify()->error('Balance Insufficient');
                 return redirect()->back()->withInput();
             }
-            DB::commit();
+
             notify()->success('Data has been saved successfully!');
             return redirect()->route('secure.transferList');
         }
