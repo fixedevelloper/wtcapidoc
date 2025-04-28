@@ -4,6 +4,7 @@
 namespace App\Services;
 
 
+use App\Models\Country;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\Session;
 use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
@@ -39,7 +40,8 @@ class WaceApiService
                     "message" => $beneficiaryReponse->status
                 ];
             }
-            logger($sender->currency());
+
+            logger($transaction->sender()->currency());
             $bank = [
                 'businessType' => 'P2P',
                 "payoutCountry" => $transaction->gatewayItem->country->codeIso2,
@@ -48,7 +50,7 @@ class WaceApiService
                 "amountToPaid" => $transaction->amount_total,
                 "senderCode" => $sender->sender->Code,
                 "beneficiaryCode" => $beneficiaryReponse->beneficiary->Code,
-                "sendingCurrency" => $sender->currency(),
+                "sendingCurrency" => $transaction->sender()->currency(),
                 "bankAccount" => $transaction->accountnumber,
                 "bankName" => $transaction->gatewayItem->name,
                 "bankSwCode" => $transaction->swift,
