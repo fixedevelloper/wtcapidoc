@@ -301,7 +301,7 @@ class WaceApiService
         logger()->info(json_encode($beneficiary));
         $response=$this->cURL($endpoint, json_encode($beneficiary));
         logger(json_encode($response));
-        return $this->cURL($endpoint, json_encode($response));
+        return $response;
     }
 
     public function validateTransaction($reference)
