@@ -298,9 +298,9 @@ class WaceApiService
             "updateIfExist" => true
         ];
         logger()->info("##############DataBeneficiary################");
-        logger()->info(json_encode($beneficiary_));
+        logger()->info(json_encode($beneficiary));
         $response=$this->cURL($endpoint, json_encode($beneficiary));
-        logger($response);
+        logger(json_encode($response));
         return $this->cURL($endpoint, json_encode($response));
     }
 
