@@ -23,7 +23,7 @@ class BasicController extends Controller
     use UploadableTrait;
     public function dashboard(Request $request)
     {
-        $last_transactions=Transaction::query()->where(['type'=>Helper::TYPESANDBOX])->latest()->limit(5)->get();
+        $last_transactions=Transaction::query()->where(['type'=>Helper::TYPESECURE])->latest()->limit(5)->get();
         return view('admin.dashbord', [
             'transactions'=>$last_transactions
         ]);
@@ -178,6 +178,12 @@ class BasicController extends Controller
         }
         $country->save();
         return redirect()->route('admin.countries');
+    }
+    public function customer_detail(Request $request,$code)
+    {
+        return view('admin.add.customer_detail', [
+            'customer'=>Customer::query()->firstWhere(['id'=>$code])
+        ]);
     }
     public function sender_detail(Request $request,$code)
     {

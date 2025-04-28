@@ -441,10 +441,10 @@ class StaticController extends Controller
         return[
             'status'=>1,
             'value'=>[
-                'total'=>number_format($amount*$rate_country->rate,2),
-                'costs'=>number_format($costs+$rate_country->fixed_amount,2),
-                'total_local'=>number_format($value,2),
-                'rate'=>number_format($rate_country->rate,2)
+                'total'=>number_format($amount*$rate_country->rate,14),
+                'costs'=>number_format($costs+$rate_country->fixed_amount,14),
+                'total_local'=>number_format($value,14),
+                'rate'=>number_format($rate_country->rate,14)
             ],
             'total'=>$amount*$rate_country->rate,
             'costs'=>$costs+$rate_country->fixed_amount,

@@ -152,7 +152,7 @@
                                             <a href="#" class="btn btn-sm btn-icon btn-trigger dropdown-toggle" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                                             <div class="dropdown-menu dropdown-menu-end">
                                                 <ul class="link-list-opt no-bdr">
-                                                    <li><a href="#"><em class="icon ni ni-eye"></em><span>View Details</span></a></li>
+                                                    <li><a rel="modal:open" href="{{route('admin.customer_detail',['code'=>$item->id])}}"><em class="icon ni ni-eye"></em><span>View Details</span></a></li>
                                                     <li><a href="{{route('admin.addrates',['id'=>$item->id])}}"><em class="icon ni ni-repeat"></em><span>Rates</span></a></li>
                                                     <li class="divider"></li>
                                                     <li><a href="#"><em class="icon ni ni-na"></em><span>Suspend User</span></a></li>
