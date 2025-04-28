@@ -41,7 +41,6 @@ class WaceApiService
                 ];
             }
 
-            logger($transaction->sender->currency());
             $bank = [
                 'businessType' => 'P2P',
                 "payoutCountry" => $transaction->gatewayItem->country->codeIso2,
@@ -55,7 +54,7 @@ class WaceApiService
                 "bankName" => $transaction->gatewayItem->name,
                 "bankSwCode" => $transaction->swift,
                 "bankBranch" => '',
-                "fromCountry" => $transaction->sender->country->codeIso2,
+                "fromCountry" => $transaction->sender->country,
                 "payerCode" => $transaction->gatewayItem->payer_code,
                 "originFund" => $transaction->origin_fond,
                 "reason" => $transaction->motif_send,
