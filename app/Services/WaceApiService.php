@@ -50,7 +50,7 @@ class WaceApiService
                 "senderCode" => $sender->sender->Code,
                 "beneficiaryCode" => $beneficiaryReponse->beneficiary->Code,
                 "sendingCurrency" => $transaction->sender->currency(),
-                "bankAccount" => $transaction->accountnumber,
+                "bankAccount" => $transaction->accountNumber,
                 "bankName" => $transaction->gatewayItem->name,
                 "bankSwCode" => $transaction->swift,
                 "bankBranch" => '',
