@@ -99,8 +99,7 @@
                             <div class="nk-tb-col tb-col-md"><span class="sub-text">Phone</span></div>
                             <div class="nk-tb-col tb-col-xxl"><span class="sub-text">Company</span></div>
                             <div class="nk-tb-col tb-col-lg"><span class="sub-text">Balance</span></div>
-                            <div class="nk-tb-col tb-col-xxl"><span class="sub-text">Last Login</span></div>
-                            <div class="nk-tb-col"><span class="sub-text">Status</span></div>
+                            <div class="nk-tb-col tb-col-xxl"><span class="sub-text">Balance sandbox</span></div>
                             <div class="nk-tb-col nk-tb-col-tools text-end">
                             </div>
                         </div>
@@ -132,15 +131,13 @@
                                 <span>{{$item->user->phone}}</span>
                             </div>
                             <div class="nk-tb-col tb-col-xxl">
-                                <span>{{$item->balance}}</span>
-                            </div>
-                            <div class="nk-tb-col tb-col-lg">
-                                <ul class="list-status">
-                                    <li><em class="icon text-success ni ni-check-circle"></em> <span>Email</span></li>
-                                </ul>
+                                <span>{{$item->company}}</span>
                             </div>
                             <div class="nk-tb-col tb-col-xxl">
-                                <span>10 Feb 2020</span>
+                                <span>{{$item->balance}}</span>
+                            </div>
+                            <div class="nk-tb-col tb-col-xxl">
+                                <span>{{$item->balance_sandbox}}</span>
                             </div>
                             <div class="nk-tb-col">
                                 <span class="tb-status text-success">Active</span>
