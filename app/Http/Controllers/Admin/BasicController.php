@@ -158,6 +158,8 @@ class BasicController extends Controller
                 $rate->customer_id=$id;
                 $rate->country_id=$request->countryCode;
                 $rate->save();
+                notify()->success('Date send successful');
+                return redirect()->route('admin.addrates',['id'=>$rate->customer_id]);
             }
             notify()->warning('This rate exits');
         }

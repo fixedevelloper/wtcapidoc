@@ -92,20 +92,9 @@
                                 <div class="nk-tb-col tb-col-xxl">
                                     <span>{{$item->cost}}</span>
                                 </div>
-                                <div class="nk-tb-col nk-tb-col-tools">
-                                    <ul class="nk-tb-actions gx-2">
-                                        <li>
-                                            <div class="drodown">
-                                                <a href="#" class="btn btn-sm btn-icon btn-trigger dropdown-toggle" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
-                                                <div class="dropdown-menu dropdown-menu-end">
-                                                    <ul class="link-list-opt no-bdr">
-                                                        <li><a href="#"><em class="icon ni ni-trash"></em><span>Remove</span></a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
+
+                                            <livewire:confirm-remove-rate :rate="$item"/>
+
                             </div>
                         @endforeach
 

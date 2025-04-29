@@ -158,19 +158,7 @@
                                 </div>
 
                                 <div class="nk-tb-col nk-tb-col-tools">
-                                    <ul class="nk-tb-actions gx-1">
-                                        <li>
-                                            <div class="drodown">
-                                                <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
-                                                <div class="dropdown-menu dropdown-menu-end">
-                                                    <ul class="link-list-opt no-bdr">
-                                                      {{--  <li><a href="{{route('admin.transaction_detail',['numero_identifiant'=>$item['number_transaction']])}}"><em class="icon ni ni-eye"></em><span>View Details</span></a></li>
---}}
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
+                                    <livewire:detail-deposit :deposit="$item"/>
                                 </div>
                             </div><!-- .nk-tb-item -->
                         @endforeach
@@ -183,4 +171,5 @@
             </div><!-- .card-inner-group -->
         </div><!-- .card -->
     </div>
+    <div>
 @endsection

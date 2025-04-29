@@ -135,8 +135,7 @@
                                                 <div class="dropdown-menu dropdown-menu-end">
                                                     <ul class="link-list-opt no-bdr">
                                                         <li><a href="#"><em class="icon ni ni-eye"></em><span>Edit</span></a></li>
-                                                        <li><a href="{{route('admin.addrates',['id'=>$item->id])}}"><em class="icon ni ni-percent"></em><span>Add rate</span></a></li>
-                                                        <li><a href="#"><em class="icon ni ni-building"></em><span>Add city</span></a></li>
+                                                       <li><a href="#"><em class="icon ni ni-building"></em><span>Add city</span></a></li>
                                                     </ul>
                                                 </div>
                                             </div>
