@@ -88,10 +88,12 @@
                                     <label class="custom-control-label" for="uid"></label>
                                 </div>
                             </div>
-                            <div class="nk-tb-col"><span class="sub-text">Sender</span></div>
+                            <div class="nk-tb-col"><span class="sub-text">Customer</span></div>
+
                             <div class="nk-tb-col tb-col-mb"><span class="sub-text">Country</span></div>
                             <div class="nk-tb-col tb-col-md"><span class="sub-text">Amount Send</span></div>
                             <div class="nk-tb-col tb-col-lg"><span class="sub-text">Amount receive</span></div>
+                            <div class="nk-tb-col"><span class="sub-text">Sender</span></div>
                             <div class="nk-tb-col tb-col-lg"><span class="sub-text">Beneficiary</span></div>
                             <div class="nk-tb-col tb-col-md"><span class="sub-text">Total Fees &amp; Charges</span></div>
                             <div class="nk-tb-col tb-col-md"><span class="sub-text">Date</span></div>
@@ -147,6 +149,28 @@
                                     </div>
                                 </div>
                                 <div class="nk-tb-col">
+                                    <div class="align-center">
+                                        <div class="user-card">
+                                            <div class="user-avatar user-avatar-xs bg-azure-dim">
+                                                <span>{{strtoupper(substr($item['customer']['user']['name'],0,2))}}</span>
+                                            </div>
+                                            <div class="user-name">
+                                                <span class="tb-lead">{{$item['customer']['user']['name']}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="nk-tb-col tb-col-mb">
+                                    <span class="tb-amount">{{$item->gatewayItem->country->name}} </span>
+                                </div>
+                                <div class="nk-tb-col tb-col-sm">
+                                    <span>{{number_format($item['amount']+$item['rate'],2)}} XAF</span>
+                                </div>
+                                <div class="nk-tb-col tb-col-md">
+                                    <span>{{number_format($item['amount_total'],2) }} {{$item->gatewayItem->country->currency}}</span>
+                                </div>
+                                <div class="nk-tb-col">
                                     <div class="user-card">
                                         <div class="user-avatar bg-success">
                                             <span>{{ substr($item['sender']['first_name'],0,1) }}{{ substr($item['sender']['last_name'],0,1) }}</span>
@@ -161,16 +185,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="nk-tb-col tb-col-mb">
-                                    <span class="tb-amount">{{$item->gatewayItem->country->name}} </span>
-                                </div>
-                                <div class="nk-tb-col tb-col-sm">
-                                    <span>{{number_format($item['amount']+$item['rate'],2)}} XAF</span>
-                                </div>
-                                <div class="nk-tb-col tb-col-md">
-                                    <span>{{number_format($item['amount_total'],2) }} {{$item->gatewayItem->country->currency}}</span>
-                                </div>
-
                                 <div class="nk-tb-col tb-col-sm">
                                     <div class="user-info">
                                         <span class="tb-lead">{{$item['beneficiary']['first_name']}}</span>

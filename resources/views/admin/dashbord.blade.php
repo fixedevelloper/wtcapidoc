@@ -140,15 +140,35 @@
                     </div>
                     <div class="nk-tb-list">
                         <div class="nk-tb-item nk-tb-head">
+                            <div class="nk-tb-col"><span>Customer</span></div>
+                            <div class="nk-tb-col tb-col-md"><span>Date</span></div>
+                            <div class="nk-tb-col"><span>Amount</span></div>
                             <div class="nk-tb-col"><span>Sender</span></div>
                             <div class="nk-tb-col tb-col-sm"><span>Beneficiary</span></div>
-                            <div class="nk-tb-col tb-col-lg"><span>Date</span></div>
-                            <div class="nk-tb-col"><span>Amount</span></div>
+
                             <div class="nk-tb-col tb-col-sm"><span>&nbsp;Status</span></div>
                             <div class="nk-tb-col"><span>&nbsp;</span></div>
                         </div>
                         @foreach($transactions as $item)
                         <div class="nk-tb-item">
+                            <div class="nk-tb-col">
+                                <div class="align-center">
+                                <div class="user-card">
+                                    <div class="user-avatar user-avatar-xs bg-azure-dim">
+                                        <span>{{strtoupper(substr($item['customer']['user']['name'],0,2))}}</span>
+                                    </div>
+                                    <div class="user-name">
+                                        <span class="tb-lead">{{$item['customer']['user']['name']}}</span>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            <div class="nk-tb-col tb-col-sm">
+                                <span class="tb-sub">{{$item['created_at']}}</span>
+                            </div>
+                            <div class="nk-tb-col">
+                                <span class="tb-sub tb-amount">{{number_format($item['amount_total'],2)}}<span>FCFA</span></span>
+                            </div>
                             <div class="nk-tb-col">
                                 <div class="align-center">
                                     <div class="user-avatar user-avatar-sm bg-light">
@@ -160,6 +180,7 @@
                                 </div>
                             </div>
                             <div class="nk-tb-col tb-col-sm">
+
                                 <div class="user-card">
                                     <div class="user-avatar user-avatar-xs bg-azure-dim">
                                         <span>{{strtoupper(substr($item['beneficiary']['first_name'],0,1))}}{{strtoupper(substr($item['beneficiary']['last_name'],0,1))}}</span>
@@ -169,12 +190,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="nk-tb-col tb-col-lg">
-                                <span class="tb-sub">{{$item['created_at']}}</span>
-                            </div>
-                            <div class="nk-tb-col">
-                                <span class="tb-sub tb-amount">{{$item['amount_total']}}<span>FCFA</span></span>
-                            </div>
+
                             <div class="nk-tb-col tb-col-sm">
                                 <span class="{{ $item->stringStatus->class }}">{{$item->stringStatus->value}}</span>
                             </div>

@@ -284,7 +284,7 @@
                                             </div>
 
                                         </div>
-                                        <div class="mt-3 mb-3 text-danger text-md-center">Notice: You are in a test environment</div>
+                                        <div class="mt-3 mb-3 text-danger text-md-center"> </div>
                                     </div>
                                 </div>
 
