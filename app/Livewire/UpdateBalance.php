@@ -2,8 +2,11 @@
 
 namespace App\Livewire;
 
+use App\Helpers\Helper;
 use App\Models\Customer;
+use App\Models\DepositRequest;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class UpdateBalance extends Component
@@ -21,12 +24,18 @@ class UpdateBalance extends Component
     }
     public function save()
     {
-        logger('upadet');
+       DB::beginTransaction();
        $custome=Customer::query()->find($this->customer->id);
        $custome->balance+=$this->balance;
-
+        $custome->save();
+        $deposit=new DepositRequest();
+        $deposit->customer_id=$custome->id;
+        $deposit->amount=$this->balance;
+        $deposit->status=Helper::STATUSSUCCESS;
+        $deposit->save();
+        Helper::create_journal_deposit($this->balance,$custome->id,$this->balance_old);
         $this->balance_old+=$this->balance;
-       $custome->save();
+        DB::commit();
         $this->reset('balance');
 
         $this->showModal = false;

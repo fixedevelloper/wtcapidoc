@@ -11,6 +11,7 @@ use App\Models\Beneficiary;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\Customer;
+use App\Models\DepositRequest;
 use App\Models\Gateway;
 use App\Models\Rate;
 use App\Models\Sender;
@@ -24,8 +25,10 @@ class BasicController extends Controller
     public function dashboard(Request $request)
     {
         $last_transactions=Transaction::query()->where(['type'=>Helper::TYPESECURE])->latest()->limit(5)->get();
+        $last_deposits=DepositRequest::query()->where([])->latest()->limit(5)->get();
         return view('admin.dashbord', [
-            'transactions'=>$last_transactions
+            'transactions'=>$last_transactions,
+            'deposits'=>$last_deposits
         ]);
     }
     public function customers(Request $request)

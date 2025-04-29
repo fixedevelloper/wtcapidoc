@@ -3,9 +3,9 @@
     <div class="nk-block-head nk-block-head-sm">
         <div class="nk-block-between">
             <div class="nk-block-head-content">
-                <h3 class="nk-block-title page-title">Customers Lists</h3>
+                <h3 class="nk-block-title page-title">Deposits</h3>
                 <div class="nk-block-des text-soft">
-                    <p>You have total {{count($customers)}} users.</p>
+                    <p>You have total {{count($deposits)}} items.</p>
                 </div>
             </div><!-- .nk-block-head-content -->
             <div class="nk-block-head-content">
@@ -14,11 +14,6 @@
                     <div class="toggle-expand-content" data-content="pageMenu">
                         <ul class="nk-block-tools g-3">
                             <li><a href="#" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li>
-                            <li class="nk-block-tools-opt">
-                                <div class="">
-                                    <a href="{{route('admin.add.customer')}}" class="btn btn-icon btn-primary"><em class="icon ni ni-plus"></em></a>
-                                </div>
-                            </li>
                         </ul>
                     </div>
                 </div><!-- .toggle-wrap -->
@@ -85,7 +80,7 @@
                     </div><!-- .card-search -->
                 </div><!-- .card-inner -->
                 <div class="card-inner p-0">
-                    <div class="nk-tb-list nk-tb-ulist is-compact">
+                    <div class="nk-tb-list nk-tb-ulist">
                         <div class="nk-tb-item nk-tb-head">
                             <div class="nk-tb-col nk-tb-col-check">
                                 <div class="custom-control custom-control-sm custom-checkbox notext">
@@ -93,79 +88,97 @@
                                     <label class="custom-control-label" for="uid"></label>
                                 </div>
                             </div>
-                            <div class="nk-tb-col"><span class="sub-text">User</span></div>
-                            <div class="nk-tb-col tb-col-md"><span class="sub-text">Country</span></div>
-                            <div class="nk-tb-col tb-col-sm"><span class="sub-text">Email</span></div>
-                            <div class="nk-tb-col tb-col-md"><span class="sub-text">Phone</span></div>
-                            <div class="nk-tb-col tb-col-xxl"><span class="sub-text">Company</span></div>
-                            <div class="nk-tb-col tb-col-lg"><span class="sub-text">Balance</span></div>
-                            <div class="nk-tb-col tb-col-xxl"><span class="sub-text">Balance sandbox</span></div>
-                            <div class="nk-tb-col nk-tb-col-tools text-end">
-                            </div>
-                        </div>
-                        @foreach($customers as $item)
-                        <div class="nk-tb-item">
-                            <div class="nk-tb-col nk-tb-col-check">
-                                <div class="custom-control custom-control-sm custom-checkbox notext">
-                                    <input type="checkbox" class="custom-control-input" id="uid1">
-                                    <label class="custom-control-label" for="uid1"></label>
-                                </div>
-                            </div>
-                            <div class="nk-tb-col">
-                                <div class="user-card">
-                                    <div class="user-avatar xs bg-primary">
-                                        <span>{{substr($item->user->name,0,2)}}</span>
-                                    </div>
-                                    <div class="user-name">
-                                        <span class="tb-lead">{{$item->user->name}}</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="nk-tb-col tb-col-md">
-                                <span>{{$item->country}}</span>
-                            </div>
-                            <div class="nk-tb-col tb-col-sm">
-                                <span>{{$item->user->email}}</span>
-                            </div>
-                            <div class="nk-tb-col tb-col-md">
-                                <span>{{$item->phone}}</span>
-                            </div>
-                            <div class="nk-tb-col tb-col-xxl">
-                                <span>{{$item->company}}</span>
-                            </div>
-                            <div class="nk-tb-col tb-col-xxl">
-                                <span>{{$item->balance}}</span>
-                            </div>
-                            <div class="nk-tb-col tb-col-xxl">
-                                <span>{{$item->balance_sandbox}}</span>
-                            </div>
-                            <div class="nk-tb-col">
-                                <span class="tb-status text-success">Active</span>
-                            </div>
-                            <div class="nk-tb-col nk-tb-col-tools">
-                                <ul class="nk-tb-actions gx-2">
-                                    <li>
-                                        <div class="drodown">
-                                            <a href="#" class="btn btn-sm btn-icon btn-trigger dropdown-toggle" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
-                                            <div class="dropdown-menu dropdown-menu-end">
-                                                <ul class="link-list-opt no-bdr">
-                                                    <li><a rel="modal:open" href="{{route('admin.customer_detail',['code'=>$item->id])}}"><em class="icon ni ni-eye"></em><span>View Details</span></a></li>
-                                                    <li><a href="{{route('admin.addrates',['id'=>$item->id])}}"><em class="icon ni ni-repeat"></em><span>Rates</span></a></li>
-                                                    <li class="divider"></li>
-                                                    <li><a href="#"><em class="icon ni ni-na"></em><span>Suspend User</span></a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        @endforeach
+                            <div class="nk-tb-col"><span class="sub-text">Customer</span></div>
+                            <div class="nk-tb-col tb-col-md"><span class="sub-text">Amount</span></div>
+                            <div class="nk-tb-col tb-col-md"><span class="sub-text">Date</span></div>
 
-                    </div><!-- .nk-tb-list -->
+                            <div class="nk-tb-col tb-col-md"><span class="sub-text">C.Note</span></div>
+                            <div class="nk-tb-col tb-col-md"><span class="sub-text">A.Note</span></div>
+                            <div class="nk-tb-col tb-col-md"><span class="sub-text">Status</span></div>
+                            <div class="nk-tb-col nk-tb-col-tools text-end">
+                                <div class="dropdown">
+                                    <a href="#" class="btn btn-xs btn-outline-light btn-icon dropdown-toggle" data-bs-toggle="dropdown" data-offset="0,5"><em class="icon ni ni-plus"></em></a>
+                                    <div class="dropdown-menu dropdown-menu-xs dropdown-menu-end">
+                                        <ul class="link-tidy sm no-bdr">
+                                            <li>
+                                                <div class="custom-control custom-control-sm custom-checkbox checked">
+                                                    <input type="checkbox" class="custom-control-input" checked="" id="bl">
+                                                    <label class="custom-control-label" for="bl">Customer</label>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="custom-control custom-control-sm custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" checked="" id="ph">
+                                                    <label class="custom-control-label" for="ph">Amount</label>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- .nk-tb-item -->
+                        @foreach($deposits as $item)
+                            <div class="nk-tb-item">
+                                <div class="nk-tb-col nk-tb-col-check">
+                                    <div class="custom-control custom-control-sm custom-checkbox notext">
+                                        <input type="checkbox" class="custom-control-input" id="{{$item['id']}}">
+                                        <label class="custom-control-label" for="{{$item['id']}}"></label>
+                                    </div>
+                                </div>
+                                <div class="nk-tb-col">
+                                    <div class="user-card">
+                                        <div class="user-avatar bg-success">
+                                            <span>{{ strtoupper(substr($item['customer']['user']['name'],0,2)) }}</span>
+                                        </div>
+                                        <div class="user-info">
+                                                        <span class="tb-lead">
+                                                            {{$item['customer']['user']['name']}}
+                                                            <span class="dot dot-warning d-md-none ms-1">
+
+                                                            </span></span>
+                                            <span>{{$item['customer']['user']['email']}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="nk-tb-col tb-col-sm">
+                                    <span>{{number_format($item['amount'],2)}} XAF</span>
+                                </div>
+                                <div class="nk-tb-col tb-col-md">
+                                    <span>{{$item['created_at']}}</span>
+                                </div>
+                                <div class="nk-tb-col tb-col-md">
+                                    <span>{{$item['sender_note']}}</span>
+                                </div>
+                                <div class="nk-tb-col tb-col-md">
+                                    <span>{{$item['admin_note']}}</span>
+                                </div>
+                                <div class="nk-tb-col tb-col-md">
+                                    <span class="{{ $item->stringStatus->class }}">{{$item->stringStatus->value}}</span>
+                                </div>
+
+                                <div class="nk-tb-col nk-tb-col-tools">
+                                    <ul class="nk-tb-actions gx-1">
+                                        <li>
+                                            <div class="drodown">
+                                                <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
+                                                <div class="dropdown-menu dropdown-menu-end">
+                                                    <ul class="link-list-opt no-bdr">
+                                                      {{--  <li><a href="{{route('admin.transaction_detail',['numero_identifiant'=>$item['number_transaction']])}}"><em class="icon ni ni-eye"></em><span>View Details</span></a></li>
+--}}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div><!-- .nk-tb-item -->
+                        @endforeach
+                    </div>
+
                 </div><!-- .card-inner -->
                 <div class="card-inner">
-                    {{$customers->links('vendor.pagination.custom-paginator')}}
+                    {{$deposits->links('vendor.pagination.custom-paginator')}}
                 </div><!-- .card-inner -->
             </div><!-- .card-inner-group -->
         </div><!-- .card -->

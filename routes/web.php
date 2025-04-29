@@ -58,6 +58,9 @@ Route::match(["POST", "GET"], '/logout', [SecuritySecureController::class, 'logo
         Route::match(["POST", "GET"], '/make_bank', [StaticSecureController::class, 'make_bank'])->name('secure.make_bank');
         Route::match(["POST", "GET"], '/make_mobil', [StaticSecureController::class, 'make_mobil'])->name('secure.make_mobil');
         Route::match(["POST", "GET"], '/transfer_list', [StaticSecureController::class, 'transferList'])->name('secure.transferList');
+        Route::match(["POST", "GET"], '/deposits', [StaticSecureController::class, 'deposits'])->name('secure.deposits');
+        Route::match(["POST", "GET"], '/withdraws', [StaticSecureController::class, 'withdraws'])->name('secure.withdraws');
+        Route::match(["POST", "GET"], '/journals', [StaticSecureController::class, 'journals'])->name('secure.journals');
         Route::match(["POST", "GET"], '/securesenders', [StaticSecureController::class, 'senders'])->name('secure.senders');
         Route::match(["POST", "GET"], '/transfer_list/detail/{numero_identifiant}', [StaticSecureController::class, 'transaction_detail'])->name('secure.transaction_detail');
         Route::match(["POST", "GET"], '/securesenders/add', [StaticSecureController::class, 'addSender'])->name('secure.add.senders');
@@ -70,7 +73,7 @@ Route::match(["POST", "GET"], '/logout', [SecuritySecureController::class, 'logo
     });
 });
 
-Route::domain('manage.agensic.com')->group(function () {
+//Route::domain('manage.agensic.com')->group(function () {
     Route::match(["POST", "GET"], '/', [SecurityAdminController::class, 'adminLogin'])->name('admin.login');
     Route::match(["POST", "GET"], '/register', [SecurityAdminController::class, 'register'])->name('admin.register');
     Route::group(['middleware' => ['isAdmin']], function () {
@@ -84,6 +87,9 @@ Route::match(["POST", "GET"], '/transaction_sandbox', [TransactionController::cl
     Route::match(["POST", "GET"], '/transactions/detail/{numero_identifiant}', [TransactionController::class, 'transaction_detail'])->name('admin.transaction_detail');
 
     Route::match(["POST", "GET"], '/rates', [BasicController::class, 'rates'])->name('admin.rates');
+        Route::match(["POST", "GET"], '/deposits', [TransactionController::class, 'deposits'])->name('admin.deposits');
+        Route::match(["POST", "GET"], '/withdraws', [TransactionController::class, 'withdraws'])->name('admin.withdraws');
+        Route::match(["POST", "GET"], '/journals', [TransactionController::class, 'journals'])->name('admin.journals');
     Route::match(["POST", "GET"], '/customers/rate/{id}', [BasicController::class, 'addrates',])->name('admin.addrates');
 Route::match(["POST", "GET"], '/countries', [BasicController::class, 'countries'])->name('admin.countries');
 Route::match(["POST", "GET"], '/saveCountry', [BasicController::class, 'saveCountry'])->name('admin.saveCountry');
@@ -93,4 +99,4 @@ Route::match(["POST", "GET"], '/gateways', [BasicController::class, 'gateways'])
 Route::match(["POST", "GET"], '/senders/detail/{code}', [BasicController::class, 'sender_detail'])->name('admin.sender_detail');
 Route::match(["POST", "GET"], '/beneficiaries/detail/{code}', [BasicController::class, 'beneficiary_detail'])->name('admin.beneficiary_detail');
     });
-});
+//});

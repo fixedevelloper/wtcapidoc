@@ -59,7 +59,28 @@
                         </a>
                     </li>
                     <li class="nk-menu-heading">
+                        <h6 class="overline-title text-primary-alt">Operations</h6>
+                    </li>
+                    <li class="nk-menu-item">
+                        <a href="{{route('secure.deposits')}}" class="nk-menu-link">
+                            <span class="nk-menu-icon"><em class="icon ni ni-wallet-in"></em></span>
+                            <span class="nk-menu-text">Deposits</span>
+                        </a>
+                    </li>
+                    <li class="nk-menu-item">
+                        <a href="{{route('secure.withdraws')}}" class="nk-menu-link">
+                            <span class="nk-menu-icon"><em class="icon ni ni-wallet-out"></em></span>
+                            <span class="nk-menu-text">Withdraws</span>
+                        </a>
+                    </li>
+                    <li class="nk-menu-heading">
                         <h6 class="overline-title text-primary-alt">Settings</h6>
+                    </li>
+                    <li class="nk-menu-item">
+                        <a href="{{route('secure.journals')}}" class="nk-menu-link">
+                            <span class="nk-menu-icon"><em class="icon ni ni-link-group"></em></span>
+                            <span class="nk-menu-text">Journals</span>
+                        </a>
                     </li>
                     <li class="nk-menu-item">
                         <a href="{{route('secure.profil')}}" class="nk-menu-link">

@@ -4,6 +4,7 @@
 namespace App\Helpers;
 
 
+use App\Models\Journal;
 use Carbon\Carbon;
 use http\Exception;
 use Jenssegers\Agent\Agent;
@@ -26,7 +27,67 @@ class Helper
     const TYPESECURE     = "SECURE";
     const METHODBANK    = "BANK";
     const METHODMOBIL     = "MOBIL";
+    const OPERATIONDEPOSIT     = "DEPOSIT";
+    const OPERATIONWITHDRAW     = "WITHDRAW";
+    const OPERATIONTRANSFERT     = "TRANSFER";
+    const OPERATIONTRANSFERT_CANCEL     = "TRANSFER_CANCEL";
+    const OPERATIONDEPOSIT_CANCEL     = "DEPOSIT_CANCEL";
+    const OPERATIONWITHDRAW_CANCEL     = "WITHDRAW_CANCEL";
     const per_page=10;
+    public static function create_journal_deposit($amount,$customer_id,$old_balance){
+        $journal=new Journal();
+        $journal->type_operation=self::OPERATIONDEPOSIT;
+        $journal->amount=$amount;
+        $journal->customer_id=$customer_id;
+        $journal->balance_before=$old_balance;
+        $journal->balance_after=$old_balance+$amount;
+        $journal->save();
+    }
+    public static function create_journal_Transfer($amount,$customer_id,$old_balance){
+        $journal=new Journal();
+        $journal->type_operation=self::OPERATIONTRANSFERT;
+        $journal->amount=$amount;
+        $journal->customer_id=$customer_id;
+        $journal->balance_before=$old_balance;
+        $journal->balance_after=$old_balance-$amount;
+        $journal->save();
+    }
+    public static function create_journal_withdraw($amount,$customer_id,$old_balance){
+        $journal=new Journal();
+        $journal->type_operation=self::OPERATIONWITHDRAW;
+        $journal->amount=$amount;
+        $journal->customer_id=$customer_id;
+        $journal->balance_before=$old_balance;
+        $journal->balance_after=$old_balance-$amount;
+        $journal->save();
+    }
+    public static function create_journal_transfer_cancel($amount,$customer_id,$old_balance){
+        $journal=new Journal();
+        $journal->type_operation=self::OPERATIONTRANSFERT_CANCEL;
+        $journal->amount=$amount;
+        $journal->customer_id=$customer_id;
+        $journal->balance_before=$old_balance;
+        $journal->balance_after=$old_balance+$amount;
+        $journal->save();
+    }
+    public static function create_journal_deposit_cancel($amount,$customer_id,$old_balance){
+        $journal=new Journal();
+        $journal->type_operation=self::OPERATIONDEPOSIT_CANCEL;
+        $journal->amount=$amount;
+        $journal->customer_id=$customer_id;
+        $journal->balance_before=$old_balance;
+        $journal->balance_after=$old_balance-$amount;
+        $journal->save();
+    }
+    public static function create_journal_withdraw_cancel($amount,$customer_id,$old_balance){
+        $journal=new Journal();
+        $journal->type_operation=self::OPERATIONWITHDRAW_CANCEL;
+        $journal->amount=$amount;
+        $journal->customer_id=$customer_id;
+        $journal->balance_before=$old_balance;
+        $journal->balance_after=$old_balance+$amount;
+        $journal->save();
+    }
     public static function str_slug($text){
         return strtolower(str_ireplace(" ","_",$text)) ;
     }

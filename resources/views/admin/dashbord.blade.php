@@ -134,7 +134,7 @@
                                 <h6 class="title">Recent Transfert</h6>
                             </div>
                             <div class="card-tools">
-                                <a href="#" class="link">View All</a>
+                                <a href="{{route('admin.transactions')}}" class="link">View All</a>
                             </div>
                         </div>
                     </div>
@@ -144,7 +144,7 @@
                             <div class="nk-tb-col tb-col-sm"><span>Beneficiary</span></div>
                             <div class="nk-tb-col tb-col-lg"><span>Date</span></div>
                             <div class="nk-tb-col"><span>Amount</span></div>
-                            <div class="nk-tb-col tb-col-sm"><span>&nbsp;</span></div>
+                            <div class="nk-tb-col tb-col-sm"><span>&nbsp;Status</span></div>
                             <div class="nk-tb-col"><span>&nbsp;</span></div>
                         </div>
                         @foreach($transactions as $item)
@@ -183,8 +183,7 @@
                                     <a class="text-soft dropdown-toggle btn btn-sm btn-icon btn-trigger" data-bs-toggle="dropdown"><em class="icon ni ni-chevron-right"></em></a>
                                     <div class="dropdown-menu dropdown-menu-end dropdown-menu-xs">
                                         <ul class="link-list-plain">
-                                            <li><a href="#">View</a></li>
-                                            <li><a href="#">Invoice</a></li>
+                                            <li><a href="{{route('admin.transaction_detail',['numero_identifiant'=>$item['number_transaction']])}}">View</a></li>
                                             <li><a href="#">Print</a></li>
                                         </ul>
                                     </div>
@@ -209,40 +208,37 @@
                     </div>
                     <div class="nk-tb-list">
                         <div class="nk-tb-item nk-tb-head">
-                            <div class="nk-tb-col"><span>Plan</span></div>
-                            <div class="nk-tb-col tb-col-sm"><span>Who</span></div>
+                            <div class="nk-tb-col"><span>Customer</span></div>
                             <div class="nk-tb-col tb-col-lg"><span>Date</span></div>
                             <div class="nk-tb-col"><span>Amount</span></div>
-                            <div class="nk-tb-col tb-col-sm"><span>&nbsp;</span></div>
+                            <div class="nk-tb-col tb-col-sm"><span>&nbsp;Status</span></div>
                             <div class="nk-tb-col"><span>&nbsp;</span></div>
                         </div>
+                        @foreach($deposits as $deposit)
                         <div class="nk-tb-item">
                             <div class="nk-tb-col">
                                 <div class="align-center">
                                     <div class="user-avatar user-avatar-sm bg-light">
                                         <span>P2</span>
                                     </div>
-                                    <span class="tb-sub ms-2">Dimond <span class="d-none d-md-inline">- Daily 8.52% for 14 Days</span></span>
-                                </div>
-                            </div>
-                            <div class="nk-tb-col tb-col-sm">
-                                <div class="user-card">
-                                    <div class="user-avatar user-avatar-xs bg-azure-dim">
-                                        <span>VA</span>
+                                    <span class="tb-sub ms-2">
+                                        <div class="user-name">
+                                        <span class="tb-lead"> {{$deposit->customer->user->name}} </span>
                                     </div>
-                                    <div class="user-name">
-                                        <span class="tb-lead">Victoria Aguilar</span>
-                                    </div>
+
+                                        <span class="d-none d-md-inline">{{$deposit->customer->user->email}}
+                                        </span>
+                                    </span>
                                 </div>
                             </div>
                             <div class="nk-tb-col tb-col-lg">
-                                <span class="tb-sub">18/10/2019</span>
+                                <span class="tb-sub">{{$deposit->created_at}}</span>
                             </div>
                             <div class="nk-tb-col">
-                                <span class="tb-sub tb-amount">1.094780 <span>FCFA</span></span>
+                                <span class="tb-sub tb-amount">{{$deposit->amount}}<span>FCFA</span></span>
                             </div>
                             <div class="nk-tb-col tb-col-sm">
-                                <span class="tb-sub text-success">Completed</span>
+                                <span class="{{ $deposit->stringStatus->class }}">{{$deposit->stringStatus->value}}</span>
                             </div>
                             <div class="nk-tb-col nk-tb-col-action">
                                 <div class="dropdown">
@@ -250,136 +246,13 @@
                                     <div class="dropdown-menu dropdown-menu-end dropdown-menu-xs">
                                         <ul class="link-list-plain">
                                             <li><a href="#">View</a></li>
-                                            <li><a href="#">Invoice</a></li>
                                             <li><a href="#">Print</a></li>
                                         </ul>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="nk-tb-item">
-                            <div class="nk-tb-col">
-                                <div class="align-center">
-                                    <div class="user-avatar user-avatar-sm bg-light">
-                                        <span>P3</span>
-                                    </div>
-                                    <span class="tb-sub ms-2">Platinam <span class="d-none d-md-inline">- Daily 14.82% for 7 Days</span></span>
-                                </div>
-                            </div>
-                            <div class="nk-tb-col tb-col-sm">
-                                <div class="user-card">
-                                    <div class="user-avatar user-avatar-xs bg-purple-dim">
-                                        <span>EH</span>
-                                    </div>
-                                    <div class="user-name">
-                                        <span class="tb-lead">Emma Henry</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="nk-tb-col tb-col-lg">
-                                <span class="tb-sub">18/10/2019</span>
-                            </div>
-                            <div class="nk-tb-col">
-                                <span class="tb-sub tb-amount">1.094780 <span>FCFA</span></span>
-                            </div>
-                            <div class="nk-tb-col tb-col-sm">
-                                <span class="tb-sub text-success">Completed</span>
-                            </div>
-                            <div class="nk-tb-col nk-tb-col-action">
-                                <div class="dropdown">
-                                    <a class="text-soft dropdown-toggle btn btn-sm btn-icon btn-trigger" data-bs-toggle="dropdown"><em class="icon ni ni-chevron-right"></em></a>
-                                    <div class="dropdown-menu dropdown-menu-end dropdown-menu-xs">
-                                        <ul class="link-list-plain">
-                                            <li><a href="#">View</a></li>
-                                            <li><a href="#">Invoice</a></li>
-                                            <li><a href="#">Print</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="nk-tb-item">
-                            <div class="nk-tb-col">
-                                <div class="align-center">
-                                    <div class="user-avatar user-avatar-sm bg-light">
-                                        <span>P1</span>
-                                    </div>
-                                    <span class="tb-sub ms-2">Silver <span class="d-none d-md-inline">- Daily 4.76% for 21 Days</span></span>
-                                </div>
-                            </div>
-                            <div class="nk-tb-col tb-col-sm">
-                                <div class="user-card">
-                                    <div class="user-avatar user-avatar-xs bg-teal-dim">
-                                        <span>AF</span>
-                                    </div>
-                                    <div class="user-name">
-                                        <span class="tb-lead">Alice Ford</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="nk-tb-col tb-col-lg">
-                                <span class="tb-sub">18/10/2019</span>
-                            </div>
-                            <div class="nk-tb-col">
-                                <span class="tb-sub tb-amount">1.094780 <span>FCFA</span></span>
-                            </div>
-                            <div class="nk-tb-col tb-col-sm">
-                                <span class="tb-sub text-success">Completed</span>
-                            </div>
-                            <div class="nk-tb-col nk-tb-col-action">
-                                <div class="dropdown">
-                                    <a class="text-soft dropdown-toggle btn btn-sm btn-icon btn-trigger" data-bs-toggle="dropdown"><em class="icon ni ni-chevron-right"></em></a>
-                                    <div class="dropdown-menu dropdown-menu-end dropdown-menu-xs">
-                                        <ul class="link-list-plain">
-                                            <li><a href="#">View</a></li>
-                                            <li><a href="#">Invoice</a></li>
-                                            <li><a href="#">Print</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="nk-tb-item">
-                            <div class="nk-tb-col">
-                                <div class="align-center">
-                                    <div class="user-avatar user-avatar-sm bg-light">
-                                        <span>P3</span>
-                                    </div>
-                                    <span class="tb-sub ms-2">Platinam <span class="d-none d-md-inline">- Daily 14.82% for 7 Days</span></span>
-                                </div>
-                            </div>
-                            <div class="nk-tb-col tb-col-sm">
-                                <div class="user-card">
-                                    <div class="user-avatar user-avatar-xs bg-orange-dim">
-                                        <span>HW</span>
-                                    </div>
-                                    <div class="user-name">
-                                        <span class="tb-lead">Harold Walker</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="nk-tb-col tb-col-lg">
-                                <span class="tb-sub">18/10/2019</span>
-                            </div>
-                            <div class="nk-tb-col">
-                                <span class="tb-sub tb-amount">1.094780 <span>FCFA</span></span>
-                            </div>
-                            <div class="nk-tb-col tb-col-sm">
-                                <span class="tb-sub text-success">Completed</span>
-                            </div>
-                            <div class="nk-tb-col nk-tb-col-action">
-                                <div class="dropdown">
-                                    <a class="text-soft dropdown-toggle btn btn-sm btn-icon btn-trigger" data-bs-toggle="dropdown"><em class="icon ni ni-chevron-right"></em></a>
-                                    <div class="dropdown-menu dropdown-menu-end dropdown-menu-xs">
-                                        <ul class="link-list-plain">
-                                            <li><a href="#">View</a></li>
-                                            <li><a href="#">Invoice</a></li>
-                                            <li><a href="#">Print</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        @endforeach
                     </div>
                 </div><!-- .card -->
             </div><!-- .col -->

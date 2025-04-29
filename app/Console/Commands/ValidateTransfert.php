@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Helpers\api\Helpers;
 use App\Helpers\Helper;
+use App\Models\Customer;
 use App\Models\Transaction;
 use App\Services\WaceApiService;
 use Illuminate\Console\Command;
@@ -51,10 +52,14 @@ class ValidateTransfert extends Command
             logger(json_encode($response));
             if (isset($response->status) && $response->status == 2000) {
                 if ($response->transaction->Status=='PAID'){
-                   // $this->telegramService->senMoney($transaction_pending);
+
                     $transaction->status=Helper::STATUSSUCCESS;
                 }elseif ($response->transaction->Status=='CANCELED'){
                     $transaction->status=Helper::STATUSFAILD;
+                    $customer=Customer::query()->find($transaction->customer_id);
+                    Helper::create_journal_transfer_cancel($transaction->amount+$transaction->rate,$customer->id,$customer->balance);
+                    $customer->balance+=$transaction->amount+$transaction->rate;
+                    $customer->save();
                 }else{
                     $transaction->status=Helper::STATUSPROCESSING;
                 }

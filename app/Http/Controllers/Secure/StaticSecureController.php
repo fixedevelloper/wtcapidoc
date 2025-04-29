@@ -10,10 +10,13 @@ use App\Models\Beneficiary;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\Customer;
+use App\Models\DepositRequest;
 use App\Models\Gateway;
+use App\Models\Journal;
 use App\Models\Rate;
 use App\Models\Sender;
 use App\Models\Transaction;
+use App\Models\WithdrawRequest;
 use App\Services\WaceApiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -69,8 +72,63 @@ class StaticSecureController extends Controller
             'transactions' => $items
         ]);
     }
+    public function withdraws(Request $request)
+    {
+        $auth = Auth::user();
+        $customer = Customer::query()->firstWhere(['user_id' => $auth->id]);
+        $query_param = [];
+        $search = $request->search;
+        if ($request->has('search')) {
+            $items = WithdrawRequest::query()->where('name', 'like', "%$search%")
+                ->orWhere('iso', 'like', "%$search%");
+            $query_param = ['search' => $request['search']];
+        } else {
+            $items = new WithdrawRequest();
+        }
+        $items = $items->where(['customer_id' => $customer->id])->orderByDesc('created_at')->paginate(20)->appends($query_param);
 
+        return view('secure.withdraws', [
+            'withdraws' => $items
+        ]);
+    }
+    public function deposits(Request $request)
+    {
+        $auth = Auth::user();
+        $customer = Customer::query()->firstWhere(['user_id' => $auth->id]);
+        $query_param = [];
+        $search = $request->search;
+        if ($request->has('search')) {
+            $items = DepositRequest::query()->where('name', 'like', "%$search%")
+                ->orWhere('iso', 'like', "%$search%");
+            $query_param = ['search' => $request['search']];
+        } else {
+            $items = new DepositRequest();
+        }
+        $items = $items->where(['customer_id' => $customer->id])->orderByDesc('created_at')->paginate(20)->appends($query_param);
 
+        return view('secure.deposits', [
+            'deposits' => $items
+        ]);
+    }
+    public function journals(Request $request)
+    {
+        $auth = Auth::user();
+        $customer = Customer::query()->firstWhere(['user_id' => $auth->id]);
+        $query_param = [];
+        $search = $request->search;
+        if ($request->has('search')) {
+            $items = Journal::query()->where('name', 'like', "%$search%")
+                ->orWhere('iso', 'like', "%$search%");
+            $query_param = ['search' => $request['search']];
+        } else {
+            $items = new Journal();
+        }
+        $items = $items->where(['customer_id' => $customer->id])->orderByDesc('created_at')->paginate(20)->appends($query_param);
+
+        return view('secure.journals', [
+            'journals' => $items
+        ]);
+    }
     public function make_mobil(Request $request)
     {
         $auth = Auth::user();
@@ -265,6 +323,7 @@ class StaticSecureController extends Controller
             $transaction->method=Helper::METHODBANK;
             $transaction->status=Helper::STATUSPENDING;
             $transaction->save();
+            Helper::create_journal_Transfer($rate['total_local'],$customer->id,$customer->balance);
             $customer->balance-=$rate['total_local'];
             $customer->save();
             DB::commit();
@@ -272,17 +331,24 @@ class StaticSecureController extends Controller
                 $response= $this->waceService->sendTransaction($transaction);
                 if ($response['status'] !==2000){
                     $transaction->status=Helper::STATUSFAILD;
+                    Helper::create_journal_transfer_cancel($rate['total_local'],$customer->id,$customer->balance);
+                    $customer->balance+=$rate['total_local'];
+                    $customer->save();
                     notify()->error('Internal error');
                     return redirect()->back()->withInput();
                 }else{
                     $transaction->reference_partner=$response['reference'];
                     $transaction->status=Helper::STATUSPROCESSING;
-
                 }
                 $transaction->save();
             }catch (\Exception $exception){
                 logger($exception->getMessage());
-                notify()->error('Balance Insufficient');
+                $transaction->status=Helper::STATUSFAILD;
+                $transaction->save();
+                Helper::create_journal_transfer_cancel($rate['total_local'],$customer->id,$customer->balance);
+                $customer->balance+=$rate['total_local'];
+                $customer->save();
+                notify()->error('Internal error');
                 return redirect()->back()->withInput();
             }
 

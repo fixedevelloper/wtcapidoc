@@ -85,7 +85,32 @@
                             </li>
 
                         </ul><!-- .nk-menu-sub -->
-                    </li><!-- .nk-menu-item -->
+                    </li>
+                    <li class="nk-menu-item has-sub">
+                        <a href="#" class="nk-menu-link nk-menu-toggle">
+                            <span class="nk-menu-text">Operations</span>
+                        </a>
+                        <ul class="nk-menu-sub">
+                            <li class="nk-menu-item">
+                                <a href="{{route('admin.deposits')}}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-list-fill"></em></span>
+                                    <span class="nk-menu-text">Deposits</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
+                            <li class="nk-menu-item">
+                                <a href="{{route('admin.withdraws')}}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-list-round"></em></span>
+                                    <span class="nk-menu-text">Withdraws</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
+                            <li class="nk-menu-item">
+                                <a href="{{route('admin.journals')}}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-list-check"></em></span>
+                                    <span class="nk-menu-text">Journals</span></a>
+                            </li>
+
+                        </ul><!-- .nk-menu-sub -->
+                    </li>
                     <li class="nk-menu-item has-sub">
                         <a href="#" class="nk-menu-link nk-menu-toggle">
                             <span class="nk-menu-text">Settings</span>
