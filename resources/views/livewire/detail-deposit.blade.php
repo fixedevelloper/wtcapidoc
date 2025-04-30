@@ -3,7 +3,7 @@
     <li><a class="btn btn-primary" wire:click="openModal" ><em class="icon ni ni-eye"></em><span>View Details</span></a></li>
     <!-- Modal -->
     <div class="modal fade @if($isOpen) show @endif" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="@if($isOpen) display: block; @endif">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Details deposit</h5>
@@ -42,9 +42,18 @@
                             </li>
                         </ul>
                     </div>
+                    <div class="card p-4">
+                        <div class="mt-3">
+                            <p><strong>Proof :</strong></p>
+                        <img src="{{ asset("storage/".$deposit['proof_image']) }}" width="200" class="rounded shadow">
+                        </div>
+                    </div>
 
                 </div>
                 <div class="modal-footer">
+                    @if($deposit->status!=\App\Helpers\Helper::STATUSSUCCESS || $deposit->status!=\App\Helpers\Helper::STATUSFAILD)
+                    <button type="button" class="btn btn-success" wire:click="validateDeposit" data-bs-dismiss="modal">Validate</button>
+                    @endif
                     <button type="button" class="btn btn-secondary" wire:click="closeModal" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>

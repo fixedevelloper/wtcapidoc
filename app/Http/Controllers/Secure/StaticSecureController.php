@@ -43,7 +43,7 @@ class StaticSecureController extends Controller
     public function dashboard(Request $request)
     {
         return view('secure.dashbord', [
-
+            'customer'=>Customer::query()->firstWhere(['user_id'=>\auth()->user()->id])
         ]);
     }
 

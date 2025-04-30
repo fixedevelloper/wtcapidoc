@@ -2,6 +2,9 @@
 
 namespace App\Livewire;
 
+use App\Helpers\Helper;
+use App\Models\Customer;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class DetailDeposit extends Component
@@ -20,7 +23,20 @@ class DetailDeposit extends Component
     {
         $this->isOpen = false;
     }
+    public function validateDeposit()
+    {
+        DB::beginTransaction();
 
+       $this->deposit->status=Helper::STATUSSUCCESS;
+        $custome=Customer::query()->find($this->deposit->customer_id);
+        $balance_old=$custome->balance;
+        $custome->balance+=$this->deposit->amount;
+        $custome->save();
+        Helper::create_journal_deposit($this->deposit->amount,$custome->id,$balance_old);
+        $this->deposit->save();
+        DB::commit();
+        $this->redirect('/deposits');
+    }
 
     public function render()
     {

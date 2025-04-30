@@ -121,7 +121,7 @@
                                         <div class="card-inner">
                                             <div class="user-account-info py-0">
                                                 <h6 class="overline-title-alt">WTC Wallet Account</h6>
-                                                <div class="user-balance">{{$profile['balance']}} <small class="currency currency-btc">FCFA</small></div>
+                                                <div class="user-balance">{{number_format($profile['balance'],2)}} <small class="currency currency-btc">FCFA</small></div>
                                                 <div class="user-balance-sub">Locked <span>0 <span class="currency currency-btc">FCFA</span></span></div>
                                             </div>
                                         </div><!-- .card-inner -->
