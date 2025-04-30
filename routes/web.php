@@ -48,7 +48,7 @@ Route::match(["POST", "GET"], '/', [SecurityController::class, 'sandboxLogin'])-
         Route::match(["POST", "GET"], '/get_ajax_rate', [StaticController::class, 'getRateAjax'])->name('sandbox.get_ajax_rate');
     });
 });
-Route::domain('secure.agensic.com')->group(function () {
+//Route::domain('secure.agensic.com')->group(function () {
     Route::match(["POST", "GET"], '/', [SecuritySecureController::class, 'secureLogin'])->name('secure.login');
     Route::match(["POST", "GET"], '/register', [SecuritySecureController::class, 'secureRegister'])->name('secure.register');
 Route::match(["POST", "GET"], '/logout', [SecuritySecureController::class, 'logout'])->name('secure.logout');
@@ -70,8 +70,9 @@ Route::match(["POST", "GET"], '/logout', [SecuritySecureController::class, 'logo
         Route::match(["POST", "GET"], '/get_ajax_cities', [StaticSecureController::class, 'getCitiesAjax'])->name('secure.get_ajax_cities');
         Route::match(["POST", "GET"], '/get_ajax_operators', [StaticSecureController::class, 'getOperatorsAjax'])->name('secure.get_ajax_operators');
         Route::match(["POST", "GET"], '/get_ajax_rate', [StaticSecureController::class, 'getRateAjax'])->name('secure.get_ajax_rate');
+        Route::match(["POST", "GET"], '/make_deposit', [StaticSecureController::class, 'make_deposit'])->name('secure.make_deposit');
     });
-});
+//});
 
 Route::domain('manage.agensic.com')->group(function () {
     Route::match(["POST", "GET"], '/', [SecurityAdminController::class, 'adminLogin'])->name('admin.login');

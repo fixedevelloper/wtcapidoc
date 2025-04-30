@@ -87,7 +87,7 @@
                                         </div>
                                         <div class="nk-tb-col tb-col-mb"><span class="sub-text">Date</span></div>
                                         <div class="nk-tb-col tb-col-md"><span class="sub-text">Type operation</span></div>
-                                        <div class="nk-tb-col tb-col-lg"><span class="sub-text">Balance before</span></div>
+                                        <div class="nk-tb-col"><span class="sub-text">Balance before</span></div>
                                         <div class="nk-tb-col tb-col-lg"><span class="sub-text">Balance after</span></div>
                                         <div class="nk-tb-col tb-col-md"><span class="sub-text">amount</span></div>
                                         <div class="nk-tb-col nk-tb-col-tools text-end">

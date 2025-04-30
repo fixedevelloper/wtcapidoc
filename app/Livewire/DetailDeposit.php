@@ -7,7 +7,7 @@ use Livewire\Component;
 class DetailDeposit extends Component
 {
     public $deposit;
-    public $isOpen = false; // Contrôle l'état du modal
+    public $isOpen = false;
 
     // Fonction pour ouvrir le modal
     public function openModal()

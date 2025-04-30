@@ -367,7 +367,7 @@
                 });
             })
             $('#amount').keyup(function () {
-                $('#amount_text').text($('#amount').val())
+               // $('#amount_text').text($('#amount').val().toLocaleString())
                 $.ajax({
                     url: configs.routes.get_ajax_rate,
                     type: "GET",
@@ -380,6 +380,7 @@
                         if (data.data['status']===0){
                             toastr.error('unauthorized for this country', '503!')
                         }
+                        $('#amount_text').text(data.data['value']['amount'])
                         $('#exchange_rate_text').text(data.data['value']['rate'])
                         $('#fees').text(data.data['value']['costs'])
                         $('#payable').text(data.data['value']['total_local'])

@@ -13,7 +13,7 @@
                             <ul class="nk-block-tools g-3">
                                 <li>
                                     <div class="drodown">
-                                        <a href="#" class="dropdown-toggle btn btn btn-primary" data-bs-toggle="dropdown"><em class="icon ni ni-plus"></em>Add transction</a>
+                                        <a href="{{route('secure.make_deposit')}}" class="btn btn btn-primary"><em class="icon ni ni-plus"></em>Add deposit</a>
                                     </div>
                                 </li>
                             </ul>
@@ -80,10 +80,8 @@
                                             </div>
                                         </div>
                                         <div class="nk-tb-col"><span class="sub-text">Date</span></div>
-                                        <div class="nk-tb-col tb-col-md"><span class="sub-text">Amount</span></div>
-                                        <div class="nk-tb-col tb-col-md"><span class="sub-text">Balance</span></div>
+                                        <div class="nk-tb-col"><span class="sub-text">Amount</span></div>
                                         <div class="nk-tb-col tb-col-md"><span class="sub-text">Status</span></div>
-                                        <div class="nk-tb-col tb-col-md"><span class="sub-text">Operator</span></div>
                                         <div class="nk-tb-col nk-tb-col-tools text-end">
                                             <div class="dropdown">
                                                 <a href="#" class="btn btn-xs btn-outline-light btn-icon dropdown-toggle" data-bs-toggle="dropdown" data-offset="0,5"><em class="icon ni ni-plus"></em></a>
@@ -101,16 +99,18 @@
                                             <div class="nk-tb-col tb-col-mb">
                                                 <span class="tb-amount">{{$item->created_at}} </span>
                                             </div>
-                                            <div class="nk-tb-col tb-col-sm">
+                                            <div class="nk-tb-col tb-col-mb">
                                                 <span>{{number_format($item['amount'],2)}} XAF</span>
                                             </div>
-
+                                            <div class="nk-tb-col tb-col-md">
+                                                <span class="{{ $item->stringStatus->class }}">{{$item->stringStatus->value}}</span>
+                                            </div>
                                             <div class="nk-tb-col nk-tb-col-tools">
                                                 <ul class="nk-tb-actions gx-1">
                                                     <li>
                                                         <div class="drodown">
                                                             <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
-
+                                                        </div>
                                                     </li>
                                                 </ul>
                                             </div>

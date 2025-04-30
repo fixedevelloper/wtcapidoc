@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Secure;
 
 
 use App\Helpers\Helper;
+use App\Helpers\UploadableTrait;
 use App\Http\Controllers\Controller;
 use App\Models\Beneficiary;
 use App\Models\City;
@@ -19,6 +20,7 @@ use App\Models\Transaction;
 use App\Models\WithdrawRequest;
 use App\Services\WaceApiService;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -26,6 +28,7 @@ use Illuminate\Support\Facades\Validator;
 
 class StaticSecureController extends Controller
 {
+    use UploadableTrait;
     protected $waceService;
 
     /**
@@ -449,6 +452,29 @@ class StaticSecureController extends Controller
            'transaction'=>Transaction::query()->firstWhere(['number_transaction'=>$numero_identifiant])
         ]);
     }
+    public function make_deposit(Request $request)
+    {
+        $auth = Auth::user();
+        $customer = Customer::query()->firstWhere(['user_id' => $auth->id]);
+        if ($request->method()=='POST'){
+            $deposit=new DepositRequest();
+            $deposit->customer_id=$customer->id;
+            $deposit->amount=$request->amount;
+            $deposit->type=$request->type;
+           //  $deposit->name=$request->name;
+            $deposit->phone=$request->phone;
+            $deposit->status=Helper::STATUSPROCESSING;
+            if ($request->hasFile('proof') && $request->file('proof') instanceof UploadedFile) {
+                $flag = $this->storeFile($request->file('proof'), 'proofs');
+                $deposit->proof_image = $flag;
+            }
+            $deposit->save();
+            return redirect()->route('secure.deposits');
+        }
+        return view('secure.make_deposit', [
+            'countries'=>Country::all()
+        ]);
+    }
     public function addBeneficiaries(Request $request)
     {
         $auth = Auth::user();
@@ -539,7 +565,8 @@ class StaticSecureController extends Controller
                 'total'=>number_format($amount*$rate_country->rate,2),
                 'costs'=>number_format($costs+$rate_country->fixed_amount,2),
                 'total_local'=>number_format($value,2),
-                'rate'=>number_format($rate_country->rate,5)
+                'rate'=>number_format($rate_country->rate,5),
+                'amount'=>number_format($amount,2)
             ],
             'total'=>$amount*$rate_country->rate,
             'costs'=>$costs+$rate_country->fixed_amount,

@@ -96,6 +96,7 @@
 </script>
 @notify_js
 @notify_render
+@livewireScripts
 @stack('js')
 </body>
 

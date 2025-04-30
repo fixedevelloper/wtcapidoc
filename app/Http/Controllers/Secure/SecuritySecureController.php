@@ -33,15 +33,10 @@ class SecuritySecureController extends Controller
                     ->withErrors($validator)->with(['message' => $messages])
                     ->withInput();
             }
-            $credentials = $request->validate([
-                'email' => ['required', 'email'],
-                'password' => ['required'],
-            ]);
-            //  Auth::guard('web')->logout();
-            if (Auth::attempt(['email' => $request->email, 'password' => $request->password], $request->remember)) {
+
+            if (Auth::attempt(['email' => $request->email, 'password' => $request->password,'user_type'=>User::CUSTOMER_TYPE], $request->remember)) {
                 notify()->success("Authentication successful", 'Request success', ["Success loggedIn"]);
                 $request->session()->regenerate();
-
                     return redirect()->route('secure.dashboard');
 
 
