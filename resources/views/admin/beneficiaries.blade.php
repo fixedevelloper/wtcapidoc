@@ -90,7 +90,7 @@
                             </div>
                             <div class="nk-tb-col"><span class="sub-text">User</span></div>
                             <div class="nk-tb-col tb-col-md"><span class="sub-text">Phone</span></div>
-                            <div class="nk-tb-col tb-col-lg"><span class="sub-text">Country</span></div>
+                            <div class="nk-tb-col"><span class="sub-text">Country</span></div>
                             <div class="nk-tb-col tb-col-md"><span class="sub-text">Type Identifiant</span></div>
                             <div class="nk-tb-col tb-col-md"><span class="sub-text">N document</span></div>
                             <div class="nk-tb-col tb-col-md"><span class="sub-text">Expired Document</span></div>
@@ -154,7 +154,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="nk-tb-col tb-col-mb">
+                                <div class="nk-tb-col">
                                     <span class="tb-amount">{{$item['country']}} </span>
                                 </div>
                                 <div class="nk-tb-col tb-col-md">

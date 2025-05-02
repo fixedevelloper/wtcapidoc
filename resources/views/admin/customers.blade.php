@@ -98,8 +98,8 @@
                             <div class="nk-tb-col tb-col-sm"><span class="sub-text">Email</span></div>
                             <div class="nk-tb-col tb-col-md"><span class="sub-text">Phone</span></div>
                             <div class="nk-tb-col tb-col-xxl"><span class="sub-text">Company</span></div>
-                            <div class="nk-tb-col tb-col-lg"><span class="sub-text">Balance</span></div>
-                            <div class="nk-tb-col tb-col-xxl"><span class="sub-text">Balance sandbox</span></div>
+                            <div class="nk-tb-col"><span class="sub-text">Balance</span></div>
+                            <div class="nk-tb-col"><span class="sub-text">Balance sandbox</span></div>
                             <div class="nk-tb-col nk-tb-col-tools text-end">
                             </div>
                         </div>
@@ -133,14 +133,11 @@
                             <div class="nk-tb-col tb-col-xxl">
                                 <span>{{$item->company}}</span>
                             </div>
-                            <div class="nk-tb-col tb-col-xxl">
+                            <div class="nk-tb-col">
                                 <span>{{$item->balance}}</span>
                             </div>
-                            <div class="nk-tb-col tb-col-xxl">
-                                <span>{{$item->balance_sandbox}}</span>
-                            </div>
                             <div class="nk-tb-col">
-                                <span class="tb-status text-success">Active</span>
+                                <span>{{$item->balance_sandbox}}</span>
                             </div>
                             <div class="nk-tb-col nk-tb-col-tools">
                                 <ul class="nk-tb-actions gx-2">

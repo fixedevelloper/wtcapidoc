@@ -94,7 +94,7 @@
                                 </div>
                             </div>
                             <div class="nk-tb-col"><span class="sub-text">Name</span></div>
-                            <div class="nk-tb-col tb-col-md"><span class="sub-text">Country</span></div>
+                            <div class="nk-tb-col"><span class="sub-text">Country</span></div>
                             <div class="nk-tb-col tb-col-sm"><span class="sub-text">Code</span></div>
                             <div class="nk-tb-col nk-tb-col-tools text-end">
                             </div>
@@ -107,10 +107,10 @@
                                         <label class="custom-control-label" for="uid1"></label>
                                     </div>
                                 </div>
-                                <div class="nk-tb-col tb-col-md">
+                                <div class="nk-tb-col">
                                     <span>{{$item->name}}</span>
                                 </div>
-                                <div class="nk-tb-col tb-col-md">
+                                <div class="nk-tb-col">
                                     <span>{{$item->country->name}}</span>
                                 </div>
                                 <div class="nk-tb-col tb-col-sm">

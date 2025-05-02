@@ -65,15 +65,18 @@
                             </ul><!-- .btn-toolbar -->
                         </div><!-- card-tools -->
                         <div class="card-search search-wrap" data-search="search">
-                            <div class="search-content">
-                                <a href="#" class="search-back btn btn-icon toggle-search" data-target="search"><em
-                                        class="icon ni ni-arrow-left"></em></a>
-                                <input type="text"
-                                       class="form-control form-control-sm border-transparent form-focus-none"
-                                       placeholder="Quick search by order id">
-                                <button class="search-submit btn btn-icon"><em class="icon ni ni-search"></em></button>
-                            </div>
-                        </div><!-- card-search -->
+
+                                <div class="search-content">
+                                    <a href="#" class="search-back btn btn-icon toggle-search" data-target="search"><em
+                                            class="icon ni ni-arrow-left"></em></a>
+                                    <form>   <input type="text" name="search"
+                                           class="form-control form-control-sm border-transparent form-focus-none"
+                                           placeholder="Quick search by code, firstName and lastName">
+                                    <button class="search-submit btn btn-icon"><em class="icon ni ni-search"></em></button>
+                                    </form>  </div>
+
+
+                        </div>
                     </div><!-- .card-title-group -->
                 </div><!-- .card-inner -->
                 <div class="card-inner p-0">
@@ -86,6 +89,7 @@
                                 </div>
                             </div>
                             <div class="nk-tb-col"><span class="sub-text">User</span></div>
+                            <div class="nk-tb-col tb-col-mb"><span class="sub-text">Unique Code</span></div>
                             <div class="nk-tb-col tb-col-mb"><span class="sub-text">Country</span></div>
                             <div class="nk-tb-col tb-col-md"><span class="sub-text">Phone</span></div>
                             <div class="nk-tb-col tb-col-lg"><span class="sub-text">Gender</span></div>
@@ -138,8 +142,8 @@
                         <div class="nk-tb-item">
                             <div class="nk-tb-col nk-tb-col-check">
                                 <div class="custom-control custom-control-sm custom-checkbox notext">
-                                    <input type="checkbox" class="custom-control-input" id="uid9">
-                                    <label class="custom-control-label" for="uid9"></label>
+                                    <input type="checkbox" class="custom-control-input" id="{{$item['code']}}">
+                                    <label class="custom-control-label" for="{{$item['code']}}"></label>
                                 </div>
                             </div>
                             <div class="nk-tb-col">
@@ -152,6 +156,9 @@
                                         <span>{{$item->email}}</span>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="nk-tb-col tb-col-mb">
+                                <span class="tb-amount">{{$item->code}} </span>
                             </div>
                             <div class="nk-tb-col tb-col-mb">
                                 <span class="tb-amount">{{$item->country}} </span>
@@ -181,7 +188,7 @@
                                 <ul class="nk-tb-actions gx-1">
 
                                     <li class="nk-tb-action-hidden">
-                                        <a href="#" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Details" data-bs-original-title="Details">
+                                        <a href="{{route('secure.edit.senders',['code'=>$item['code']])}}" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Details" data-bs-original-title="Details">
                                             <em class="icon ni ni-user-cross-fill"></em>
                                         </a>
                                     </li>
@@ -190,8 +197,7 @@
                                             <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                                             <div class="dropdown-menu dropdown-menu-end">
                                                 <ul class="link-list-opt no-bdr">
-                                                    <li><a href="#"><em class="icon ni ni-eye"></em><span>View Details</span></a></li>
-                                                  <li><a href="#"><em class="icon ni ni-repeat"></em><span>Transaction</span></a></li>
+                                                    <li><a href="{{route('secure.edit.senders',['code'=>$item['code']])}}"><em class="icon ni ni-eye"></em><span>View Details</span></a></li>
                                                 </ul>
                                             </div>
                                         </div>

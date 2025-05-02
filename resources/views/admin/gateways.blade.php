@@ -89,8 +89,8 @@
                                 </div>
                             </div>
                             <div class="nk-tb-col"><span class="sub-text">Country</span></div>
-                            <div class="nk-tb-col tb-col-md"><span class="sub-text">Name</span></div>
-                            <div class="nk-tb-col tb-col-sm"><span class="sub-text">Type</span></div>
+                            <div class="nk-tb-col"><span class="sub-text">Name</span></div>
+                            <div class="nk-tb-col tb-col-md"><span class="sub-text">Type</span></div>
                             <div class="nk-tb-col tb-col-md"><span class="sub-text">Method</span></div>
                             <div class="nk-tb-col tb-col-xxl"><span class="sub-text">payer_code</span></div>
                         </div>
@@ -112,7 +112,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="nk-tb-col tb-col-md">
+                                <div class="nk-tb-col">
                                     <span>{{$item->name}}</span>
                                 </div>
                                 <div class="nk-tb-col tb-col-sm">

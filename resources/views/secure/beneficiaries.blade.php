@@ -68,10 +68,13 @@
                             <div class="search-content">
                                 <a href="#" class="search-back btn btn-icon toggle-search" data-target="search"><em
                                         class="icon ni ni-arrow-left"></em></a>
-                                <input type="text"
-                                       class="form-control form-control-sm border-transparent form-focus-none"
-                                       placeholder="Quick search by order id">
-                                <button class="search-submit btn btn-icon"><em class="icon ni ni-search"></em></button>
+                                <form>
+                                    <input name="search" type="text"
+                                           class="form-control form-control-sm border-transparent form-focus-none"
+                                           placeholder="Quick search  by code, firstName and lastName">
+                                    <button class="search-submit btn btn-icon"><em class="icon ni ni-search"></em></button>
+                                </form>
+
                             </div>
                         </div><!-- card-search -->
                     </div><!-- .card-title-group -->
@@ -86,6 +89,7 @@
                                 </div>
                             </div>
                             <div class="nk-tb-col"><span class="sub-text">User</span></div>
+                            <div class="nk-tb-col tb-col-md"><span class="sub-text">Code</span></div>
                             <div class="nk-tb-col tb-col-md"><span class="sub-text">Phone</span></div>
                             <div class="nk-tb-col"><span class="sub-text">Country</span></div>
                             <div class="nk-tb-col tb-col-md"><span class="sub-text">Type Identifiant</span></div>
@@ -135,8 +139,8 @@
                             <div class="nk-tb-item">
                                 <div class="nk-tb-col nk-tb-col-check">
                                     <div class="custom-control custom-control-sm custom-checkbox notext">
-                                        <input type="checkbox" class="custom-control-input" id="uid9">
-                                        <label class="custom-control-label" for="uid9"></label>
+                                        <input type="checkbox" class="custom-control-input" id="{{$item['code']}}">
+                                        <label class="custom-control-label" for="{{$item['code']}}"></label>
                                     </div>
                                 </div>
                                 <div class="nk-tb-col">
@@ -150,12 +154,16 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="nk-tb-col tb-col-mb">
-                                    <span class="tb-amount">{{$item['country']}} </span>
+                                <div class="nk-tb-col tb-col-md">
+                                    <span>{{$item['code']}}</span>
                                 </div>
                                 <div class="nk-tb-col tb-col-md">
                                     <span>{{$item['phone']}}</span>
                                 </div>
+                                <div class="nk-tb-col tb-col-mb">
+                                    <span class="tb-amount">{{$item['country']}} </span>
+                                </div>
+
                                 <div class="nk-tb-col tb-col-md">
                                     <span>{{$item['identification_document']}}</span>
                                 </div>
@@ -172,7 +180,7 @@
                                                 <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                                                 <div class="dropdown-menu dropdown-menu-end">
                                                     <ul class="link-list-opt no-bdr">
-                                                        <li><a href="#"><em class="icon ni ni-eye"></em><span>View Details</span></a></li>
+                                                        <li><a href="{{route('secure.edit.beneficiaries',['code'=>$item['code']])}}"><em class="icon ni ni-eye"></em><span>View Details</span></a></li>
                                                     </ul>
                                                 </div>
                                             </div>

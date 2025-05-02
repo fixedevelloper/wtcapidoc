@@ -73,8 +73,11 @@
                         <div class="card-body">
                             <div class="search-content">
                                 <a href="#" class="search-back btn btn-icon toggle-search" data-target="search"><em class="icon ni ni-arrow-left"></em></a>
-                                <input type="text" class="form-control border-transparent form-focus-none" placeholder="Search by user or email">
-                                <button class="search-submit btn btn-icon"><em class="icon ni ni-search"></em></button>
+                                <form>
+                                    <input name="search" type="text" class="form-control border-transparent form-focus-none" placeholder="Search by customer or n°transaction">
+                                    <button class="search-submit btn btn-icon"><em class="icon ni ni-search"></em></button>
+                                </form>
+
                             </div>
                         </div>
                     </div><!-- .card-search -->
@@ -91,9 +94,9 @@
                             <div class="nk-tb-col"><span class="sub-text">Customer</span></div>
 
                             <div class="nk-tb-col tb-col-mb"><span class="sub-text">Country</span></div>
-                            <div class="nk-tb-col tb-col-md"><span class="sub-text">Amount Send</span></div>
-                            <div class="nk-tb-col tb-col-lg"><span class="sub-text">Amount receive</span></div>
-                            <div class="nk-tb-col"><span class="sub-text">Sender</span></div>
+                            <div class="nk-tb-col"><span class="sub-text">Amount Send</span></div>
+                            <div class="nk-tb-col"><span class="sub-text">Amount receive</span></div>
+                            <div class="nk-tb-col tb-col-lg"><span class="sub-text">Sender</span></div>
                             <div class="nk-tb-col tb-col-lg"><span class="sub-text">Beneficiary</span></div>
                             <div class="nk-tb-col tb-col-md"><span class="sub-text">Total Fees &amp; Charges</span></div>
                             <div class="nk-tb-col tb-col-md"><span class="sub-text">Date</span></div>
@@ -164,13 +167,13 @@
                                 <div class="nk-tb-col tb-col-mb">
                                     <span class="tb-amount">{{$item->gatewayItem->country->name}} </span>
                                 </div>
-                                <div class="nk-tb-col tb-col-sm">
+                                <div class="nk-tb-col">
                                     <span>{{number_format($item['amount']+$item['rate'],2)}} XAF</span>
                                 </div>
-                                <div class="nk-tb-col tb-col-md">
+                                <div class="nk-tb-col">
                                     <span>{{number_format($item['amount_total'],2) }} {{$item->gatewayItem->country->currency}}</span>
                                 </div>
-                                <div class="nk-tb-col">
+                                <div class="nk-tb-col tb-col-sm">
                                     <div class="user-card">
                                         <div class="user-avatar bg-success">
                                             <span>{{ substr($item['sender']['first_name'],0,1) }}{{ substr($item['sender']['last_name'],0,1) }}</span>

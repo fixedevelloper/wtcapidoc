@@ -63,13 +63,19 @@ class StaticSecureController extends Controller
         $query_param = [];
         $search = $request->search;
         if ($request->has('search')) {
-            $items = Transaction::query()->where('name', 'like', "%$search%")
-                ->orWhere('iso', 'like', "%$search%");
+            $items = Transaction::query()
+                ->leftJoin('senders', 'transactions.sender_id', '=', 'senders.id')
+                ->where('type',Helper::TYPESECURE)
+                ->where((DB::raw("CONCAT(senders.first_name, ' ', senders.last_name)")), 'like', "%$search%")
+                //->orWhere((DB::raw("CONCAT(beneficiaries.first_name, ' ', beneficiaries.last_name)")), 'like', "%$search%")
+                ->orWhere('number_transaction', 'like', "%$search%")
+                ->orWhere('transactions.created_at', 'like', "%$search%");
+
             $query_param = ['search' => $request['search']];
         } else {
             $items = new Transaction();
         }
-        $items = $items->where(['customer_id' => $customer->id,'type'=>Helper::TYPESECURE])->orderByDesc('created_at')->paginate(20)->appends($query_param);
+        $items = $items->where(['transactions.customer_id' => $customer->id,'type'=>Helper::TYPESECURE])->orderByDesc('transactions.created_at')->paginate(20)->appends($query_param);
 
         return view('secure.transferList', [
             'transactions' => $items
@@ -376,8 +382,12 @@ class StaticSecureController extends Controller
         $query_param = [];
         $search = $request->search;
         if ($request->has('search')) {
-            $items = Sender::query()->where('name', 'like', "%$search%")
-                ->orWhere('iso', 'like', "%$search%");
+            $items = Sender::query()->where(DB::raw("CONCAT(first_name, ' ', last_name)"), 'like', "%$search%")
+                // ->orWhere('last_name', 'like', "%$search%")
+                ->orWhere('code', 'like', "%$search%");
+           /* $items = Sender::query()->where('first_name', 'like', "%$search%")
+                ->orWhere('last_name', 'like', "%$search%")
+                ->orWhere('code', 'like', "%$search%");*/
             $query_param = ['search' => $request['search']];
         } else {
             $items = new Sender();
@@ -425,7 +435,38 @@ class StaticSecureController extends Controller
             'countries' => $countries
         ]);
     }
+    public function editSender(Request $request,$code)
+    {
+        $countries = Country::all();
+        $sender = Sender::query()->firstWhere(['code'=>$code]);
+        if ($request->method() == 'POST') {
+            $body = [
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'email' => $request->email,
+                'date_birth' => $request->date_birth,
+                'num_document' => $request->num_document,
+                'country' => $request->country,
+                'phone' => $request->phone,
+                'identification_document' => $request->identification_document,
+                'occupation' => $request->occupation,
+                'civility' => $request->civility,
+                'gender' => $request->gender,
+                'expired_document' => $request->expired_document,
+                'address' => $request->address,
+                'city' => $request->numCity,
 
+            ];
+            $sender->update($body);
+            notify()->success('Data has been saved successfully!');
+            return redirect()->route('secure.senders');
+
+        }
+        return view('secure.editSender', [
+            'countries' => $countries,
+            'sender'=>$sender
+        ]);
+    }
     public function beneficiaries(Request $request)
     {
         $auth = Auth::user();
@@ -433,8 +474,12 @@ class StaticSecureController extends Controller
         $query_param = [];
         $search = $request->search;
         if ($request->has('search')) {
-            $items = Beneficiary::query()->where('name', 'like', "%$search%")
-                ->orWhere('iso', 'like', "%$search%");
+            $items = Beneficiary::query()->where(DB::raw("CONCAT(first_name, ' ', last_name)"), 'like', "%$search%")
+               // ->orWhere('last_name', 'like', "%$search%")
+                ->orWhere('code', 'like', "%$search%");
+           /* $items = Beneficiary::query()->where('first_name', 'like', "%$search%")
+                ->orWhere('last_name', 'like', "%$search%")
+                ->orWhere('code', 'like', "%$search%");*/
             $query_param = ['search' => $request['search']];
         } else {
             $items = new Beneficiary();
@@ -506,6 +551,38 @@ class StaticSecureController extends Controller
         }
         return view('secure.addBeneficiary', [
             'countries' => Country::all(),
+        ]);
+    }
+    public function editBeneficiaries(Request $request,$code)
+    {
+        $beneficiary = Beneficiary::query()->firstWhere(['code'=>$code]);
+        if ($request->method() == 'POST') {
+            $body = [
+                'numSender' => $request->get('numSender'),
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'email' => $request->email,
+                'date_birth' => $request->date_birth,
+                'num_document' => $request->num_document,
+                'country' => $request->country,
+                'phone' => $request->phone,
+                'identification_document' => $request->identification_document,
+                'zipcode' => $request->zipcode,
+                'civility' => $request->civility,
+                'gender' => $request->gender,
+                'expired_document' => $request->expired_document,
+                'address' => '',
+                'city' => '',
+                'occupation'=>'',
+            ];
+
+            $beneficiary->update($body);
+            notify()->success('Data has been saved successfully!');
+            return redirect()->route('secure.beneficiaries');
+        }
+        return view('secure.editBeneficiary', [
+            'countries' => Country::all(),
+            'beneficiary'=>$beneficiary
         ]);
     }
 

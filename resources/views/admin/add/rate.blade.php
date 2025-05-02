@@ -64,10 +64,10 @@
                                     <label class="custom-control-label" for="uid"></label>
                                 </div>
                             </div>
-                            <div class="nk-tb-col tb-col-md"><span class="sub-text">Country</span></div>
-                            <div class="nk-tb-col tb-col-sm"><span class="sub-text">fixed Amount</span></div>
-                            <div class="nk-tb-col tb-col-md"><span class="sub-text">Rate</span></div>
-                            <div class="nk-tb-col tb-col-xxl"><span class="sub-text">Costs</span></div>
+                            <div class="nk-tb-col"><span class="sub-text">Country</span></div>
+                            <div class="nk-tb-col"><span class="sub-text">fixed Amount</span></div>
+                            <div class="nk-tb-col"><span class="sub-text">Rate</span></div>
+                            <div class="nk-tb-col"><span class="sub-text">Costs</span></div>
                             <div class="nk-tb-col nk-tb-col-tools text-end">
                             </div>
                         </div>
@@ -79,17 +79,17 @@
                                         <label class="custom-control-label" for="uid1"></label>
                                     </div>
                                 </div>
-                                <div class="nk-tb-col tb-col-md">
+                                <div class="nk-tb-col">
                                     <span>{{$item->country->name}}</span>
                                 </div>
-                                <div class="nk-tb-col tb-col-md">
+                                <div class="nk-tb-col">
                                     <span>{{$item->fixed_amount}}</span>
                                 </div>
-                                <div class="nk-tb-col tb-col-sm">
+                                <div class="nk-tb-col">
                                     <span>{{$item->rate}}</span>
                                 </div>
 
-                                <div class="nk-tb-col tb-col-xxl">
+                                <div class="nk-tb-col">
                                     <span>{{$item->cost}}</span>
                                 </div>
 

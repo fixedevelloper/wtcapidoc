@@ -1,8 +1,7 @@
 <div class="nk-tb-col nk-tb-col-tools">
-    <ul class="nk-tb-actions gx-2">
-        <li>
+
     <!-- Bouton pour ouvrir le modal -->
-    <li><a class="btn btn-danger" wire:click="openModal" ><em class="icon ni ni-trash"></em><span>Remove</span></a></li>
+    <a class="btn btn-danger btn-sm" wire:click="openModal" ><em class="icon ni ni-trash"></em></a>
     <!-- Modal -->
     <div class="modal fade @if($isOpen) show @endif" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="@if($isOpen) display: block; @endif">
         <div class="modal-dialog">
@@ -25,7 +24,7 @@
             </div>
         </div>
     </div>
-    </ul>
+
 </div>
 @if(!$isOpen)
     <script>

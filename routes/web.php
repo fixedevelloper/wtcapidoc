@@ -64,7 +64,9 @@ Route::match(["POST", "GET"], '/logout', [SecuritySecureController::class, 'logo
         Route::match(["POST", "GET"], '/securesenders', [StaticSecureController::class, 'senders'])->name('secure.senders');
         Route::match(["POST", "GET"], '/transfer_list/detail/{numero_identifiant}', [StaticSecureController::class, 'transaction_detail'])->name('secure.transaction_detail');
         Route::match(["POST", "GET"], '/securesenders/add', [StaticSecureController::class, 'addSender'])->name('secure.add.senders');
+        Route::match(["POST", "GET"], '/securesenders/edit/{code}', [StaticSecureController::class, 'editSender'])->name('secure.edit.senders');
         Route::match(["POST", "GET"], '/securebeneficiaries/add', [StaticSecureController::class, 'addBeneficiaries'])->name('secure.add.beneficiaries');
+        Route::match(["POST", "GET"], '/securebeneficiaries/edit/{code}', [StaticSecureController::class, 'editBeneficiaries'])->name('secure.edit.beneficiaries');
         Route::match(["POST", "GET"], '/securebeneficiaries', [StaticSecureController::class, 'beneficiaries'])->name('secure.beneficiaries');
         Route::match(["POST", "GET"], '/get_ajax_beneficiaries', [StaticSecureController::class, 'getBeneficiaryAjax'])->name('secure.get_ajax_beneficiaries');
         Route::match(["POST", "GET"], '/get_ajax_cities', [StaticSecureController::class, 'getCitiesAjax'])->name('secure.get_ajax_cities');

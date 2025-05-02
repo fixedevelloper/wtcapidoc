@@ -89,12 +89,12 @@
                                 </div>
                             </div>
                             <div class="nk-tb-col"><span class="sub-text">Customer</span></div>
-                            <div class="nk-tb-col tb-col-md"><span class="sub-text">Amount</span></div>
+                            <div class="nk-tb-col"><span class="sub-text">Amount</span></div>
                             <div class="nk-tb-col tb-col-md"><span class="sub-text">Date</span></div>
 
                             <div class="nk-tb-col tb-col-md"><span class="sub-text">C.Note</span></div>
                             <div class="nk-tb-col tb-col-md"><span class="sub-text">A.Note</span></div>
-                            <div class="nk-tb-col tb-col-md"><span class="sub-text">Status</span></div>
+                            <div class="nk-tb-col"><span class="sub-text">Status</span></div>
                             <div class="nk-tb-col nk-tb-col-tools text-end">
                                 <div class="dropdown">
                                     <a href="#" class="btn btn-xs btn-outline-light btn-icon dropdown-toggle" data-bs-toggle="dropdown" data-offset="0,5"><em class="icon ni ni-plus"></em></a>
@@ -133,15 +133,13 @@
                                         <div class="user-info">
                                                         <span class="tb-lead">
                                                             {{$item['customer']['user']['name']}}
-                                                            <span class="dot dot-warning d-md-none ms-1">
-
-                                                            </span></span>
+                                                            </span>
                                             <span>{{$item['customer']['user']['email']}}</span>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="nk-tb-col tb-col-sm">
+                                <div class="nk-tb-col">
                                     <span>{{number_format($item['amount'],2)}} XAF</span>
                                 </div>
                                 <div class="nk-tb-col tb-col-md">
@@ -153,7 +151,7 @@
                                 <div class="nk-tb-col tb-col-md">
                                     <span>{{$item['admin_note']}}</span>
                                 </div>
-                                <div class="nk-tb-col tb-col-md">
+                                <div class="nk-tb-col">
                                     <span class="{{ $item->stringStatus->class }}">{{$item->stringStatus->value}}</span>
                                 </div>
 

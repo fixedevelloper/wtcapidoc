@@ -70,8 +70,10 @@
                                     <div class="card-search search-wrap" data-search="search">
                                         <div class="search-content">
                                             <a href="#" class="search-back btn btn-icon toggle-search" data-target="search"><em class="icon ni ni-arrow-left"></em></a>
-                                            <input type="text" class="form-control form-control-sm border-transparent form-focus-none" placeholder="Quick search by order id">
-                                            <button class="search-submit btn btn-icon"><em class="icon ni ni-search"></em></button>
+                                            <form>
+                                            <input name="search" type="text" class="form-control form-control-sm border-transparent form-focus-none"
+                                                   placeholder="Quick search by sender,date and n°transaction">
+                                            <button class="search-submit btn btn-icon"><em class="icon ni ni-search"></em></button> </form>
                                         </div>
                                     </div><!-- card-search -->
                                 </div><!-- .card-title-group -->

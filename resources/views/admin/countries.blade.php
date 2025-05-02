@@ -93,10 +93,10 @@
                                     <label class="custom-control-label" for="uid"></label>
                                 </div>
                             </div>
-                            <div class="nk-tb-col tb-col-md"><span class="sub-text">Name</span></div>
+                            <div class="nk-tb-col"><span class="sub-text">Name</span></div>
                             <div class="nk-tb-col tb-col-sm"><span class="sub-text">Code Iso</span></div>
-                            <div class="nk-tb-col tb-col-md"><span class="sub-text">Code Iso2</span></div>
-                            <div class="nk-tb-col tb-col-xxl"><span class="sub-text">Currency</span></div>
+                            <div class="nk-tb-col"><span class="sub-text">Code Iso2</span></div>
+                            <div class="nk-tb-col tb-col-md"><span class="sub-text">Currency</span></div>
                             <div class="nk-tb-col nk-tb-col-tools text-end">
                             </div>
                         </div>
@@ -121,7 +121,7 @@
                                 <div class="nk-tb-col tb-col-md">
                                     <span>{{$item->codeIso}}</span>
                                 </div>
-                                <div class="nk-tb-col tb-col-sm">
+                                <div class="nk-tb-col">
                                     <span>{{$item->codeIso2}}</span>
                                 </div>
                                 <div class="nk-tb-col tb-col-md">

@@ -12,6 +12,7 @@ use App\Models\Sender;
 use App\Models\Transaction;
 use App\Models\WithdrawRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TransactionController extends Controller
 {
@@ -20,13 +21,17 @@ class TransactionController extends Controller
         $query_param = [];
         $search = $request->search;
         if ($request->has('search')) {
-            $items = Transaction::query()->where('name', 'like', "%$search%")
-                ->orWhere('iso', 'like', "%$search%");
+            $items = Transaction::query()
+                ->leftJoin('customers', 'transactions.customer_id', '=', 'customers.id')
+                ->leftJoin('users', 'customers.user_id', '=', 'users.id')
+                ->where('type',Helper::TYPESECURE)
+                ->where('users.name', 'like', "%$search%")
+                ->orWhere('number_transaction', 'like', "%$search%");
             $query_param = ['search' => $request['search']];
         } else {
             $items = new Transaction();
         }
-        $items = $items->where(['type'=>Helper::TYPESECURE])->orderByDesc('created_at')->paginate(20)->appends($query_param);
+        $items = $items->where(['type'=>Helper::TYPESECURE])->orderByDesc('transactions.created_at')->paginate(20)->appends($query_param);
         return view('admin.transactions', [
             'transactions'=>$items
         ]);

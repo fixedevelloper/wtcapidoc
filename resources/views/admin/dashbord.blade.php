@@ -35,7 +35,7 @@
                             </div>
                         </div>
                         <div class="card-amount">
-                                                    <span class="amount"> 49,595.34 <span class="currency currency-usd">FCFA</span>
+                                                    <span class="amount"> {{number_format($sumDepositTotal,2)}} <span class="currency currency-usd">FCFA</span>
                                                     </span>
                             <span class="change up text-danger"><em class="icon ni ni-arrow-long-up"></em>1.93%</span>
                         </div>
@@ -43,11 +43,11 @@
                             <div class="invest-data-amount g-2">
                                 <div class="invest-data-history">
                                     <div class="title">This Month</div>
-                                    <div class="amount">2,940.59 <span class="currency currency-usd">FCFA</span></div>
+                                    <div class="amount">{{number_format($sumCurrentMonthDeposits,2)}} <span class="currency currency-usd">FCFA</span></div>
                                 </div>
                                 <div class="invest-data-history">
                                     <div class="title">This Week</div>
-                                    <div class="amount">1,259.28 <span class="currency currency-usd">FCFA</span></div>
+                                    <div class="amount">{{number_format($sumWeekendDeposits,2)}} <span class="currency currency-usd">FCFA</span></div>
                                 </div>
                             </div>
                             <div class="invest-data-ck">
@@ -69,7 +69,7 @@
                             </div>
                         </div>
                         <div class="card-amount">
-                                                    <span class="amount"> 49,595.34 <span class="currency currency-usd">FCFA</span>
+                                                    <span class="amount"> {{number_format($sumTotal,2)}} <span class="currency currency-usd">FCFA</span>
                                                     </span>
                             <span class="change down text-danger"><em class="icon ni ni-arrow-long-down"></em>1.93%</span>
                         </div>
@@ -77,11 +77,11 @@
                             <div class="invest-data-amount g-2">
                                 <div class="invest-data-history">
                                     <div class="title">This Month</div>
-                                    <div class="amount">2,940.59 <span class="currency currency-usd">FCFA</span></div>
+                                    <div class="amount">{{number_format($sumCurrentMonthTransactions,2)}} <span class="currency currency-usd">FCFA</span></div>
                                 </div>
                                 <div class="invest-data-history">
                                     <div class="title">This Week</div>
-                                    <div class="amount">1,259.28 <span class="currency currency-usd">FCFA</span></div>
+                                    <div class="amount">{{number_format($sumWeekendTransactions,2)}}<span class="currency currency-usd">FCFA</span></div>
                                 </div>
                             </div>
                             <div class="invest-data-ck">
@@ -96,25 +96,25 @@
                     <div class="card-inner">
                         <div class="card-title-group align-start mb-0">
                             <div class="card-title">
-                                <h6 class="subtitle">Balance in Account</h6>
+                                <h6 class="subtitle">Total withdraws</h6>
                             </div>
                             <div class="card-tools">
-                                <em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" aria-label="Total Balance in Account" data-bs-original-title="Total Balance in Account"></em>
+                                <em class="card-hint icon ni ni-help-fill" data-bs-toggle="tooltip" data-bs-placement="left" aria-label="Total withdraws" data-bs-original-title="Total withdraws"></em>
                             </div>
                         </div>
                         <div class="card-amount">
-                                                    <span class="amount"> 79,358.50 <span class="currency currency-usd">FCFA</span>
+                                                    <span class="amount"> {{number_format($sumWithdrawTotal,2)}} <span class="currency currency-usd">FCFA</span>
                                                     </span>
                         </div>
                         <div class="invest-data">
                             <div class="invest-data-amount g-2">
                                 <div class="invest-data-history">
                                     <div class="title">This Month</div>
-                                    <div class="amount">2,940.59 <span class="currency currency-usd">FCFA</span></div>
+                                    <div class="amount">{{number_format($sumCurrentMonthWithdraws,2)}} <span class="currency currency-usd">FCFA</span></div>
                                 </div>
                                 <div class="invest-data-history">
                                     <div class="title">This Week</div>
-                                    <div class="amount">1,259.28 <span class="currency currency-usd">FCFA</span></div>
+                                    <div class="amount">{{number_format($sumWeekendWithdraws,2)}} <span class="currency currency-usd">FCFA</span></div>
                                 </div>
                             </div>
                             <div class="invest-data-ck">
@@ -218,7 +218,7 @@
                                 <h6 class="title">Recent Deposit</h6>
                             </div>
                             <div class="card-tools">
-                                <a href="#" class="link">View All</a>
+                                <a href="{{route('admin.deposits')}}" class="link">View All</a>
                             </div>
                         </div>
                     </div>
