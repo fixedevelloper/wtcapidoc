@@ -77,7 +77,7 @@ Route::match(["POST", "GET"], '/logout', [SecuritySecureController::class, 'logo
     });
 });
 
-//Route::domain('manage.agensic.com')->group(function () {
+Route::domain('manage.agensic.com')->group(function () {
     Route::match(["POST", "GET"], '/', [SecurityAdminController::class, 'adminLogin'])->name('admin.login');
     Route::match(["POST", "GET"], '/register', [SecurityAdminController::class, 'register'])->name('admin.register');
     Route::group(['middleware' => ['isAdmin']], function () {
@@ -103,4 +103,4 @@ Route::match(["POST", "GET"], '/gateways', [BasicController::class, 'gateways'])
 Route::match(["POST", "GET"], '/senders/detail/{code}', [BasicController::class, 'sender_detail'])->name('admin.sender_detail');
 Route::match(["POST", "GET"], '/beneficiaries/detail/{code}', [BasicController::class, 'beneficiary_detail'])->name('admin.beneficiary_detail');
     });
-//});
+});
