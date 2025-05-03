@@ -27,6 +27,8 @@ Route::middleware('customer.jwt')->group(function () {
         Route::get('/senders/detail', [CustomerApiController::class, 'getSender']);
         Route::get('/beneficiaries', [CustomerApiController::class, 'getBeneficiaries']);
         Route::get('/beneficiaries/detail', [CustomerApiController::class, 'getBeneficiary']);
+        Route::post('/senders', [CustomerApiController::class, 'postSenders']);
+        Route::post('/beneficiaries', [CustomerApiController::class, 'postBeneficiaries']);
     });
 });
 

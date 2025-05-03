@@ -11,11 +11,7 @@
             <div class="nk-block-head-content">
                 <div class="toggle-wrap nk-block-tools-toggle">
                     <a href="#" class="btn btn-icon btn-trigger toggle-expand me-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
-                    <div class="toggle-expand-content" data-content="pageMenu">
-                        <ul class="nk-block-tools g-3">
-                            <li><a href="#" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li>
-                        </ul>
-                    </div>
+                    <livewire:export-transaction/>
                 </div><!-- .toggle-wrap -->
             </div><!-- .nk-block-head-content -->
         </div><!-- .nk-block-between -->

@@ -14,6 +14,8 @@ use App\Models\Gateway;
 use App\Models\Sender;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class CustomerApiController extends Controller
 {
@@ -184,5 +186,159 @@ class CustomerApiController extends Controller
         }
         $message = 'banks get successful';
         return Helpers::success($countries_, $message);
+    }
+    public function postSenders(Request $request)
+    {
+        $customer = $request->customer;
+
+        $validator = Validator::make($request->all(), [
+            'country_code' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required',
+            'date_birth' => 'required',
+            'num_document' => 'required',
+            'type_document' => 'required',
+            'occupation' => 'required',
+            'civility' => 'required',
+            'gender' => 'required',
+            'expired_document' => 'required',
+            'address' => 'required',
+            'city' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            $err = null;
+            foreach ($validator->errors()->all() as $error) {
+                $err = $error;
+            }
+            return Helpers::error($err);
+        }
+        $country=Country::query()->firstWhere(['codeIso2'=>$request->country_code]);
+        if (is_null($country)){
+            return Helpers::error('country not found');
+        }
+        $city=City::query()->firstWhere(['name'=>$request->city,'country_id'=>$country->id]);
+        if (is_null($city)){
+            return Helpers::error('city not found');
+        }
+        $sender_email=Sender::query()->firstWhere(['email'=>$request->email]);
+        if (!is_null($sender_email)){
+            return Helpers::error('Duplicate entry :'.$request->email);
+        }
+        DB::beginTransaction();
+        $body = [
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'date_birth' => $request->date_birth,
+            'num_document' => $request->num_document,
+            'country' => $request->country_code,
+            'phone' => $request->phone,
+            'identification_document' => $request->type_document,
+            'occupation' => $request->occupation,
+            'civility' => $request->civility,
+            'gender' => $request->gender,
+            'expired_document' => $request->expired_document,
+            'code' => Helper::generatenumber(),
+            'address' => $request->address,
+            'city' => $request->city,
+            'customer_id' => $customer->id
+
+        ];
+        try {
+            $sender = new Sender($body);
+            $sender->save($body);
+        }catch (\Exception $exception){
+            return Helpers::error($exception->getMessage());
+        }
+
+        DB::commit();
+        return Helpers::success([
+            'first_name' => $sender->first_name,
+            'last_name' => $sender->last_name,
+            'email' => $sender->email,
+            'phone' => $sender->phone,
+            'code' => $sender->code,
+            'occupation' => $sender->occupation,
+            'civility' => $sender->civility,
+            'gender' => $sender->gender,
+            'document_type' => $sender->identification_document,
+            'document_expired' => $sender->expired_document,
+            'document_number' => $sender->num_document
+        ], 'sender created successful');
+    }
+    public function postBeneficiaries(Request $request)
+    {
+        $customer = $request->customer;
+
+        $validator = Validator::make($request->all(), [
+            'country_code' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required',
+            'date_birth' => 'required',
+            'num_document' => 'required',
+            'type_document' => 'required',
+            'occupation' => 'required',
+            'civility' => 'required',
+            'gender' => 'required',
+            'expired_document' => 'required',
+            'address' => 'required',
+            'city' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            $err = null;
+            foreach ($validator->errors()->all() as $error) {
+                $err = $error;
+            }
+            return Helpers::error($err);
+        }
+        $country=Country::query()->firstWhere(['codeIso2'=>$request->country_code]);
+        if (is_null($country)){
+            return Helpers::error('country not found');
+        }
+        $city=City::query()->firstWhere(['name'=>$request->city,'country_id'=>$country->id]);
+        if (is_null($city)){
+            return Helpers::error('city not found');
+        }
+        DB::beginTransaction();
+        $body = [
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'date_birth' => $request->date_birth,
+            'num_document' => $request->num_document,
+            'country' => $request->country_code,
+            'phone' => $request->phone,
+            'identification_document' => $request->type_document,
+            'occupation' => $request->occupation,
+            'civility' => $request->civility,
+            'gender' => $request->gender,
+            'expired_document' => $request->expired_document,
+            'code' => Helper::generatenumber(),
+            'address' => $request->address,
+            'city' => $request->city,
+            'customer_id' => $customer->id
+
+        ];
+        $item = new Beneficiary($body);
+        $item->save($body);
+        DB::commit();
+        return Helpers::success([
+            'first_name' => $item->first_name,
+            'last_name' => $item->last_name,
+            'email' => $item->email,
+            'phone' => $item->phone,
+            'code' => $item->code,
+            'occupation' => $item->occupation,
+            'civility' => $item->civility,
+            'gender' => $item->gender,
+            'document_type' => $item->identification_document,
+            'document_expired' => $item->expired_document,
+            'document_number' => $item->num_document
+
+        ], 'beneficiary created successful');
     }
 }

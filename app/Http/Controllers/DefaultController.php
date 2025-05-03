@@ -9,6 +9,13 @@ use Illuminate\Http\Request;
 class DefaultController extends Controller
 {
 
+    public function documentation(Request $request)
+    {
+
+        return view('front.documentation', [
+
+        ]);
+    }
     public function home(Request $request)
     {
 

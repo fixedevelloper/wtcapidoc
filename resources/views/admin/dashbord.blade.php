@@ -167,7 +167,7 @@
                                 <span class="tb-sub">{{$item['created_at']}}</span>
                             </div>
                             <div class="nk-tb-col">
-                                <span class="tb-sub tb-amount">{{number_format($item['amount_total'],2)}}<span>FCFA</span></span>
+                                <span class="tb-sub tb-amount">{{number_format($item['amount_total'],2)}} <span>{{$item->gatewayItem->country->currency}}</span></span>
                             </div>
                             <div class="nk-tb-col">
                                 <div class="align-center">

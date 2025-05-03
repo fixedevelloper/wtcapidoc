@@ -12,8 +12,9 @@ use App\Models\City;
 use App\Models\Country;
 use App\Models\Gateway;
 use App\Models\Sender;
-use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class CustomerApiController extends Controller
 {
@@ -161,7 +162,6 @@ class CustomerApiController extends Controller
         $message = 'senders get successful';
         return Helpers::success($countries_, $message);
     }
-
     public function getBanks(Request $request)
     {
         $customer = $request->customer;
@@ -184,5 +184,126 @@ class CustomerApiController extends Controller
         }
         $message = 'banks get successful';
         return Helpers::success($countries_, $message);
+    }
+
+    public function postSenders(Request $request)
+    {
+        $customer = $request->customer;
+
+        $validator = Validator::make($request->all(), [
+            'country_code' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required',
+            'date_birth' => 'required',
+            'num_document' => 'required',
+            'type_document' => 'required',
+            'occupation' => 'required',
+            'civility' => 'required',
+            'gender' => 'required',
+            'expired_document' => 'required',
+            'address' => 'required',
+            'city' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            $err = null;
+            foreach ($validator->errors()->all() as $error) {
+                $err = $error;
+            }
+            return Helpers::error($err);
+        }
+        $country=Country::query()->firstWhere(['codeIso2'=>$request->country_code]);
+        if (is_null($country)){
+            return Helpers::error('country not found');
+        }
+        $city=City::query()->firstWhere(['name'=>$request->city,'country_id'=>$country->id]);
+        if (is_null($city)){
+            return Helpers::error('city not found');
+        }
+        DB::beginTransaction();
+        $body = [
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'date_birth' => $request->date_birth,
+            'num_document' => $request->num_document,
+            'country' => $request->country_code,
+            'phone' => $request->phone,
+            'identification_document' => $request->type_document,
+            'occupation' => $request->occupation,
+            'civility' => $request->civility,
+            'gender' => $request->gender,
+            'expired_document' => $request->expired_document,
+            'code' => Helper::generatenumber(),
+            'address' => $request->address,
+            'city' => $request->numCity,
+            'customer_id' => $customer->id
+
+        ];
+        $sender = new Sender($body);
+        $sender->save($body);
+        DB::commit();
+        return Helpers::success([], 'transaction created successful');
+    }
+    public function createBeneficiaries(Request $request)
+    {
+        $customer = $request->customer;
+
+        $validator = Validator::make($request->all(), [
+            'country_code' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required',
+            'date_birth' => 'required',
+            'num_document' => 'required',
+            'type_document' => 'required',
+            'occupation' => 'required',
+            'civility' => 'required',
+            'gender' => 'required',
+            'expired_document' => 'required',
+            'address' => 'required',
+            'city' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            $err = null;
+            foreach ($validator->errors()->all() as $error) {
+                $err = $error;
+            }
+            return Helpers::error($err);
+        }
+        $country=Country::query()->firstWhere(['codeIso2'=>$request->country_code]);
+        if (is_null($country)){
+            return Helpers::error('country not found');
+        }
+        $city=City::query()->firstWhere(['name'=>$request->city,'country_id'=>$country->id]);
+        if (is_null($city)){
+            return Helpers::error('city not found');
+        }
+        DB::beginTransaction();
+        $body = [
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'date_birth' => $request->date_birth,
+            'num_document' => $request->num_document,
+            'country' => $request->country_code,
+            'phone' => $request->phone,
+            'identification_document' => $request->type_document,
+            'occupation' => $request->occupation,
+            'civility' => $request->civility,
+            'gender' => $request->gender,
+            'expired_document' => $request->expired_document,
+            'code' => Helper::generatenumber(),
+            'address' => $request->address,
+            'city' => $request->numCity,
+            'customer_id' => $customer->id
+
+        ];
+        $sender = new Sender($body);
+        $sender->save($body);
+        DB::commit();
+        return Helpers::success([], 'transaction created successful');
     }
 }
