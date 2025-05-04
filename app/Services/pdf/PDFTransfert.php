@@ -15,6 +15,7 @@ class PDFTransfert extends FPDF
     var $format;
     var $angle=0;
     var $total_send=0.0;
+    var $total_charge=0.0;
 // fonctions privées
     function RoundedRect($x, $y, $w, $h, $r, $style = '')
     {
@@ -125,6 +126,7 @@ class PDFTransfert extends FPDF
             $this->Cell(35, 8, Carbon::parse($row->created_at)->format('d/m/Y'), 1, 0, 'L');
             $this->Ln();
             $this->total_send+=$row->amount;
+            $this->total_charge+=$row->rate;
             $i = $i + 1;
         }
     }
@@ -158,6 +160,7 @@ class PDFTransfert extends FPDF
             $this->Cell(35, 8, Carbon::parse($row->created_at)->format('d/m/Y'), 1, 0, 'L');
             $this->Ln();
             $this->total_send+=$row->amount;
+            $this->total_charge+=$row->rate;
             $i = $i + 1;
         }
     }
@@ -168,7 +171,7 @@ class PDFTransfert extends FPDF
         $this->SetFont('Arial', 'B', 14);
         $this->Cell(0, 10, 'Total Send: ' . number_format($this->total_send, 2).' FCFA', 0, 1, 'L');
         $this->Ln(1);
-        $this->Cell(0, 10, 'Total Charges: ' . number_format($this->total_send, 2).' FCFA', 0, 1, 'L');
+        $this->Cell(0, 10, 'Total Charges: ' . number_format($this->total_charge, 2).' FCFA', 0, 1, 'L');
         $this->Ln();
     }
     function Footer()
