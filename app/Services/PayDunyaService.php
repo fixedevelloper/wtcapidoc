@@ -20,6 +20,7 @@ class PayDunyaService
 
     public function make_transfert($item)
     {
+        logger($this->base_url);
         logger()->error('*******************************************************************************************');
         $transaction_numero = '';
         $allowed_characters = array(1, 2, 3, 4, 5, 6, 7, 8, 9, 'a', 'b', 'c', 'd', 'f');

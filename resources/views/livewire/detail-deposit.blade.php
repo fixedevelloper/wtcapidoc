@@ -51,10 +51,12 @@
 
                 </div>
                 <div class="modal-footer">
-                    @if($deposit->status!=\App\Helpers\Helper::STATUSSUCCESS || $deposit->status!=\App\Helpers\Helper::STATUSFAILD)
+                    @if($deposit->status!=\App\Helpers\Helper::STATUSSUCCESS || $deposit->status!=\App\Helpers\Helper::STATUSREJECTED|| $deposit->status!=\App\Helpers\Helper::STATUSFAILD)
                     <button type="button" class="btn btn-success" wire:click="validateDeposit" data-bs-dismiss="modal">Validate</button>
+
+                    <button type="button" class="btn btn-danger" wire:click="cancelDeposit" data-bs-dismiss="modal">Cancel</button>
                     @endif
-                    <button type="button" class="btn btn-secondary" wire:click="closeModal" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" wire:click="closeModal" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>

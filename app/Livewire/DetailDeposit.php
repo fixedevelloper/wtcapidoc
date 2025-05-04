@@ -37,6 +37,18 @@ class DetailDeposit extends Component
         DB::commit();
         $this->redirect('/deposits');
     }
+    public function cancelDeposit()
+    {
+        DB::beginTransaction();
+
+        $this->deposit->status=Helper::STATUSREJECTED;
+        $custome=Customer::query()->find($this->deposit->customer_id);
+        $balance_old=$custome->balance;
+        Helper::create_journal_deposit_cancel($this->deposit->amount,$custome->id,$balance_old);
+        $this->deposit->save();
+        DB::commit();
+        $this->redirect('/deposits');
+    }
 
     public function render()
     {
