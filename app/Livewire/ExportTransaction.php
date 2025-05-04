@@ -37,10 +37,10 @@ class ExportTransaction extends Component
         $pdf->Myheader();
         if ($this->isPeriodic){
             logger($this->start_date);
-            $transactions=Transaction::query()->where('type',Helper::TYPESECURE)->whereBetween('created_at', [$this->start_date, $this->end_date])->get();
+            $transactions=Transaction::query()->where('type',Helper::TYPESECURE)->where('status',Helper::STATUSSUCCESS)->whereBetween('created_at', [$this->start_date, $this->end_date])->get();
             $pdf->bodyListePeriodic($transactions,$this->start_date,$this->end_date);
         }else{
-            $transactions=Transaction::query()->where('type',Helper::TYPESECURE)->get();
+            $transactions=Transaction::query()->where('type',Helper::TYPESECURE)->where('status',Helper::STATUSSUCCESS)->get();
             $pdf->bodyListeAll($transactions);
         }
 
