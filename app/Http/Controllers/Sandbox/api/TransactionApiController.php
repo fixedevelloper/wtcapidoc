@@ -253,4 +253,12 @@ class TransactionApiController extends Controller
             'rate'=>$rate_country->rate
         ];
     }
+    public function notifyPaydunnya(Request $request)
+    {
+        $data = $request->all();
+        logger($data);
+        $paymentStatus = $data['status'] ?? null;
+
+        return response()->json(['data' => [$data],'status' => true]);
+    }
 }

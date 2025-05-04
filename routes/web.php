@@ -48,7 +48,7 @@ Route::domain('sandbox.agensic.com')->group(function () {
         Route::match(["POST", "GET"], '/get_ajax_rate', [StaticController::class, 'getRateAjax'])->name('sandbox.get_ajax_rate');
     });
 });
-Route::domain('secure.agensic.com')->group(function () {
+//Route::domain('secure.agensic.com')->group(function () {
     Route::match(["POST", "GET"], '/', [SecuritySecureController::class, 'secureLogin'])->name('secure.login');
     Route::match(["POST", "GET"], '/register', [SecuritySecureController::class, 'secureRegister'])->name('secure.register');
     Route::match(["POST", "GET"], '/logout', [SecuritySecureController::class, 'logout'])->name('secure.logout');
@@ -75,7 +75,7 @@ Route::domain('secure.agensic.com')->group(function () {
         Route::match(["POST", "GET"], '/get_ajax_rate', [StaticSecureController::class, 'getRateAjax'])->name('secure.get_ajax_rate');
         Route::match(["POST", "GET"], '/make_deposit', [StaticSecureController::class, 'make_deposit'])->name('secure.make_deposit');
     });
-});
+//});
 
 Route::domain('manage.agensic.com')->group(function () {
     Route::match(["POST", "GET"], '/', [SecurityAdminController::class, 'adminLogin'])->name('admin.login');
@@ -89,7 +89,6 @@ Route::domain('manage.agensic.com')->group(function () {
         Route::match(["POST", "GET"], '/transactions', [TransactionController::class, 'transactions'])->name('admin.transactions');
         Route::match(["POST", "GET"], '/transaction_sandbox', [TransactionController::class, 'transaction_sandbox'])->name('admin.transaction_sandbox');
         Route::match(["POST", "GET"], '/transactions/detail/{numero_identifiant}', [TransactionController::class, 'transaction_detail'])->name('admin.transaction_detail');
-
         Route::match(["POST", "GET"], '/rates', [BasicController::class, 'rates'])->name('admin.rates');
         Route::match(["POST", "GET"], '/deposits', [TransactionController::class, 'deposits'])->name('admin.deposits');
         Route::match(["POST", "GET"], '/withdraws', [TransactionController::class, 'withdraws'])->name('admin.withdraws');

@@ -62,7 +62,7 @@ class PaymentMobilService
                     'phone'=>$transaction->accountNumber,
                     'amount'=>$transaction->amount_total,
                     'draw'=>strtolower(str_ireplace(' ','-',$transaction->gatewayItem->name)),
-                    'callback_url'=>'https://secure.agensic.com/notifyurl/paydunya'
+                    'callback_url'=>'https://secure.agensic.com/api/notifyurl/paydunya'
                 ];
                 $response=  $this->paydunyaService->make_transfert($item);
                 if ($response->response_code=='00'){

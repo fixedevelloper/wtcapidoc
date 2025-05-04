@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('login', [AuthApiController::class, 'login']);
 Route::middleware('auth:api')->get('user', [AuthApiController::class, 'me']);
+Route::match(["POST", "GET"], '/notifyurl/paydunya', [TransactionApiController::class, 'notifyPaydunnya']);
 Route::middleware('customer.jwt')->group(function () {
     Route::get('customer/profile', function (Request $request) {
 
