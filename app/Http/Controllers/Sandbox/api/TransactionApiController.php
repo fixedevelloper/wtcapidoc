@@ -79,8 +79,6 @@ class TransactionApiController extends Controller
     public function postBankTransaction(Request $request)
     {
         $customer = $request->customer;
-
-
         $validator = Validator::make($request->all(), [
             'country_code' => 'required',
             'gateway' => 'required',
@@ -150,10 +148,89 @@ class TransactionApiController extends Controller
         $transaction->customer_id=$customer->id;
         $transaction->type=Helper::TYPESANDBOX;
         $transaction->method=Helper::METHODBANK;
-        $transaction->status=Helper::STATUSPENDING;
+        $transaction->status=Helper::STATUSSUCCESS;
        $transaction->save();
         $customer->balance_sandbox-=$rate['total_local'];
        $customer->save();
+        DB::commit();
+        return Helpers::success([], 'transaction created successful');
+    }
+    public function postMobilTransaction(Request $request)
+    {
+        $customer = $request->customer;
+        $validator = Validator::make($request->all(), [
+            'country_code' => 'required',
+            'gateway' => 'required',
+            'operator' => 'required',
+            'sender_code' => 'required',
+            'beneficiary_code' => 'required',
+            'city' => 'required',
+            'amount' => 'required',
+            'raison_transaction' => 'required',
+            'origin_fond' => 'required',
+            'relation' => 'required',
+            'accountNumber' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            $err = null;
+            foreach ($validator->errors()->all() as $error) {
+                $err = $error;
+            }
+            return Helpers::error($err);
+        }
+        $country=Country::query()->firstWhere(['codeIso2'=>$request->country_code]);
+        if (is_null($country)){
+            return Helpers::error('country not found');
+        }
+        $gateway=Gateway::query()->firstWhere(['name'=>$request->bank,'country_id'=>$country->id]);
+        if (is_null($gateway)){
+            return Helpers::error('bank not exist in country');
+        }
+        $sender=Sender::query()->firstWhere(['code'=>$request->sender_code,'customer_id'=>$customer->id]);
+        if (is_null($sender)){
+            return Helpers::error('sender not found');
+        }
+        $beneficiary=Beneficiary::query()->firstWhere(['code'=>$request->beneficiary_code,'customer_id'=>$customer->id]);
+        if (is_null($beneficiary)){
+            return Helpers::error('beneficiary not found');
+        }
+        $city=City::query()->firstWhere(['name'=>$request->city,'country_id'=>$country->id]);
+        if (is_null($city)){
+            return Helpers::error('city not found');
+        }
+        $rate=$this->calculRate($country->id,$customer->id,$request->amount);
+        if ($rate['status']==0){
+            return Helpers::unauthorized('unauthorized for this country');
+        }
+        $amount_total=$rate['total'];
+        if ($customer->balance_sandbox<$rate['total_local']){
+            return Helpers::error('Balance Insufficient');
+        }
+        DB::beginTransaction();
+        $transaction=new Transaction();
+        $transaction->sender_id=$sender->id;
+        $transaction->relation=$request->get('relation');
+        $transaction->origin_fond=$request->get('origin_fond');
+        $transaction->motif_send=$request->get('raison_transaction');
+        $transaction->accountNumber=$request->get('accountNumber');
+        $transaction->wallet=$request->get('wallet');
+        $transaction->iban=$request->get('iban');
+        $transaction->beneficiary_id=$beneficiary->id;
+        $transaction->gateway_id=$gateway->id;
+        $transaction->city=$city->id;
+        $transaction->amount=$request->get('amount');
+        $transaction->code=Helper::generatenumber();
+        $transaction->number_transaction='wtc_'.Helper::generateTransactionNumber(20);
+        $transaction->amount_total=$amount_total;
+        $transaction->rate=$rate['costs'];
+        $transaction->customer_id=$customer->id;
+        $transaction->type=Helper::TYPESANDBOX;
+        $transaction->method=Helper::METHODMOBIL;
+        $transaction->status=Helper::STATUSSUCCESS;
+        $transaction->save();
+        $customer->balance_sandbox-=$rate['total_local'];
+        $customer->save();
         DB::commit();
         return Helpers::success([], 'transaction created successful');
     }

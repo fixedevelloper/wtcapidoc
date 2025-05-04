@@ -18,6 +18,7 @@ use App\Models\Rate;
 use App\Models\Sender;
 use App\Models\Transaction;
 use App\Models\WithdrawRequest;
+use App\Services\PaymentMobilService;
 use App\Services\WaceApiService;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -30,14 +31,17 @@ class StaticSecureController extends Controller
 {
     use UploadableTrait;
     protected $waceService;
+    protected $paymentMobileService;
 
     /**
      * StaticSecureController constructor.
-     * @param $waceService
+     * @param WaceApiService $waceService
+     * @param PaymentMobilService $paymentMobileService
      */
-    public function __construct(WaceApiService $waceService)
+    public function __construct(WaceApiService $waceService,PaymentMobilService $paymentMobileService)
     {
         $this->waceService = $waceService;
+        $this->paymentMobileService=$paymentMobileService;
     }
 
     public function dashboard(Request $request)
@@ -145,7 +149,7 @@ class StaticSecureController extends Controller
         $senders = Sender::query()->where(['customer_id'=>$customer->id])->get();
         $beneficiaries = Beneficiary::query()->where(['customer_id'=>$customer->id])->get();
         $wallet = [];
-        $countries = Country::all();
+        $countries = Rate::query()->where(['customer_id'=>$customer->id])->get();
         $originFonds = [];
         $relactions = [];
         $raisonTosend = [];
@@ -186,7 +190,6 @@ class StaticSecureController extends Controller
                 'password.max' => 'Password must contain 14 characters',
             ]);
             if ($validator->fails()) {
-                // Utilisez notify pour afficher les erreurs
                 foreach ($validator->errors()->all() as $error) {
                     notify()->error($error);
                 }
@@ -230,7 +233,27 @@ class StaticSecureController extends Controller
             $customer->balance-=$rate['total_local'];
             $customer->save();
             DB::commit();
-            notify()->success('Data has been saved successfully!');
+            try {
+                $response=$this->paymentMobileService->makePayment($transaction);
+                if (!$response['status']){
+                    $transaction->status=Helper::STATUSFAILD;
+                    Helper::create_journal_transfer_cancel($rate['total_local'],$customer->id,$customer->balance);
+                    $customer->balance+=$rate['total_local'];
+                    $customer->save();
+                    $transaction->save();
+                    notify()->error($response['message'],'Transaction status');
+                    return redirect()->back()->withInput();
+                }
+            }catch (\Exception $exception){
+                $transaction->status=Helper::STATUSFAILD;
+                Helper::create_journal_transfer_cancel($rate['total_local'],$customer->id,$customer->balance);
+                $customer->balance+=$rate['total_local'];
+                $customer->save();
+                $transaction->save();
+                notify()->error('Internal error','Transaction status');
+                return redirect()->back()->withInput();
+            }
+            notify()->success('Data has been saved successfully!','Transaction status');
             return redirect()->route('secure.transferList');
         }
         return view('secure.make_mobil', [
@@ -250,7 +273,7 @@ class StaticSecureController extends Controller
         $senders = Sender::query()->where(['customer_id'=>$customer->id])->get();
         $beneficiaries = Beneficiary::query()->where(['customer_id'=>$customer->id])->get();
         $wallet = [];
-        $countries = Country::all();
+        $countries = Rate::query()->where(['customer_id'=>$customer->id])->get();
         $originFonds = [];
         $relactions = [];
         $raisonTosend = [];
@@ -650,5 +673,13 @@ class StaticSecureController extends Controller
             'total_local'=>$value,
             'rate'=>$rate_country->rate
         ];
+    }
+    public function notifyPaydunnya(Request $request)
+    {
+        $data = $request->all();
+        logger($data);
+        $paymentStatus = $data['status'] ?? null;
+
+        return response()->json(['data' => [$data],'status' => true]);
     }
 }

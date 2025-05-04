@@ -66,7 +66,7 @@ class StaticController extends Controller
         $senders = Sender::query()->where(['customer_id'=>$customer->id])->get();
         $beneficiaries = Beneficiary::query()->where(['customer_id'=>$customer->id])->get();
         $wallet = [];
-        $countries = Country::all();
+        $countries = Rate::query()->where(['customer_id'=>$customer->id])->get();
         $originFonds = [];
         $relactions = [];
         $raisonTosend = [];
@@ -146,7 +146,7 @@ class StaticController extends Controller
             $transaction->customer_id=$customer->id;
             $transaction->type=Helper::TYPESANDBOX;
             $transaction->method=Helper::METHODMOBIL;
-            $transaction->status=Helper::STATUSPENDING;
+            $transaction->status=Helper::STATUSSUCCESS;
             $transaction->save();
             $customer->balance_sandbox-=$rate['total_local'];
             $customer->save();
@@ -171,7 +171,7 @@ class StaticController extends Controller
         $senders = Sender::query()->where(['customer_id'=>$customer->id])->get();
         $beneficiaries = Beneficiary::query()->where(['customer_id'=>$customer->id])->get();
         $wallet = [];
-        $countries = Country::all();
+        $countries = Rate::query()->where(['customer_id'=>$customer->id])->get();
         $originFonds = [];
         $relactions = [];
         $raisonTosend = [];
@@ -251,7 +251,7 @@ class StaticController extends Controller
             $transaction->customer_id=$customer->id;
             $transaction->type=Helper::TYPESANDBOX;
             $transaction->method=Helper::METHODBANK;
-            $transaction->status=Helper::STATUSPENDING;
+            $transaction->status=Helper::STATUSSUCCESS;
             $transaction->save();
             $customer->balance_sandbox-=$rate['total_local'];
             $customer->save();
@@ -441,10 +441,11 @@ class StaticController extends Controller
         return[
             'status'=>1,
             'value'=>[
-                'total'=>number_format($amount*$rate_country->rate,14),
-                'costs'=>number_format($costs+$rate_country->fixed_amount,14),
-                'total_local'=>number_format($value,14),
-                'rate'=>number_format($rate_country->rate,14)
+                'total'=>number_format($amount*$rate_country->rate,2),
+                'costs'=>number_format($costs+$rate_country->fixed_amount,2),
+                'total_local'=>number_format($value,2),
+                'rate'=>number_format($rate_country->rate,5),
+                'amount'=>number_format($amount,2)
             ],
             'total'=>$amount*$rate_country->rate,
             'costs'=>$costs+$rate_country->fixed_amount,

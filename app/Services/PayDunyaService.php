@@ -12,11 +12,10 @@ class PayDunyaService
 
     /**
      * PayDunyaService constructor.
-     * @param $base_url
      */
-    public function __construct($base_url)
+    public function __construct()
     {
-        $this->base_url = $base_url;
+        $this->base_url = config('app.PAYDUNYA_URL');
     }
 
     public function make_transfert($item)
@@ -64,9 +63,9 @@ class PayDunyaService
         // Request headers
         $headers = array(
             'Content-Type:application/json',
-            "PAYDUNYA-MASTER-KEY: ".config("PAYDUNYA_PRINCIPAL"),
-            "PAYDUNYA-PRIVATE-KEY: ".config("PAYDUNYA_SECRET_KEY"),
-            "PAYDUNYA-TOKEN: ".config("PAYDUNYA_TOKEN")
+            "PAYDUNYA-MASTER-KEY: ".config("app.PAYDUNYA_PRINCIPAL"),
+            "PAYDUNYA-PRIVATE-KEY: ".config("app.PAYDUNYA_SECRET_KEY"),
+            "PAYDUNYA-TOKEN: ".config("app.PAYDUNYA_TOKEN")
         );
         // Return the transfer as a string
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);

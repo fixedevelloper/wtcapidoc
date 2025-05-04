@@ -12,11 +12,10 @@ use App\Http\Controllers\Secure\StaticSecureController;
 use Illuminate\Support\Facades\Route;
 
 
-
 Route::domain('doc.agensic.com')->group(function () {
 
     Route::get('/', [DefaultController::class, 'documentation'])->name('documentation');
-Route::get('/home', [DefaultController::class, 'home'])->name('home');
+    Route::get('/home', [DefaultController::class, 'home'])->name('home');
     Route::get('/countries', [DefaultController::class, 'country'])->name('countries');
     Route::get('/gateway', [DefaultController::class, 'geteway'])->name('gateway');
     Route::get('/cities', [DefaultController::class, 'cities'])->name('cities');
@@ -30,7 +29,7 @@ Route::get('/home', [DefaultController::class, 'home'])->name('home');
 
 Route::domain('sandbox.agensic.com')->group(function () {
     Route::match(["POST", "GET"], '/logout', [SecurityController::class, 'logout'])->name('sandbox.logout');
-Route::match(["POST", "GET"], '/', [SecurityController::class, 'sandboxLogin'])->name('sandbox.login');
+    Route::match(["POST", "GET"], '/', [SecurityController::class, 'sandboxLogin'])->name('sandbox.login');
     Route::match(["POST", "GET"], '/register', [SecurityController::class, 'register'])->name('sandbox.register');
     Route::group(['middleware' => ['sandbox.api']], function () {
         Route::match(["POST", "GET"], '/dashboard', [StaticController::class, 'dashboard'])->name('sandbox.dashboard');
@@ -52,7 +51,8 @@ Route::match(["POST", "GET"], '/', [SecurityController::class, 'sandboxLogin'])-
 Route::domain('secure.agensic.com')->group(function () {
     Route::match(["POST", "GET"], '/', [SecuritySecureController::class, 'secureLogin'])->name('secure.login');
     Route::match(["POST", "GET"], '/register', [SecuritySecureController::class, 'secureRegister'])->name('secure.register');
-Route::match(["POST", "GET"], '/logout', [SecuritySecureController::class, 'logout'])->name('secure.logout');
+    Route::match(["POST", "GET"], '/logout', [SecuritySecureController::class, 'logout'])->name('secure.logout');
+    Route::match(["POST", "GET"], '/notifyurl/paydunya', [StaticSecureController::class, 'notifyPaydunnya'])->name('secure.notifyPaydunnya');
     Route::group(['middleware' => ['remote.api']], function () {
         Route::match(["POST", "GET"], '/profil', [StaticSecureController::class, 'profil'])->name('secure.profil');
         Route::match(["POST", "GET"], '/dashboard', [StaticSecureController::class, 'dashboard'])->name('secure.dashboard');
@@ -82,25 +82,25 @@ Route::domain('manage.agensic.com')->group(function () {
     Route::match(["POST", "GET"], '/register', [SecurityAdminController::class, 'register'])->name('admin.register');
     Route::group(['middleware' => ['isAdmin']], function () {
         Route::match(["POST", "GET"], '/dashboard', [BasicController::class, 'dashboard'])->name('admin.dashboard');
-Route::match(["POST", "GET"], '/customers', [BasicController::class, 'customers'])->name('admin.customers');
-Route::match(["POST", "GET"], '/customers/add', [SecurityAdminController::class, 'create_customer_direct'])->name('admin.add.customer');
-Route::match(["POST", "GET"], '/senders', [BasicController::class, 'senders'])->name('admin.senders');
-Route::match(["POST", "GET"], '/beneficiaries', [BasicController::class, 'beneficiaries'])->name('admin.beneficiaries');
-Route::match(["POST", "GET"], '/transactions', [TransactionController::class, 'transactions'])->name('admin.transactions');
-Route::match(["POST", "GET"], '/transaction_sandbox', [TransactionController::class, 'transaction_sandbox'])->name('admin.transaction_sandbox');
-    Route::match(["POST", "GET"], '/transactions/detail/{numero_identifiant}', [TransactionController::class, 'transaction_detail'])->name('admin.transaction_detail');
+        Route::match(["POST", "GET"], '/customers', [BasicController::class, 'customers'])->name('admin.customers');
+        Route::match(["POST", "GET"], '/customers/add', [SecurityAdminController::class, 'create_customer_direct'])->name('admin.add.customer');
+        Route::match(["POST", "GET"], '/senders', [BasicController::class, 'senders'])->name('admin.senders');
+        Route::match(["POST", "GET"], '/beneficiaries', [BasicController::class, 'beneficiaries'])->name('admin.beneficiaries');
+        Route::match(["POST", "GET"], '/transactions', [TransactionController::class, 'transactions'])->name('admin.transactions');
+        Route::match(["POST", "GET"], '/transaction_sandbox', [TransactionController::class, 'transaction_sandbox'])->name('admin.transaction_sandbox');
+        Route::match(["POST", "GET"], '/transactions/detail/{numero_identifiant}', [TransactionController::class, 'transaction_detail'])->name('admin.transaction_detail');
 
-    Route::match(["POST", "GET"], '/rates', [BasicController::class, 'rates'])->name('admin.rates');
+        Route::match(["POST", "GET"], '/rates', [BasicController::class, 'rates'])->name('admin.rates');
         Route::match(["POST", "GET"], '/deposits', [TransactionController::class, 'deposits'])->name('admin.deposits');
         Route::match(["POST", "GET"], '/withdraws', [TransactionController::class, 'withdraws'])->name('admin.withdraws');
         Route::match(["POST", "GET"], '/journals', [TransactionController::class, 'journals'])->name('admin.journals');
-    Route::match(["POST", "GET"], '/customers/rate/{id}', [BasicController::class, 'addrates',])->name('admin.addrates');
-Route::match(["POST", "GET"], '/countries', [BasicController::class, 'countries'])->name('admin.countries');
-Route::match(["POST", "GET"], '/saveCountry', [BasicController::class, 'saveCountry'])->name('admin.saveCountry');
-Route::match(["POST", "GET"], '/cities', [BasicController::class, 'cities'])->name('admin.cities');
-Route::match(["POST", "GET"], '/gateways', [BasicController::class, 'gateways'])->name('admin.gateways');
+        Route::match(["POST", "GET"], '/customers/rate/{id}', [BasicController::class, 'addrates',])->name('admin.addrates');
+        Route::match(["POST", "GET"], '/countries', [BasicController::class, 'countries'])->name('admin.countries');
+        Route::match(["POST", "GET"], '/saveCountry', [BasicController::class, 'saveCountry'])->name('admin.saveCountry');
+        Route::match(["POST", "GET"], '/cities', [BasicController::class, 'cities'])->name('admin.cities');
+        Route::match(["POST", "GET"], '/gateways', [BasicController::class, 'gateways'])->name('admin.gateways');
         Route::match(["POST", "GET"], '/customers/detail/{code}', [BasicController::class, 'customer_detail'])->name('admin.customer_detail');
-Route::match(["POST", "GET"], '/senders/detail/{code}', [BasicController::class, 'sender_detail'])->name('admin.sender_detail');
-Route::match(["POST", "GET"], '/beneficiaries/detail/{code}', [BasicController::class, 'beneficiary_detail'])->name('admin.beneficiary_detail');
+        Route::match(["POST", "GET"], '/senders/detail/{code}', [BasicController::class, 'sender_detail'])->name('admin.sender_detail');
+        Route::match(["POST", "GET"], '/beneficiaries/detail/{code}', [BasicController::class, 'beneficiary_detail'])->name('admin.beneficiary_detail');
     });
 });

@@ -45,8 +45,9 @@
                                             <div class="form-control-wrap ">
                                                 <div class="form-control-select">
                                                     <select required name="countryCode" class="form-control" id="country">
+                                                        <option>Choose Country</option>
                                                         @foreach($countries as $item)
-                                                            <option data-currency="{{$item->currency}}" value="{{$item->id}}">{{$item->name}}</option>
+                                                            <option data-currency="{{$item->country->currency}}" value="{{$item->country->id}}">{{$item->country->name}}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -349,7 +350,7 @@
                 });
             })
             $('#amount').keyup(function () {
-                $('#amount_text').text($('#amount').val())
+
                 $.ajax({
                     url: configs.routes.get_ajax_rate,
                     type: "GET",
@@ -369,7 +370,7 @@
                         $('#will_send').text(data.data['value']['total'])
                         $('#exchange_rate_currency').text($("select[name=countryCode] :selected").data('currency'))
                         $('#will_send_currency').text($("select[name=countryCode] :selected").data('currency'))
-
+                        $('#amount_text').text(data.data['value']['amount'])
                     },
                     error: function (err) {
                         alert("An error ocurred while loading data ...");

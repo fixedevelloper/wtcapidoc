@@ -54,8 +54,9 @@
                                             <div class="form-control-wrap ">
                                                 <div class="form-control-select">
                                                     <select required name="countryCode" class="form-control" id="country">
+                                                        <option>Choose Country</option>
                                                         @foreach($countries as $item)
-                                                            <option data-currency="{{$item->currency}}" value="{{$item->id}}">{{$item->name}}</option>
+                                                            <option data-currency="{{$item->country->currency}}" value="{{$item->country->id}}">{{$item->country->name}}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
