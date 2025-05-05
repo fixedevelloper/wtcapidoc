@@ -155,7 +155,7 @@
                                     <span class="{{ $item->stringStatus->class }}">{{$item->stringStatus->value}}</span>
                                 </div>
 
-                                <div class="nk-tb-col nk-tb-col-tools">
+                                <div class="nk-tb-col nk-tb-col-tools me-2">
                                     <livewire:detail-deposit :deposit="$item"/>
                                 </div>
                             </div><!-- .nk-tb-item -->

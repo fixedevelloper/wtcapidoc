@@ -15,6 +15,7 @@ use App\Models\Rate;
 use App\Models\Sender;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -128,6 +129,14 @@ class TransactionApiController extends Controller
         if ($customer->balance_sandbox<$rate['total_local']){
           return Helpers::error('Balance Insufficient');
         }
+        $startOfMonth = Carbon::now()->startOfMonth();
+        $endOfMonth = Carbon::now()->endOfMonth();
+        $sumCurrentMonthTransactions = Transaction::query()->where('type',Helper::TYPESECURE)->where('sender_id',$sender->id)
+            ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+            ->sum('amount');
+        if ($sumCurrentMonthTransactions+$request->amount>=$sender->max_transaction){
+            return Helpers::error('Limit transaction');
+        }
         DB::beginTransaction();
         $transaction=new Transaction();
         $transaction->sender_id=$sender->id;
@@ -206,6 +215,14 @@ class TransactionApiController extends Controller
         $amount_total=$rate['total'];
         if ($customer->balance_sandbox<$rate['total_local']){
             return Helpers::error('Balance Insufficient');
+        }
+        $startOfMonth = Carbon::now()->startOfMonth();
+        $endOfMonth = Carbon::now()->endOfMonth();
+        $sumCurrentMonthTransactions = Transaction::query()->where('type',Helper::TYPESECURE)->where('sender_id',$sender->id)
+            ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+            ->sum('amount');
+        if ($sumCurrentMonthTransactions+$request->amount>=$sender->max_transaction){
+            return Helpers::error('Limit transaction');
         }
         DB::beginTransaction();
         $transaction=new Transaction();

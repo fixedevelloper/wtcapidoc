@@ -1,6 +1,6 @@
 <div>
     <!-- Bouton pour ouvrir le modal -->
-    <li><a class="btn btn-primary" wire:click="openModal" ><em class="icon ni ni-eye"></em><span>View Details</span></a></li>
+    <a class="btn btn-primary" wire:click="openModal" ><em class="icon ni ni-eye"></em><span>View Details</span></a>
     <!-- Modal -->
     <div class="modal fade @if($isOpen) show @endif" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="@if($isOpen) display: block; @endif">
         <div class="modal-dialog modal-lg">
@@ -61,4 +61,7 @@
             </div>
         </div>
     </div>
+    @if($isOpen)
+        <div class="modal-backdrop fade show"></div>
+    @endif
 </div>

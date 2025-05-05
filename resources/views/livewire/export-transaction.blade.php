@@ -57,4 +57,7 @@
             </div>
         </div>
     </div>
+    @if($isOpen)
+        <div class="modal-backdrop fade show"></div>
+    @endif
 </div>

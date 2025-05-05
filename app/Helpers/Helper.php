@@ -76,7 +76,7 @@ class Helper
         $journal->amount=$amount;
         $journal->customer_id=$customer_id;
         $journal->balance_before=$old_balance;
-        $journal->balance_after=$old_balance-$amount;
+        $journal->balance_after=$old_balance;
         $journal->save();
     }
     public static function create_journal_withdraw_cancel($amount,$customer_id,$old_balance){

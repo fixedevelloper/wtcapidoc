@@ -101,7 +101,7 @@ class TransactionController extends Controller
         } else {
             $items = new Journal();
         }
-        $items = $items->where([])->orderByDesc('created_at')->paginate(20)->appends($query_param);
+        $items = $items->where([])->orderByDesc('created_at')->paginate(10)->appends($query_param);
         return view('admin.journals', [
             'journals'=>$items
         ]);

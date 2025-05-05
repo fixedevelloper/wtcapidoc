@@ -134,10 +134,10 @@
                                 <span>{{$item->company}}</span>
                             </div>
                             <div class="nk-tb-col">
-                                <span>{{$item->balance}}</span>
+                                <span>{{number_format($item->balance,2)}} XAF</span>
                             </div>
                             <div class="nk-tb-col">
-                                <span>{{$item->balance_sandbox}}</span>
+                                <span>{{number_format($item->balance_sandbox,2)}} XAF</span>
                             </div>
                             <div class="nk-tb-col nk-tb-col-tools">
                                 <ul class="nk-tb-actions gx-2">

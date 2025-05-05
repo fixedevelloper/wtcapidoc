@@ -6,6 +6,8 @@ use App\Helpers\api\Helpers;
 use App\Helpers\Helper;
 use App\Models\Customer;
 use App\Models\Transaction;
+use App\Services\AgensicService;
+use App\Services\PayDunyaService;
 use App\Services\WaceApiService;
 use Illuminate\Console\Command;
 
@@ -25,14 +27,18 @@ class ValidateTransfert extends Command
      */
     protected $description = 'Command description';
     protected $waceService;
+    protected $agensicService;
+    protected $paydunyaService;
     /**
      * CreateGateway constructor.
      * @param $waceService
      */
-    public function __construct(WaceApiService $waceService)
+    public function __construct(WaceApiService $waceService,AgensicService $agensicService,PayDunyaService $payDunyaService)
     {
         parent::__construct();
         $this->waceService = $waceService;
+        $this->agensicService=$agensicService;
+        $this->paydunyaService=$payDunyaService;
     }
 
     /**
@@ -41,6 +47,8 @@ class ValidateTransfert extends Command
     public function handle()
     {
         $this->validateWace();
+        $this->validateAgensicPay();
+        $this->validatePaydunnya();
     }
     function validateWace(){
         $transactions=Transaction::query()->where('status','=',Helper::STATUSPENDING)
@@ -67,5 +75,46 @@ class ValidateTransfert extends Command
             }
         }
         logger("####################END VALIDATION WACE################################");
+    }
+    function validateAgensicPay(){
+        $transactions=Transaction::query()->where('status','=',Helper::STATUSPENDING)
+            ->orWhere(['status'=>Helper::STATUSPROCESSING])->where(['type'=>Helper::TYPESECURE,'wallet'=>'AGENSICPAY_XAF'])->get();
+        logger("####################BEGIN VALIDATION AGENSICPAY################################");
+        foreach ($transactions as $transaction){
+            $json = [
+                'apikey' => '87S86K61M9W11G27R25G99W30O96X23F87D79N85G',
+                'transactionId' => $transaction->reference_partner,
+            ];
+            $response = $this->agensicService->getPayID($json);
+            if (isset($response['status']) && $response['status'] == "Success") {
+                $transaction->status=Helper::STATUSSUCCESS;
+            }elseif (isset($response['status']) && $response['status'] == "Failed"){
+                $transaction->status=Helper::STATUSFAILD;
+                $customer=Customer::query()->find($transaction->customer_id);
+                Helper::create_journal_transfer_cancel($transaction->amount+$transaction->rate,$customer->id,$customer->balance);
+                $customer->balance+=$transaction->amount+$transaction->rate;
+                $customer->save();
+            }
+            $transaction->save();
+        }
+    }
+    function validatePaydunnya(){
+        $transactions=Transaction::query()->where('status','=',Helper::STATUSPENDING)
+            ->orWhere(['status'=>Helper::STATUSPROCESSING])->where(['type'=>Helper::TYPESECURE,'wallet'=>'AGENSICPAY_XOF'])->get();
+        logger("####################BEGIN VALIDATION PAYDUNYA################################");
+        foreach ($transactions as $transaction){
+            $response = $this->paydunyaService->checkStatus($transaction->reference_partner);
+
+            if ($response->status == 'success') {
+                $transaction->status=Helper::STATUSSUCCESS;
+            }elseif (isset($response['status']) && $response['status'] == "failed"){
+                $transaction->status=Helper::STATUSFAILD;
+                $customer=Customer::query()->find($transaction->customer_id);
+                Helper::create_journal_transfer_cancel($transaction->amount+$transaction->rate,$customer->id,$customer->balance);
+                $customer->balance+=$transaction->amount+$transaction->rate;
+                $customer->save();
+            }
+            $transaction->save();
+        }
     }
 }

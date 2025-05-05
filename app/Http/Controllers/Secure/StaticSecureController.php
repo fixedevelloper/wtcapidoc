@@ -22,6 +22,7 @@ use App\Services\PaymentMobilService;
 use App\Services\WaceApiService;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -207,6 +208,16 @@ class StaticSecureController extends Controller
                 notify()->error('Balance Insufficient');
                 return redirect()->back()->withInput();
             }
+            $startOfMonth = Carbon::now()->startOfMonth();
+            $endOfMonth = Carbon::now()->endOfMonth();
+            $sender=Sender::query()->find($request->get('numSender'));
+            $sumCurrentMonthTransactions = Transaction::query()->where('type',Helper::TYPESECURE)->where('sender_id',$sender->id)
+                ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+                ->sum('amount');
+            if ($sumCurrentMonthTransactions+$amount>=$sender->max_transaction){
+                notify()->error('Limit transaction','Transaction status');
+                return redirect()->back()->withInput();
+            }
             DB::beginTransaction();
             $transaction=new Transaction();
             $transaction->sender_id=$request->get('numSender');
@@ -330,6 +341,16 @@ class StaticSecureController extends Controller
             $amount_total=$rate['total'];
             if ($customer->balance<$rate['total_local']){
                 notify()->error('Balance Insufficient');
+                return redirect()->back()->withInput();
+            }
+            $startOfMonth = Carbon::now()->startOfMonth();
+            $endOfMonth = Carbon::now()->endOfMonth();
+            $sender=Sender::query()->find($request->get('numSender'));
+            $sumCurrentMonthTransactions = Transaction::query()->where('type',Helper::TYPESECURE)->where('sender_id',$sender->id)
+                ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+                ->sum('amount');
+            if ($sumCurrentMonthTransactions+$amount>=$sender->max_transaction){
+                notify()->error('Limit transaction','Transaction status');
                 return redirect()->back()->withInput();
             }
             DB::beginTransaction();

@@ -188,9 +188,13 @@
                                     <ul class="nk-tb-actions gx-1">
 
                                         <li class="nk-tb-action-hidden">
-                                            <a href="#" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Details" data-bs-original-title="Details">
+                                            <a href="{{route('admin.sender_detail',['code'=>$item['code']])}}" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Details" data-bs-original-title="Details">
                                                 <em class="icon ni ni-user-cross-fill"></em>
                                             </a>
+                                        </li>
+                                        <li class="nk-tb-action-hidden">
+                                            <livewire:limit-transaction :sender="$item"/>
+
                                         </li>
                                         <li>
                                             <div class="drodown">
