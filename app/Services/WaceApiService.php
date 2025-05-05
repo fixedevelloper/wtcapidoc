@@ -89,61 +89,59 @@ class WaceApiService
     public function sendTransactionOM(Transaction $transaction)
     {
         $endpoint = 'api/v1/transaction/wallet/create';
-        $this->tokencinet = $this->authenticate()['token'];
-        if (!is_null($this->tokencinet)) {
-            $sender = $this->getCreateSender($transaction);
-            $beneficiaryReponse = $this->createBeneficiary($transaction, $sender->sender->Code);
-            if ($beneficiaryReponse->status !== 2000) {
-                throw new NotAcceptableHttpException($beneficiaryReponse->message);
-            }
-            $operator=$this->operateurRepository->findOneBy(['name'=>$transaction->getOperateur(),'gateway'=>'WACEPAY']);
-            $wallet = [
-                "payoutCountry" => $transaction->getCountry()->getCodeString(),
-                "payoutCity" => $transaction->getTown()->getLibelle(),
-                "receiveCurrency" => $transaction->getCountry()->getMonaire(),
-                "amountToPaid" => $transaction->getMontanttotal(),
-                "senderCode" => $sender->sender->Code,
-                "beneficiaryCode" => $beneficiaryReponse->beneficiary->Code,
-                "sendingCurrency" => $transaction->getCustomer()->getCountry()->getMonaire(),
-                "service" => $operator->getShortcode(),
-                "mobileReceiveNumber" => $transaction->getBeneficiare()->getPhone(),
-                "fromCountry" => $transaction->getCustomer()->getCountry()->getCodeString(),
-                "payerCode" => $transaction->getCountry()->getPayerCode(),
-                "originFund" => is_null($transaction->getOriginFonds())?'Salary':$transaction->getOriginFonds(),
-                "reason" => is_null($transaction->getRaisontransaction())?'Salary':$transaction->getRaisontransaction(),
-                "relation" => is_null($transaction->getRelaction())?"Brother":$transaction->getRelaction()
-            ];
-            $this->logger->info("------paybody" . json_encode($wallet));
-            $res = $this->cURL($endpoint, json_encode($wallet));
-            $this->logger->info("------response" . json_encode($res));
-            if ($res->status != 2000) {
-                $valid = $this->validateTransaction($res->transaction->reference);
-                if ($valid->status == 2000) {
-                    return [
-                        "status" => 2000,
-                        "data" => $res->transaction,
-                        'reference' => $res->transaction->reference
-                    ];
-                } else {
-                    return [
-                        "status" => $valid->status,
-                        "data" => $valid->message
-                    ];
-                }
-            } else {
-                return [
-                    "status" => 500,
-                    "data" => ['status' => 500]
-                ];
-            }
 
-        } else {
+
+        $sender = $this->getCreateSender($transaction);
+        $beneficiaryReponse = $this->createBeneficiary($transaction, $sender->sender->Code);
+        if ($beneficiaryReponse->status != 2000) {
+
             return [
-                "status" => 500,
-                "data" => ['status' => 500]
+                "status" => $beneficiaryReponse->status,
+                "message" => $beneficiaryReponse->status
             ];
         }
 
+        $mobile = [
+            'businessType' => 'P2P',
+            "payoutCountry" => $transaction->gatewayItem->country->codeIso2,
+            "payoutCity" => $transaction->city,
+            "receiveCurrency" => $transaction->gatewayItem->country->currency,
+            "amountToPaid" => $transaction->amount_total,
+            "senderCode" => $sender->sender->Code,
+            "beneficiaryCode" => $beneficiaryReponse->beneficiary->Code,
+            "sendingCurrency" => $transaction->sender->currency(),
+            "mobileReceiveNumber" => $transaction->accountNumber,
+            "service" => $transaction->gatewayItem->name,
+            "fromCountry" => $transaction->sender->country,
+            "payerCode" => $transaction->gatewayItem->payer_code,
+            "originFund" => $transaction->origin_fond,
+            "reason" => $transaction->motif_send,
+            "relation" => $transaction->relation,
+        ];
+        logger("##################wace body request###########################" . json_encode($mobile));
+        $res = $this->cURL($endpoint, json_encode($mobile));
+        logger("##################wace body response###########################" . json_encode($res));
+        if ($res->status != 2000) {
+            return [
+                "status" => $res->status,
+                "message" => $res->message
+            ];
+        }
+        $valid = $this->validateTransaction($res->transaction->reference);
+        logger('########### start validate wace###############');
+        logger()->error(json_encode($valid));
+        if ($valid->status == 2000) {
+            return [
+                "status" => 2000,
+                "data" => $res->transaction,
+                'reference' => $res->transaction->reference
+            ];
+        } else {
+            return [
+                "status" => $valid->status,
+                "data" => $valid->messages
+            ];
+        }
     }
 
     public function getStatusTransaction($reference)

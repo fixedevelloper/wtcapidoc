@@ -47,8 +47,25 @@ class StaticSecureController extends Controller
 
     public function dashboard(Request $request)
     {
+        $customer=Customer::query()->firstWhere(['user_id'=>\auth()->user()->id]);
+        $last_transactions=Transaction::query()->where(['type'=>Helper::TYPESECURE])->where('customer_id',$customer->id)->latest()->limit(5)->get();
+        $startOfWeekend = Carbon::now()->startOfWeek()->addDay(5); // Samedi
+        $endOfWeekend = Carbon::now()->startOfWeek()->addDay(6)->endOfDay();
+        $sumWeekendTransactions = Transaction::query()->where('customer_id',$customer->id)->where('type',Helper::TYPESECURE)->whereBetween('created_at', [$startOfWeekend, $endOfWeekend])
+            ->sum('amount');
+        $sumTotal=Transaction::query()->where('customer_id',$customer->id)->where('type',Helper::TYPESECURE)->sum('amount');
+        $startOfMonth = Carbon::now()->startOfMonth();
+        $endOfMonth = Carbon::now()->endOfMonth();
+        $sumCurrentMonthTransactions = Transaction::query()->where('customer_id',$customer->id)->where('type',Helper::TYPESECURE)->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+            ->sum('amount');
+        $sumDepositTotal=DepositRequest::query()->where('customer_id',$customer->id)->sum('amount');
         return view('secure.dashbord', [
-            'customer'=>Customer::query()->firstWhere(['user_id'=>\auth()->user()->id])
+            'customer'=>$customer,
+            'last_transactions'=>$last_transactions,
+            'sumWeekendTransactions'=>$sumWeekendTransactions,
+            'sumTotal'=>$sumTotal,
+            'sumCurrentMonthTransactions'=>$sumCurrentMonthTransactions,
+            'sumDepositTotal'=>$sumDepositTotal
         ]);
     }
 
@@ -662,12 +679,16 @@ class StaticSecureController extends Controller
     {
         if ($request->get('method') === 'AGENSICPAY_ALL') {
             $getway = 'WACEPAY';
+            $type='BANK';
         } elseif ($request->get('method') === 'AGENSICPAY_XAF') {
             $getway = 'AGENSICPAY';
+            $type='MOBIL';
         } else {
-            $getway = 'PAYDUNYA';
+            //$getway = 'PAYDUNYA';
+            $getway = 'WACEPAY';
+            $type='MOBIL';
         }
-        $gateways = Gateway::query()->where(['method'=>$getway,'country_id'=>$request->get('country_id')])->get();
+        $gateways = Gateway::query()->where(['method'=>$getway,'type'=>$type,'country_id'=>$request->get('country_id')])->get();
 
         return response()->json(['data' => $gateways, 'status' => true]);
     }

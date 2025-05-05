@@ -11,16 +11,18 @@ class PaymentMobilService
 {
     protected $paydunyaService;
     protected $agensicService;
+    protected $waceService;
 
     /**
      * PaymentMobilService constructor.
      * @param $paydunyaService
      * @param $agensicService
      */
-    public function __construct(PayDunyaService $paydunyaService, AgensicService $agensicService)
+    public function __construct(WaceApiService $waceApiService,PayDunyaService $paydunyaService, AgensicService $agensicService)
     {
         $this->paydunyaService = $paydunyaService;
         $this->agensicService = $agensicService;
+        $this->waceService=$waceApiService;
     }
     function makePayment(Transaction $transaction){
         $country_code=$transaction->gatewayItem->country->codeIso2;
@@ -57,12 +59,28 @@ class PaymentMobilService
                     ];
                 }
             case 'AGENSICPAY_XOF':
+                $response= $this->waceService->sendTransaction($transaction);
+                if ($response['status'] ===2000){
+                    $transaction->reference_partner=$response['reference'];
+                    $transaction->status=Helper::STATUSPROCESSING;
+                    $transaction->save();
+                    return[
+                        'status'=>true,
+                        'message'=>'data send successfully'
+                    ];
+                }else{
+                    return[
+                        'status'=>false,
+                        'message'=>'internal error'
+                    ];
+                }
+            case 'AGENSICPAY_XOF2':
                 $item=[
                     'number'=>$transaction->number_transaction,
                     'phone'=>$transaction->accountNumber,
                     'amount'=>$transaction->amount_total,
                     'draw'=>strtolower(str_ireplace(' ','-',$transaction->gatewayItem->name)),
-                    'callback_url'=>'https://secure.agensic.com/api/notifyurl/paydunya'
+                    'callback_url'=>'https://wetransfercashapi.agensic.com/auth/notifyurl/paydunya'
                 ];
                 $response=  $this->paydunyaService->make_transfert($item);
                 if ($response->response_code=='00'){
@@ -79,7 +97,6 @@ class PaymentMobilService
                         'message'=>'internal error'
                     ];
                 }
-
             default:
             return[
                 'status'=>false,

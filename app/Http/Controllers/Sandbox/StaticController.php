@@ -10,11 +10,13 @@ use App\Models\Beneficiary;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\Customer;
+use App\Models\DepositRequest;
 use App\Models\Gateway;
 use App\Models\Rate;
 use App\Models\Sender;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -24,8 +26,25 @@ class StaticController extends Controller
 {
     public function dashboard(Request $request)
     {
+        $customer=Customer::query()->firstWhere(['user_id'=>\auth()->user()->id]);
+        $last_transactions=Transaction::query()->where(['type'=>Helper::TYPESANDBOX])->where('customer_id',$customer->id)->latest()->limit(5)->get();
+        $startOfWeekend = Carbon::now()->startOfWeek()->addDay(5); // Samedi
+        $endOfWeekend = Carbon::now()->startOfWeek()->addDay(6)->endOfDay();
+        $sumWeekendTransactions = Transaction::query()->where('customer_id',$customer->id)->where('type',Helper::TYPESANDBOX)->whereBetween('created_at', [$startOfWeekend, $endOfWeekend])
+            ->sum('amount');
+        $sumTotal=Transaction::query()->where('customer_id',$customer->id)->where('type',Helper::TYPESANDBOX)->sum('amount');
+        $startOfMonth = Carbon::now()->startOfMonth();
+        $endOfMonth = Carbon::now()->endOfMonth();
+        $sumCurrentMonthTransactions = Transaction::query()->where('customer_id',$customer->id)->where('type',Helper::TYPESANDBOX)->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+            ->sum('amount');
+        $sumDepositTotal=DepositRequest::query()->where('customer_id',$customer->id)->sum('amount');
         return view('sandbox.dashbord', [
-
+            'customer'=>$customer,
+            'last_transactions'=>$last_transactions,
+            'sumWeekendTransactions'=>$sumWeekendTransactions,
+            'sumTotal'=>$sumTotal,
+            'sumCurrentMonthTransactions'=>$sumCurrentMonthTransactions,
+            'sumDepositTotal'=>$sumDepositTotal
         ]);
     }
 

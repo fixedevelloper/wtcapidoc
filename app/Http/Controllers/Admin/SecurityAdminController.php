@@ -6,7 +6,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
+use App\Models\Country;
 use App\Models\Customer;
+use App\Models\Gateway;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,7 +23,7 @@ class SecurityAdminController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect()->back();
+        return redirect()->route('admin.login');
     }
     public function adminLogin(Request $request)
     {
@@ -157,5 +159,45 @@ class SecurityAdminController extends Controller
             return redirect()->route('admin.customers');
         }
         return view('admin.add.customerAdd');
+    }
+    public function create_gateway_manuel(Request $request)
+    {
+        if ($request->method() == "POST") {
+            logger($request->all());
+            $validator = Validator::make($request->all(), $rules = [
+                'country_id' => 'required',
+                'name' => 'required',
+                'code' => 'required',
+                'gateway' => 'required',
+
+            ], $messages = [
+                'email.required' => 'Email field is required!',
+                'password.required' => 'password  is required!',
+                'first_name.required' => 'name  is required!',
+                'phone.required' => 'phone  is required!',
+            ]);
+            if ($validator->fails()) {
+                foreach ($validator->errors()->all() as $error) {
+                    notify()->error($error);
+                }
+                return redirect()->back()
+                    ->withErrors($validator)->with(['message' => $messages])
+                    ->withInput();
+            }
+
+            $gateway=new Gateway();
+            $gateway->name=$request->name;
+            $gateway->code=$request->code;
+            $gateway->type=$request->type;
+            $gateway->payer_code=$request->payer_code;
+            $gateway->method=$request->gateway;
+            $gateway->country_id=$request->country_id;
+            $gateway->save();
+            notify()->success("Gateway save successfull", 'Request success', ["success loggedIn"]);
+            return redirect()->route('admin.gateways');
+        }
+        return view('admin.add.getewayAdd',[
+            'countries'=>Country::all()
+        ]);
     }
 }
