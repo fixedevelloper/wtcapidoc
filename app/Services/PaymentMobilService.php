@@ -59,7 +59,7 @@ class PaymentMobilService
                     ];
                 }
             case 'AGENSICPAY_XOF':
-                $response= $this->waceService->sendTransaction($transaction);
+                $response= $this->waceService->sendTransactionOM($transaction);
                 if ($response['status'] ===2000){
                     $transaction->reference_partner=$response['reference'];
                     $transaction->status=Helper::STATUSPROCESSING;
