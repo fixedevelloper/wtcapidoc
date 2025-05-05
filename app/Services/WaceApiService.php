@@ -111,7 +111,7 @@ class WaceApiService
             "beneficiaryCode" => $beneficiaryReponse->beneficiary->Code,
             "sendingCurrency" => $transaction->sender->currency(),
             "mobileReceiveNumber" => $transaction->accountNumber,
-            "service" => $transaction->gatewayItem->name,
+            "service" => $transaction->gatewayItem->code,
             "fromCountry" => $transaction->sender->country,
             "payerCode" => $transaction->gatewayItem->payer_code,
             "originFund" => $transaction->origin_fond,
