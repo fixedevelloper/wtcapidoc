@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\BasicController;
 use App\Http\Controllers\Admin\SecurityAdminController;
+use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\DefaultController;
 use App\Http\Controllers\Sandbox\SecurityController;
@@ -103,5 +104,6 @@ Route::match(["POST", "GET"], '/logout', [SecurityAdminController::class, 'logou
         Route::match(["POST", "GET"], '/customers/detail/{code}', [BasicController::class, 'customer_detail'])->name('admin.customer_detail');
         Route::match(["POST", "GET"], '/senders/detail/{code}', [BasicController::class, 'sender_detail'])->name('admin.sender_detail');
         Route::match(["POST", "GET"], '/beneficiaries/detail/{code}', [BasicController::class, 'beneficiary_detail'])->name('admin.beneficiary_detail');
+   Route::get('/countries/gateway/{id}',[SettingController::class,'paymentGateway'])->name('admin.countries.gateway');
     });
 });

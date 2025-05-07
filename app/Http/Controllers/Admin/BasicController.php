@@ -63,6 +63,7 @@ class BasicController extends Controller
             'sumWeekendWithdraws'=>$sumWeekendWithdraws
         ]);
     }
+
     public function customers(Request $request)
     {
         $query_param = [];

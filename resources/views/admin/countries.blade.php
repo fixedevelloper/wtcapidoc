@@ -97,6 +97,9 @@
                             <div class="nk-tb-col tb-col-sm"><span class="sub-text">Code Iso</span></div>
                             <div class="nk-tb-col"><span class="sub-text">Code Iso2</span></div>
                             <div class="nk-tb-col tb-col-md"><span class="sub-text">Currency</span></div>
+                            <div class="nk-tb-col tb-col-md"><span class="sub-text">Gateway Mobil</span></div>
+                            <div class="nk-tb-col tb-col-md"><span class="sub-text">Gateway Bank</span></div>
+                            <div class="nk-tb-col tb-col-md"><span class="sub-text">Status</span></div>
                             <div class="nk-tb-col nk-tb-col-tools text-end">
                             </div>
                         </div>
@@ -127,6 +130,15 @@
                                 <div class="nk-tb-col tb-col-md">
                                     <span>{{$item->currency}}</span>
                                 </div>
+                                <div class="nk-tb-col tb-col-md">
+                                    <span>{{$item->code_gateway_mobil}}</span>
+                                </div>
+                                <div class="nk-tb-col tb-col-md">
+                                    <span>{{$item->code_gateway_bank}}</span>
+                                </div>
+                                <div class="nk-tb-col tb-col-md">
+                                    @if($item->active) <span class="badge badge-sm  bg-success">Active</span>@else <span class="badge badge-sm bg-danger ">Close</span> @endif
+                                </div>
                                 <div class="nk-tb-col nk-tb-col-tools">
                                     <ul class="nk-tb-actions gx-2">
                                         <li>
@@ -135,7 +147,7 @@
                                                 <div class="dropdown-menu dropdown-menu-end">
                                                     <ul class="link-list-opt no-bdr">
                                                         <li><a href="#"><em class="icon ni ni-eye"></em><span>Edit</span></a></li>
-                                                       <li><a href="#"><em class="icon ni ni-building"></em><span>Add city</span></a></li>
+                                                       <li><a href="{{route('admin.countries.gateway',['id'=>$item->id])}}"><em class="icon ni ni-building"></em><span>Gateway</span></a></li>
                                                     </ul>
                                                 </div>
                                             </div>

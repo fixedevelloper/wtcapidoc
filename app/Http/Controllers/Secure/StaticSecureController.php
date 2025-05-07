@@ -193,7 +193,7 @@ class StaticSecureController extends Controller
         if ($request->method() == 'POST') {
             $validator = Validator::make($request->all(), [
                 'countryCode' => 'required',
-                'wallet' => 'required',
+                //'wallet' => 'required',
                 'gateway_id' => 'required',
                 'numSender' => 'required',
                 'numBeneficiary' => 'required',
@@ -327,7 +327,7 @@ class StaticSecureController extends Controller
         if ($request->method() == 'POST') {
             $validator = Validator::make($request->all(), [
                 'countryCode' => 'required',
-                'wallet' => 'required',
+                //'wallet' => 'required',
                 'gateway_id' => 'required',
                 'numSender' => 'required',
                 'numBeneficiary' => 'required',
@@ -636,7 +636,6 @@ class StaticSecureController extends Controller
                 'city' => '',
                 'occupation'=>'',
             ];
-
             $beneficiary->update($body);
             notify()->success('Data has been saved successfully!');
             return redirect()->route('secure.beneficiaries');
@@ -663,9 +662,15 @@ class StaticSecureController extends Controller
 
     public function getCitiesAjax(Request $request)
     {
+        $country=Country::query()->find($request->get('country_id'));
         $cities = City::query()->where(['country_id'=>$request->get('country_id')])->get();
+        if ($request->get('type')=='mobil'){
+            $gateways=Gateway::query()->where(['method'=>$country->code_gateway_mobil,'country_id'=>$country->id])->get();
+        }else{
+            $gateways=Gateway::query()->where(['method'=>$country->code_gateway_bank,'country_id'=>$country->id])->get();
+        }
 
-        return response()->json(['data' => $cities, 'status' => true]);
+        return response()->json(['data' => $cities, 'gateways'=>$gateways, 'status' => true]);
     }
     public function getRateAjax(Request $request)
     {

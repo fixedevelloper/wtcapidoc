@@ -124,7 +124,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group">
+                  {{--              <div class="form-group">
                                     <label class="form-label" for="wallet">Choose Wallet</label>
                                     <div class="form-control-wrap ">
                                         <div class="form-control-select">
@@ -136,7 +136,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                </div>
+                                </div>--}}
                                 <div class="form-group">
                                     <label class="form-label" for="operator">Choose bank</label>
                                     <div class="form-control-wrap ">
@@ -332,13 +332,18 @@
                     type: "GET",
                     dataType: "JSON",
                     data: {
-                        'country_id': $('#country').val()
+                        'country_id': $('#country').val(),
+                        'type':'bank',
                     },
                     success: function (data) {
                         $('#city').html('')
                         $('#city').append('<option>Choose city</option>')
                         $.each(data.data, function (index, item) {
                             $('#city').append('<option value="'+item["name"]+'">'+item["name"]+'</option>')
+                        })
+                        $('#operator').html('')
+                        $.each(data.gateways, function (index, item) {
+                            $('#operator').append('<option value="'+item["id"]+'">'+item["name"]+'</option>')
                         })
                     },
                     error: function (err) {
