@@ -26,7 +26,61 @@ class PaymentMobilService
     }
     function makePayment(Transaction $transaction){
         $country_code=$transaction->gatewayItem->country->codeIso2;
-        switch ($transaction->wallet){
+        $country_gateway=$transaction->gatewayItem->country->code_gateway_mobil;
+        switch ($country_gateway){
+            case 'WACEPAY':
+                $response= $this->waceService->sendTransactionOM($transaction);
+                if ($response['status'] ===2000){
+                    $transaction->reference_partner=$response['reference'];
+                    $transaction->status=Helper::STATUSPROCESSING;
+                    $transaction->save();
+                    return[
+                        'status'=>true,
+                        'message'=>'data send successfully'
+                    ];
+                }else{
+                    return[
+                        'status'=>false,
+                        'message'=>'internal error'
+                    ];
+                }
+            case 'AGENSICPAY':
+                if (in_array($country_code,['CG','CD'])){
+                    $country=$country_code=='CG'?'Congo':'DRC';
+                    $resp=$this->agensicService->withdraw([
+                        'country'=>$country,
+                        'carrier'=>$transaction->gatewayItem->name,
+                        'phone'=>$transaction->accountNumber,
+                        'amount'=>$transaction->amount_total
+                    ]);
+                    if ($resp['status']==true){
+                        $transaction->reference_partner=$resp['transactionId'];
+                        $transaction->status=Helper::STATUSPROCESSING;
+                        $transaction->save();
+                        return[
+                            'status'=>true,
+                            'message'=>'data send successfully'
+                        ];
+                    }else{
+                        return[
+                            'status'=>false,
+                            'message'=>'internal error'
+                        ];
+                    }
+
+                }else{
+                    return[
+                        'status'=>false,
+                        'message'=>'country is coming soon'
+                    ];
+                }
+            default:
+                return[
+                    'status'=>false,
+                    'message'=>'country is coming soon'
+                ];
+        }
+      /*  switch ($transaction->wallet){
             case 'AGENSICPAY_XAF':
                 logger($country_code);
                 if (in_array($country_code,['CG','CD'])){
@@ -103,7 +157,7 @@ class PaymentMobilService
                 'message'=>'country is coming soon'
             ];
 
-        }
+        }*/
 
     }
 
