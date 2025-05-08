@@ -46,6 +46,7 @@
             <a class="nav-link" href="#get-transfer">GET /api/transactions</a>
             <a class="nav-link" href="#post-transfer-bank">POST /api/transactions/bank</a>
             <a class="nav-link" href="#post-transfer-mobile">POST /api/transactions/bank</a>
+            <a class="nav-link" href="#get-transfer-status">GET /api/transactions/status/:transaction_id</a>
         </div>
     </nav>
 </div>
@@ -54,14 +55,17 @@
 <div class="content mt-5">
     <section id="intro">
         <h2>Introduction</h2>
-        <p>Bienvenue dans la documentation de notre API REST. Vous trouverez ici les détails de chaque endpoint
-            disponible.</p>
+        <p>Bienvenue dans l’API d’envoi d’argent. Cette API permet aux développeurs d’intégrer facilement des fonctionnalités de transfert de fonds dans leurs applications web ou mobiles. Elle prend en charge l’envoi d’argent entre utilisateurs, les paiements vers des comptes bancaires ou des portefeuilles mobiles, et fournit un suivi en temps réel des transactions.
+
+        </p><p> L’API est sécurisée, rapide et conçue pour répondre aux besoins des plateformes fintech, des services de paiement et des applications de commerce en ligne. Elle s’intègre facilement à votre infrastructure existante grâce à une architecture RESTful, une authentification basée sur les tokens, et une documentation claire.</p>
     </section>
 
     <section id="auth" class="mt-5">
         <h2>Authentification</h2>
         <p>L'API utilise un token JWT dans l'en-tête <code>Authorization</code>.</p>
         <pre>Authorization: Bearer &lt;votre_access_token&gt;</pre>
+        <h2><span class="text-primary">GET</span> /api/login</h2>
+        <p>Permet d'obtenir un token d'accès pour sécuriser les requêtes.</p>
         <button class="btn btn-outline-primary mb-2" data-bs-toggle="collapse" data-bs-target="#authenticate">
             Voir exemple
         </button>
@@ -79,7 +83,8 @@
 
     <section id="countries" class="mt-5">
         <h2><span class="text-primary">GET</span> /api/countries</h2>
-        <p>Récupère la liste des pays.</p>
+        <p>permet de récupérer la liste des pays disponibles pour l’envoi ou la réception d’argent via la plateforme.</p>
+        <p> Il est utile pour alimenter des menus déroulants ou valider les destinations autorisées dans votre application</p>
 
         <button class="btn btn-outline-primary mb-2" data-bs-toggle="collapse" data-bs-target="#countries_response">
             Voir exemple
@@ -114,19 +119,29 @@
     },
      ...           }</pre>
         </div>
+
     </section>
     <section id="cities" class="mt-5">
         <h2><span class="text-primary">GET</span> /api/cities?codeiso2={country_code}</h2>
-        <p>Récupère la liste des villes par pays.</p>
+        <p>permet d’obtenir la liste des villes disponibles pour un pays donné, identifié par son code ISO à deux lettres.
+            </p>
+        <p>Il est généralement utilisé pour filtrer les zones de destination lors de l’envoi d’argent.</p>
+        <h4>Paramètres de requête :</h4>
         <ul>
-            <li><strong>code</strong> (obligatoire) – code ISO2 du pays</li>
+            <li><strong>codeiso (obligatoire)</strong>  : Code ISO alpha-2 du pays (ex. : CM pour le Cameroun, CI pour la Côte d’Ivoire)</li>
         </ul>
         <button class="btn btn-outline-primary mb-2" data-bs-toggle="collapse" data-bs-target="#cities_response">
             Voir exemple
         </button>
         <div class="collapse" id="cities_response">
             <h6>Requête :</h6>
-            <pre>GET /api/cities?codeiso2=Cm</pre>
+            <h4>Champs :</h4>
+            <ul>
+              <li>name : Nom de la ville (string)</li>
+              <li> country : Pays auquel appartient la ville (string)</li>
+
+            </ul>
+            <pre>GET /api/cities?codeiso=CM</pre>
             <h6>Réponse :</h6>
             <pre>
                 {
@@ -150,20 +165,29 @@
       "country": "Cameroun"
     },
      ... }      </pre>
+            <h4>Code de réponse HTTP :</h4>
+            <ul>
+              <li> 200 OK : Liste des villes retournée avec succès</li>
+
+                <li> 400 Bad Request : Paramètre codeiso manquant ou invalide</li>
+
+                <li>  404 Not Found : Aucun pays ou aucune ville trouvée pour ce code ISO</li>
+            </ul>
         </div>
     </section>
     <section id="banks" class="mt-5">
-        <h2><span class="text-primary">GET</span> /api/banks?codeiso2={country_code}</h2>
-        <p>Récupère la liste des banks et operateurs mobile par pays.</p>
+        <h2><span class="text-primary">GET</span> /api/banks?codeiso={country_code}</h2>
+        <p>Ce endpoint permet d’obtenir la liste des banques disponibles dans un pays donné, identifié par son code ISO. </p>
+        <p>Il est essentiel pour que l’utilisateur sélectionne la banque du bénéficiaire lors d’un transfert d’argent vers un compte bancaire.</p>
         <ul>
-            <li><strong>code</strong> (obligatoire) – code ISO2 du pays</li>
+            <li><strong>codeiso (obligatoire)</strong>– Code ISO alpha-2 du pays (ex. : CM pour le Cameroun, CI pour la Côte d’Ivoire)</li>
         </ul>
         <button class="btn btn-outline-primary mb-2" data-bs-toggle="collapse" data-bs-target="#banks_response">
             Voir exemple
         </button>
         <div class="collapse" id="banks_response">
             <h6>Requête :</h6>
-            <pre>GET /api/cities?codeiso2=Cm</pre>
+            <pre>GET /api/banks?codeiso=CM</pre>
             <h6>Réponse :</h6>
             <pre>
                 {
@@ -171,27 +195,32 @@
   "status": "success",
   "data": [
     {
-      "name": "Douala",
+     "name": "BICEC",
       "country": "Cameroun"
     },
     {
-      "name": "Yaoundé",
+      "name": "Société Générale Cameroun",
       "country": "Cameroun"
     },
     {
-      "name": "Bamenda",
-      "country": "Cameroun"
-    },
-    {
-      "name": "Bafoussam",
+     "name": "UBA Cameroun",
       "country": "Cameroun"
     },
      ... }      </pre>
+         <h4>  Codes de réponse HTTP :</h4>
+            <ul>
+                <li> 200 OK : Liste des banques retournée avec succès</li>
+                <li>400 Bad Request : Paramètre codeiso manquant ou invalide</li>
+                <li>404 Not Found : Aucune banque trouvée pour ce pays</li>
+            </ul>
+
+
         </div>
     </section>
     <section id="get-senders" class="mt-5">
         <h2><span class="text-primary">GET</span> /api/senders</h2>
-        <p>Récupère la liste des expediteurs.</p>
+        <p>Ce endpoint permet de récupérer la liste des expéditeurs enregistrés sur la plateforme.</p>
+        <p> Il est utilisé pour afficher les informations des clients initiant des transferts d’argent, ou pour effectuer des opérations liées à la gestion de leurs transactions..</p>
         <ul>
 
         </ul>
@@ -245,11 +274,20 @@
       "document_expired": "2025-02-18",
       "document_number": "8957452144"
     },]}</pre>
+
+            <h4>Codes HTTP possibles :</h4>
+            <ul>
+                <li>200 OK : Liste des expéditeurs retournée avec succès</li>
+                <li>204 No Content : Aucun expéditeur ne correspond aux critères</li>
+                <li>400 Bad Request : Paramètre invalide dans la requête</li>
+                <li>401 Unauthorized : Jeton d’accès manquant ou invalide</li>
+            </ul>
         </div>
     </section>
     <section id="post-senders" class="mt-5">
         <h2><span class="text-success">POST</span> /api/senders</h2>
-        <p>Crée un nouvel expediteur.</p>
+        <p>Ce endpoint permet d’enregistrer un nouvel expéditeur sur la plateforme. </p>
+        <p>Les informations fournies sont utilisées pour authentifier l'utilisateur, l'associer à des transactions, et garantir la conformité réglementaire (KYC).</p>
         <h6>Corps JSON attendu :</h6>
         <pre>{
   "first_name":"John most",
@@ -289,11 +327,20 @@
     "document_number": "895741452"
   }
 }</pre>
+            <h4>Codes de réponse possibles :</h4>
+            <ul>
+                <li>  201 Created : Expéditeur créé avec succès</li>
+                <li>400 Bad Request : Données invalides ou manquantes</li>
+                <li>409 Conflict : Expéditeur avec ce numéro/email déjà existant</li>
+                <li>500 Internal Server Error : Erreur serveur lors de l’enregistrement</li>
+            </ul>
+
         </div>
     </section>
     <section id="get-beneficiaries" class="mt-5">
         <h2><span class="text-primary">GET</span> /api/beneficiaries</h2>
-        <p>Récupère la liste des beneficiares.</p>
+        <p>Ce endpoint permet de récupérer la liste des bénéficiaires enregistrés pour un expéditeur spécifique.
+            </p><p>Il est couramment utilisé pour préremplir les informations lors d’un envoi d’argent ou gérer les contacts favoris d’un utilisateur.</p>
         <ul>
 
         </ul>
@@ -323,11 +370,19 @@
     },..
   ]
 }</pre>
+           <h4>Codes de réponse HTTP :</h4>
+            <ul>
+                <li> 200 OK : Liste retournée avec succès</li>
+                <li>204 No Content : Aucun bénéficiaire trouvé</li>
+                <li>400 Bad Request : Paramètre manquant ou invalide</li>
+                <li>404 Not Found : Endpoint non trouvé</li>
+            </ul>
         </div>
     </section>
     <section id="post-beneficiaries" class="mt-5">
         <h2><span class="text-success">POST</span> /api/beneficiaries</h2>
-        <p>Crée un nouvel beneficiare.</p>
+        <p>Ce endpoint permet d’enregistrer un nouveau bénéficiaire vers lequel un expéditeur pourra envoyer de l’argent.</p>
+        <p> Le bénéficiaire peut être lié à un compte bancaire, un portefeuille mobile ou un point de retrait..</p>
         <h6>Corps JSON attendu :</h6>
         <pre>{
   "first_name":"John most",
@@ -367,14 +422,34 @@
     "document_number": "895741452"
   }
 }</pre>
+           <h4>Codes de réponse HTTP :</h4>
+            <ul>
+                <li>201 Created : Bénéficiaire créé avec succès</li>
+                <li>400 Bad Request : Données manquantes ou format invalide</li>
+                <li>404 Not Found : Expéditeur non trouvé</li>
+                <li>409 Conflict : Bénéficiaire déjà existant pour ce numéro ou ce compte</li>
+                <li> 500 Internal Server Error : Erreur serveur</li>
+            </ul>
+
         </div>
     </section>
     <section id="get-transfer" class="mt-5">
         <h2><span class="text-primary">GET</span> /api/transactions</h2>
-        <p>Récupère la liste des transactions.</p>
-        <ul>
+        <p>Ce endpoint permet de récupérer la liste des transactions effectuées par un expéditeur.</p>
+        <p> Il prend en charge des filtres pour rechercher par statut, type, date ou bénéficiaire, facilitant ainsi le suivi des envois d’argent.</p>
+       <h4>Paramètres de requête (query) :</h4>
+        <pre>
+        | Paramètre        | Type   | Description                                                                    |
+        | ---------------- | ------ | ------------------------------------------------------------------------------ |
+        | `sender_id`      | string | (obligatoire) Identifiant de l’expéditeur                                      |
+        | `status`         | string | (optionnel) Filtrer par statut (`pending`, `completed`, `failed`, `cancelled`) |
+        | `type`           | string | (optionnel) Type de transaction (`bank`, `mobile_money`, `cash_pickup`)        |
+        | `start_date`     | string | (optionnel) Date de début au format `YYYY-MM-DD`                               |
+        | `end_date`       | string | (optionnel) Date de fin au format `YYYY-MM-DD`                                 |
+        | `beneficiary_id` | string | (optionnel) Filtrer les transactions envoyées à un bénéficiaire spécifique     |
+        </pre>
 
-        </ul>
+
         <button class="btn btn-outline-primary mb-2" data-bs-toggle="collapse" data-bs-target="#beneficiaries_response">
             Voir exemple
         </button>
@@ -405,7 +480,8 @@
     </section>
     <section id="post-transfer-bank" class="mt-5">
         <h2><span class="text-success">POST</span> /api/transactions/bank</h2>
-        <p>Crée un nouvel beneficiare.</p>
+        <p>Ce endpoint permet de créer une transaction bancaire en transférant des fonds d’un expéditeur vers un bénéficiaire disposant d’un compte bancaire.
+            </p><p>Il vérifie les informations du client, le solde, applique les frais, et génère une référence de transaction.</p>
         <h6>Corps JSON attendu :</h6>
         <pre>{
   "first_name":"John most",
@@ -446,10 +522,30 @@
   }
 }</pre>
         </div>
+       <h4>Champs de réponse :</h4>
+        <ul>
+            <li> transaction_id : Identifiant unique de la transaction</li>
+            <li>status : Statut initial (pending, processing, completed, failed)</li>
+            <li> fees : Frais appliqués</li>
+            <li>total_debited : Montant total débité à l’expéditeur (montant + frais)</li>
+            <li>created_at : Date de création de la transaction</li>
+            <li> message : Message de confirmation</li>
+        </ul>
+        <h4> Codes de réponse HTTP :</h4>
+        <ul>
+            <li>201 Created : Transaction créée avec succès</li>
+            <li>400 Bad Request : Données manquantes ou invalides</li>
+            <li>404 Not Found : Expéditeur ou bénéficiaire introuvable</li>
+            <li>402 Payment Required : Solde insuffisant ou autorisation refusée</li>
+            <li>500 Internal Server Error : Erreur serveur lors du traitement</li>
+        </ul>
+
+
     </section>
     <section id="post-transfer-mobile" class="mt-5">
         <h2><span class="text-success">POST</span> /api/transactions/mobil</h2>
-        <p>Crée une nouvelle transaction.</p>
+        <p>Ce endpoint permet de créer une transaction Mobile en transférant des fonds d’un expéditeur vers un bénéficiaire disposant d’un compte mobil money.
+        </p><p>Il vérifie les informations du client, le solde, applique les frais, et génère une référence de transaction.</p>
         <h6>Corps JSON attendu :</h6>
         <pre>{
   "first_name":"John most",
@@ -489,6 +585,68 @@
     "document_number": "895741452"
   }
 }</pre>
+        </div>
+        <h4>Champs de réponse :</h4>
+        <ul>
+            <li> transaction_id : Identifiant unique de la transaction</li>
+            <li>status : Statut initial (pending, processing, completed, failed)</li>
+            <li> fees : Frais appliqués</li>
+            <li>total_debited : Montant total débité à l’expéditeur (montant + frais)</li>
+            <li>created_at : Date de création de la transaction</li>
+            <li> message : Message de confirmation</li>
+        </ul>
+        <h4> Codes de réponse HTTP :</h4>
+        <ul>
+            <li>201 Created : Transaction créée avec succès</li>
+            <li>400 Bad Request : Données manquantes ou invalides</li>
+            <li>404 Not Found : Expéditeur ou bénéficiaire introuvable</li>
+            <li>402 Payment Required : Solde insuffisant ou autorisation refusée</li>
+            <li>500 Internal Server Error : Erreur serveur lors du traitement</li>
+        </ul>
+    </section>
+    <section id="get-transfer-status" class="mt-5">
+        <h2><span class="text-primary">GET</span> /api/transactions/{transaction_id}</h2>
+        <p>Ce endpoint permet de récupérer le statut actuel d’une transaction donnée à l’aide de son identifiant unique.</p>
+        <p> Il est utile pour les utilisateurs finaux ou les agents afin de suivre l’évolution d’un envoi (bancaire, mobile ou en espèces).</p>
+
+        <h4>Paramètres de requête (query) :</h4>
+        <pre>*transaction_id (obligatoire) : L’identifiant unique de la transaction à suivre.
+        </pre>
+
+
+        <button class="btn btn-outline-primary mb-2" data-bs-toggle="collapse" data-bs-target="#beneficiaries_response">
+            Voir exemple
+        </button>
+        <div class="collapse" id="beneficiaries_response">
+            <h6>Requête :</h6>
+            <pre>GET /api/transactions/status/TRX987654</pre>
+            <h6>Réponse :</h6>
+            <pre>{
+  "message": "senders get successful",
+  "status": "success",
+  "data": [
+    {
+      "first_name": "emanuel kamao",
+      "last_name": "fumba",
+      "email": "contact@guens-education.com",
+      "phone": "23796854415",
+      "code": "25042553551393640666986",
+      "occupation": "",
+      "civility": "Maried",
+      "gender": "M",
+      "document_type": "PP",
+      "document_expired": "2025-05-11",
+      "document_number": "5879454555"
+    },..
+  ]
+}</pre>
+          <h4> Codes de réponse HTTP :</h4>
+            <ul>
+                <li>200 OK : Statut retourné avec succès</li>
+                <li>404 Not Found : Aucune transaction trouvée avec cet identifiant</li>
+                <li>400 Bad Request : Identifiant mal formé ou invalide</li>
+                <li>500 Internal Server Error : Erreur inattendue du serveur</li>
+            </ul>
         </div>
     </section>
 </div>
