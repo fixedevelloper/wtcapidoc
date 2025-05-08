@@ -64,10 +64,17 @@
         <h2>Authentification</h2>
         <p>L'API utilise un token JWT dans l'en-tête <code>Authorization</code>.</p>
         <pre>Authorization: Bearer &lt;votre_access_token&gt;</pre>
-        <h2><span class="text-primary">GET</span> /api/login</h2>
-        <p>Permet d'obtenir un token d'accès pour sécuriser les requêtes.</p>
+        <h2 class="mt-5"><span class="text-primary">GET</span> /api/login</h2>
+        <h4 class="mt-3">🎯 Authentifie un utilisateur avec ses identifiants</h4>
+        <p>Ce endpoint permet à un utilisateur de se connecter en envoyant son email et son mot de passe.
+            En cas de succès, un token d’accès est renvoyé pour les appels API futurs..</p>
+        <h4>Corps JSON attendu :</h4>
+        <pre>{
+"private_key":"wtc_private_sandbox25042557g2tpjdwdkt8swj596r7r987jro",
+"secret_key":"wtc_secret_sandbox250425571rp0e31y0eqklo2q0uwkfw5plu"
+}</pre>
         <button class="btn btn-outline-primary mb-2" data-bs-toggle="collapse" data-bs-target="#authenticate">
-            Voir exemple
+            Voir la Réponse
         </button>
         <div class="collapse" id="authenticate">
             <h6>Requête :</h6>
@@ -483,21 +490,18 @@
         <p>Ce endpoint permet de créer une transaction bancaire en transférant des fonds d’un expéditeur vers un bénéficiaire disposant d’un compte bancaire.
             </p><p>Il vérifie les informations du client, le solde, applique les frais, et génère une référence de transaction.</p>
         <h6>Corps JSON attendu :</h6>
-        <pre>{
-  "first_name":"John most",
-  "last_name":"Yves",
-  "phone":"675066919",
-  "email":"joh9@gmail.com",
-  "city":"Douala",
-  "address":"Bilongue",
-  "date_birth":"2010-06-14",
-  "num_document":"895741452",
-  "type_document":"PP",
-  "country_code":"CM",
-  "gender":"M",
-  "civility":"Single",
-  "occupation":"Mecanicien",
-  "expired_document":"2025-02-18"
+        <pre>{"country_code":"FR",
+"gateway":"AGENSICPAY_ALL",
+"bank":"BANQUE POPULAIRE VAL DE FRANCE",
+"sender_code":"25042521022068963666512",
+"beneficiary_code":"25042553551393640666986",
+"city":"Paris",
+"amount":"80000",
+"raison_transaction":"Business Profits to Parents",
+"origin_fond":"Donation",
+"iban":"CH9300762011623852957",
+"relation":"Brother",
+"accountNumber":"011623852957"
 }</pre>
         <button class="btn btn-outline-success mb-2" data-bs-toggle="collapse" data-bs-target="#beneficiaries_create_response">
             Voir réponse
@@ -505,20 +509,12 @@
         <div class="collapse" id="beneficiaries_create_response">
             <h6>Réponse :</h6>
             <pre>{
-  "message": "beneficiary created successful",
+  "message": "transaction created successful",
   "status": "success",
   "data": {
-    "first_name": "John most",
-    "last_name": "Yves",
-    "email": "joh9@gmail.com",
-    "phone": "675066919",
-    "code": "25050209787110801662101",
-    "occupation": "Mecanicien",
-    "civility": "Single",
-    "gender": "M",
-    "document_type": "PP",
-    "document_expired": "2025-02-18",
-    "document_number": "895741452"
+    "transaction_id": "25050816264901015287708",
+    "fees": 3600,
+    "amount": 1000
   }
 }</pre>
         </div>
@@ -547,21 +543,16 @@
         <p>Ce endpoint permet de créer une transaction Mobile en transférant des fonds d’un expéditeur vers un bénéficiaire disposant d’un compte mobil money.
         </p><p>Il vérifie les informations du client, le solde, applique les frais, et génère une référence de transaction.</p>
         <h6>Corps JSON attendu :</h6>
-        <pre>{
-  "first_name":"John most",
-  "last_name":"Yves",
-  "phone":"675066919",
-  "email":"joh9@gmail.com",
-  "city":"Douala",
-  "address":"Bilongue",
-  "date_birth":"2010-06-14",
-  "num_document":"895741452",
-  "type_document":"PP",
-  "country_code":"CM",
-  "gender":"M",
-  "civility":"Single",
-  "occupation":"Mecanicien",
-  "expired_document":"2025-02-18"
+        <pre>{"country_code":"CM",
+"gateway":"OM",
+"sender_code":"25042521022068963666512",
+"beneficiary_code":"25042553551393640666986",
+"city":"Paris",
+"amount":"80000",
+"raison_transaction":"Business Profits to Parents",
+"origin_fond":"Donation",
+"relation":"Brother",
+"accountNumber":"237675066919"
 }</pre>
         <button class="btn btn-outline-success mb-2" data-bs-toggle="collapse" data-bs-target="#beneficiaries_create_response">
             Voir réponse
@@ -569,20 +560,12 @@
         <div class="collapse" id="beneficiaries_create_response">
             <h6>Réponse :</h6>
             <pre>{
-  "message": "beneficiary created successful",
+  "message": "transaction created successful",
   "status": "success",
   "data": {
-    "first_name": "John most",
-    "last_name": "Yves",
-    "email": "joh9@gmail.com",
-    "phone": "675066919",
-    "code": "25050209787110801662101",
-    "occupation": "Mecanicien",
-    "civility": "Single",
-    "gender": "M",
-    "document_type": "PP",
-    "document_expired": "2025-02-18",
-    "document_number": "895741452"
+    "transaction_id": "25050816264901015287708",
+    "fees": 3600,
+    "amount": 1000
   }
 }</pre>
         </div>
@@ -619,13 +602,37 @@
         </button>
         <div class="collapse" id="beneficiaries_response">
             <h6>Requête :</h6>
-            <pre>GET /api/transactions/status/TRX987654</pre>
+            <pre>GET /api/transactions/status/25050816264901015287708</pre>
             <h6>Réponse :</h6>
             <pre>{
-  "message": "senders get successful",
+  "message": "transaction successful",
   "status": "success",
-  "data": [
-    {
+  "data": {
+    "transaction_id": "25050816264901015287708",
+    "status": "success",
+    "relation": "Brother",
+    "origin_fond": "Donation",
+    "motif_send": "Business Profits to Parents",
+    "amount_send": 1000,
+    "country": "FRANCE",
+    "currency": "EUR",
+    "amount_debit": 83600,
+    "bank": "BANQUE POPULAIRE VAL DE FRANCE",
+    "accountNumber": "011623852957",
+    "sender": {
+      "first_name": "kouamo",
+      "last_name": "Dieudonne",
+      "email": "info@agensic.com",
+      "phone": "237675066919",
+      "code": "25042521022068963666512",
+      "occupation": "mecanicien",
+      "civility": "Maried",
+      "gender": "M",
+      "document_type": "PP",
+      "document_expired": "2025-05-10",
+      "document_number": "5879454555"
+    },
+    "beneficiary": {
       "first_name": "emanuel kamao",
       "last_name": "fumba",
       "email": "contact@guens-education.com",
@@ -637,8 +644,8 @@
       "document_type": "PP",
       "document_expired": "2025-05-11",
       "document_number": "5879454555"
-    },..
-  ]
+    }
+  }
 }</pre>
           <h4> Codes de réponse HTTP :</h4>
             <ul>

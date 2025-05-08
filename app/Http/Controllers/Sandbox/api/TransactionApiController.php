@@ -22,13 +22,13 @@ use Illuminate\Support\Facades\Validator;
 class TransactionApiController extends Controller
 {
 
-    public function getTransaction(Request $request)
+    public function getTransaction(Request $request,$number_transaction)
     {
         $customer = $request->customer;
-        if (!isset($request->number_transaction)) {
+        if (!isset($number_transaction)) {
             return Helpers::error('number_transaction is missing');
         }
-        $transaction = Transaction::query()->firstWhere(['number_transaction' => $request->number_transaction, 'type' => Helper::TYPESANDBOX,
+        $transaction = Transaction::query()->firstWhere(['code' => $number_transaction, 'type' => Helper::TYPESANDBOX,
             'customer_id' => $customer->id]);
 
         if (is_null($transaction)) {
@@ -36,7 +36,7 @@ class TransactionApiController extends Controller
         }
         $message = 'transaction successful';
         return Helpers::success([
-            'number_transaction' => $transaction->number_transaction,
+            'transaction_id' => $transaction->code,
             'status' => $transaction->stringStatus->value,
             'relation' => $transaction->relation,
             'origin_fond' => $transaction->origin_fond,
@@ -162,7 +162,11 @@ class TransactionApiController extends Controller
         $customer->balance_sandbox-=$rate['total_local'];
        $customer->save();
         DB::commit();
-        return Helpers::success([], 'transaction created successful');
+        return Helpers::success([
+            'transaction_id'=>$transaction->code,
+            'fees'=>$transaction->rate,
+            'amount'=>$transaction->amount_total
+        ], 'transaction created successful');
     }
     public function postMobilTransaction(Request $request)
     {

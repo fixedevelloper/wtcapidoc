@@ -19,7 +19,7 @@ Route::middleware('customer.jwt')->group(function () {
         ]);
     });
     Route::group(['middleware' => ['logs.api']], function () {
-        Route::get('/transaction/status', [TransactionApiController::class, 'getTransaction']);
+        Route::get('/transaction/status/{transaction_id}', [TransactionApiController::class, 'getTransaction']);
         Route::post('/transactions/bank', [TransactionApiController::class, 'postBankTransaction']);
         Route::get('/banks', [CustomerApiController::class, 'getBanks']);
         Route::get('/countries', [CustomerApiController::class, 'getCountries']);
