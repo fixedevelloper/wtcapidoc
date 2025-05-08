@@ -25,10 +25,10 @@
                 </div>
             </div><!-- .nk-header-news -->
             <div class="nk-header-center">
-                <a href="{{route('secure.dashboard')}}">
+                <a href="javascript:void(0)">
                 <div class="custom-control custom-control-lg custom-switch">
                     <input type="checkbox" class="custom-control-input" id="switch_sandbox">
-                    <label class="custom-control-label text-white" for="customSwitch2">Switch to secure mode</label>
+                    <label class="custom-control-label text-white" for="customSwitch2">Switch to production mode</label>
                 </div>
                 </a>
             </div>
@@ -86,7 +86,7 @@
                             <div class="dropdown-inner">
                                 <ul class="link-list">
                                     <li><a href="{{route('sandbox.profil')}}"><em class="icon ni ni-user-alt"></em><span>View Profile</span></a></li>
-                                  <li><a class="dark-switch" href="#"><em class="icon ni ni-moon"></em><span>Dark Mode</span></a></li>
+                                  <li><a class="dark-switch" href="javascript:void(0)"><em class="icon ni ni-moon"></em><span>Dark Mode</span></a></li>
                                 </ul>
                             </div>
                             <div class="dropdown-inner">

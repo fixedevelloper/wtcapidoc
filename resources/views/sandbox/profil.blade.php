@@ -68,21 +68,21 @@
                                 <span class="data-label">Private key</span>
                                 <span class="data-value">{{$profile['wtc_sandbox_private_key']}}</span>
                             </div>
-                            <div class="data-col data-col-end"><a href="#" class="link link-primary">Copy</a></div>
+                            <div class="data-col data-col-end"><a href="javascript:void(0)" class="link link-primary">Copy</a></div>
                         </div><!-- data-item -->
                         <div class="data-item">
                             <div class="data-col">
                                 <span class="data-label">Secret key</span>
                                 <span class="data-value">{{$profile['wtc_sandbox_secret_key']}}</span>
                             </div>
-                            <div class="data-col data-col-end"><a href="#" class="link link-primary">Copy</a></div>
+                            <div class="data-col data-col-end"><a href="javascript:void(0)" class="link link-primary">Copy</a></div>
                         </div>
                         <div class="data-item">
                             <div class="data-col">
                                 <span class="data-label">Url sandbox</span>
                                 <span class="data-value">https://sandbox.agensic.com</span>
                             </div>
-                            <div class="data-col data-col-end"><a href="#" class="link link-primary">Copy</a></div>
+                            <div class="data-col data-col-end"><a href="javascript:void(0)" class="link link-primary">Copy</a></div>
                         </div>
                         <div class="data-item">
                             <div class="data-col">
@@ -128,9 +128,9 @@
                                         <div class="card-inner p-0">
                                             <ul class="link-list-menu">
                                                 <li><a class="active" href="{{route('sandbox.profil')}}"><em class="icon ni ni-user-fill-c"></em><span>Personal Infomation</span></a></li>
-                                                <li><a href="#"><em class="icon ni ni-bell-fill"></em><span>Notifications</span></a></li>
-                                                <li><a href="#"><em class="icon ni ni-activity-round-fill"></em><span>Account Activity</span></a></li>
-                                                <li><a href="#"><em class="icon ni ni-lock-alt-fill"></em><span>Security Settings</span></a></li>
+                                                <li><a href="javascript:void(0)"><em class="icon ni ni-bell-fill"></em><span>Notifications</span></a></li>
+                                                <li><a href="javascript:void(0)"><em class="icon ni ni-activity-round-fill"></em><span>Account Activity</span></a></li>
+                                                <li><a href="javascript:void(0)"><em class="icon ni ni-lock-alt-fill"></em><span>Security Settings</span></a></li>
                                             </ul>
                                         </div><!-- .card-inner -->
                                     </div></div></div></div><div class="simplebar-placeholder" style="width: auto; height: 504px;"></div></div><div class="simplebar-track simplebar-horizontal" style="visibility: hidden;"><div class="simplebar-scrollbar" style="width: 0px; display: none;"></div></div><div class="simplebar-track simplebar-vertical" style="visibility: hidden;"><div class="simplebar-scrollbar" style="height: 0px; display: none;"></div></div></div><!-- .card-inner-group -->
