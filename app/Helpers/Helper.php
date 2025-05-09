@@ -7,6 +7,7 @@ namespace App\Helpers;
 use App\Models\Journal;
 use Carbon\Carbon;
 use http\Exception;
+use Illuminate\Support\Facades\Http;
 use Jenssegers\Agent\Agent;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -34,6 +35,20 @@ class Helper
     const OPERATIONDEPOSIT_CANCEL     = "DEPOSIT_CANCEL";
     const OPERATIONWITHDRAW_CANCEL     = "WITHDRAW_CANCEL";
     const per_page=10;
+    public static function  isValidUrl($url)
+    {
+        if (!filter_var($url, FILTER_VALIDATE_URL)) {
+            return false;
+        }
+        return true;
+     /*   try {
+            $response = Http::timeout(2)->post($url);
+            return $response->successful();
+        } catch (\Exception $e) {
+            return false;
+        }*/
+    }
+
     public static function create_journal_deposit($amount,$customer_id,$old_balance){
         $journal=new Journal();
         $journal->type_operation=self::OPERATIONDEPOSIT;

@@ -248,7 +248,7 @@ class CustomerApiController extends Controller
         }
         $sender_email = Sender::query()->firstWhere(['email' => $request->email]);
         if (!is_null($sender_email)) {
-            return Helpers::error('Duplicate entry :' . $request->email);
+            return Helpers::error('Duplicate entry for sender :' . $request->email);
         }
         DB::beginTransaction();
         $body = [
@@ -327,6 +327,10 @@ class CustomerApiController extends Controller
         $city = City::query()->firstWhere(['name' => $request->city, 'country_id' => $country->id]);
         if (is_null($city)) {
             return Helpers::error('city not found');
+        }
+        $beneficiary = Beneficiary::query()->firstWhere(['email' => $request->email]);
+        if (!is_null($beneficiary)) {
+            return Helpers::error('email address is already used for a recipient');
         }
         DB::beginTransaction();
         $body = [

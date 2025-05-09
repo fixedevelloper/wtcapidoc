@@ -21,6 +21,7 @@ Route::middleware('customer.jwt')->group(function () {
     Route::group(['middleware' => ['logs.api','restrict.ip.sandbox']], function () {
         Route::get('/transaction/status/{transaction_id}', [TransactionApiController::class, 'getTransaction']);
         Route::post('/transactions/bank', [TransactionApiController::class, 'postBankTransaction']);
+        Route::post('/transactions/mobil', [TransactionApiController::class, 'postMobilTransaction']);
         Route::get('/banks', [CustomerApiController::class, 'getBanks']);
         Route::get('/networks', [CustomerApiController::class, 'getNetworks']);
         Route::get('/countries', [CustomerApiController::class, 'getCountries']);

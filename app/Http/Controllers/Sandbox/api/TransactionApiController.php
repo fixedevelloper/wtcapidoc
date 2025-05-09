@@ -102,6 +102,9 @@ class TransactionApiController extends Controller
             }
             return Helpers::error($err);
         }
+        if (!Helper::isValidUrl($request->get('callback_url'))){
+            return Helpers::error('Url is malformed or does not exist');
+        }
         $country=Country::query()->firstWhere(['codeIso2'=>$request->country_code]);
         if (is_null($country)){
             return Helpers::error('country not found');
@@ -149,7 +152,7 @@ class TransactionApiController extends Controller
         $transaction->iban=$request->get('iban');
         $transaction->beneficiary_id=$beneficiary->id;
         $transaction->gateway_id=$gateway->id;
-        $transaction->city=$city->id;
+        $transaction->city=$city->name;
         $transaction->amount=$request->get('amount');
         $transaction->callback_url=$request->get('callback_url');
         $transaction->is_notifiable=true;
@@ -196,13 +199,16 @@ class TransactionApiController extends Controller
             }
             return Helpers::error($err);
         }
+        if (!Helper::isValidUrl($request->get('callback_url'))){
+            return Helpers::error('Url is malformed or does not exist');
+        }
         $country=Country::query()->firstWhere(['codeIso2'=>$request->country_code]);
         if (is_null($country)){
             return Helpers::error('country not found');
         }
-        $gateway=Gateway::query()->firstWhere(['name'=>$request->bank,'country_id'=>$country->id]);
+        $gateway=Gateway::query()->firstWhere(['name'=>$request->operator,'country_id'=>$country->id]);
         if (is_null($gateway)){
-            return Helpers::error('bank not exist in country');
+            return Helpers::error('operator not exist in country');
         }
         $sender=Sender::query()->firstWhere(['code'=>$request->sender_code,'customer_id'=>$customer->id]);
         if (is_null($sender)){
@@ -243,7 +249,7 @@ class TransactionApiController extends Controller
         $transaction->iban=$request->get('iban');
         $transaction->beneficiary_id=$beneficiary->id;
         $transaction->gateway_id=$gateway->id;
-        $transaction->city=$city->id;
+        $transaction->city=$city->name;
         $transaction->amount=$request->get('amount');
         $transaction->callback_url=$request->get('callback_url');
         $transaction->is_notifiable=true;
@@ -259,7 +265,11 @@ class TransactionApiController extends Controller
         $customer->balance_sandbox-=$rate['total_local'];
         $customer->save();
         DB::commit();
-        return Helpers::success([], 'transaction created successful');
+        return Helpers::success([
+            'transaction_id'=>$transaction->code,
+            'fees'=>$transaction->rate,
+            'amount'=>$transaction->amount_total
+        ], 'transaction created successful');
     }
     function calculRate($country_id,$customer_id,$amount){
 

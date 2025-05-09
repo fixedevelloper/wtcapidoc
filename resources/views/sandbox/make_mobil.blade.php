@@ -191,7 +191,7 @@
                                                 <div class="preview-list-left">
                                                     <div class="preview-list-user-wrapper">
                                                         <div class="preview-list-user-icon">
-                                                            <i class="ni ni-exchange-alt"></i>
+                                                            <i class="ni ni-exchange"></i>
                                                         </div>
                                                         <div class="preview-list-user-content">
                                                             <span>Exchange Rate</span>
@@ -221,7 +221,7 @@
                                                 <div class="preview-list-left">
                                                     <div class="preview-list-user-wrapper">
                                                         <div class="preview-list-user-icon">
-                                                            <i class="las la-battery-half"></i>
+                                                            <i class="ni ni-bar-chart"></i>
                                                         </div>
                                                         <div class="preview-list-user-content">
                                                             <span>Total Fees &amp; Charges</span>
@@ -237,7 +237,7 @@
                                                 <div class="preview-list-left">
                                                     <div class="preview-list-user-wrapper">
                                                         <div class="preview-list-user-icon">
-                                                            <i class="las la-money-check-alt"></i>
+                                                            <i class="ni ni-money"></i>
                                                         </div>
                                                         <div class="preview-list-user-content">
                                                             <span class="">Will Send</span>
@@ -252,7 +252,7 @@
                                                 <div class="preview-list-left">
                                                     <div class="preview-list-user-wrapper">
                                                         <div class="preview-list-user-icon">
-                                                            <i class="las la-money-check-alt"></i>
+                                                            <i class="ni ni-money"></i>
                                                         </div>
                                                         <div class="preview-list-user-content">
                                                             <span class="last">Total Payable</span>
