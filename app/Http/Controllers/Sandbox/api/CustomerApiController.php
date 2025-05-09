@@ -22,10 +22,10 @@ class CustomerApiController extends Controller
     public function getSenders(Request $request)
     {
         $customer = $request->customer;
-        $senders=[];
+        $senders = [];
         $senders_ = Sender::query()->where(['customer_id' => $customer->id])->get();
-        foreach ($senders_ as $item){
-            $senders[]=[
+        foreach ($senders_ as $item) {
+            $senders[] = [
                 'first_name' => $item->first_name,
                 'last_name' => $item->last_name,
                 'email' => $item->email,
@@ -43,6 +43,7 @@ class CustomerApiController extends Controller
         $message = 'senders get successful';
         return Helpers::success($senders, $message);
     }
+
     public function getSender(Request $request)
     {
         $customer = $request->customer;
@@ -71,13 +72,14 @@ class CustomerApiController extends Controller
 
         ], $message);
     }
+
     public function getBeneficiaries(Request $request)
     {
         $customer = $request->customer;
-        $senders=[];
+        $senders = [];
         $senders_ = Beneficiary::query()->where(['customer_id' => $customer->id])->get();
-        foreach ($senders_ as $item){
-            $senders[]=[
+        foreach ($senders_ as $item) {
+            $senders[] = [
                 'first_name' => $item->first_name,
                 'last_name' => $item->last_name,
                 'email' => $item->email,
@@ -95,6 +97,7 @@ class CustomerApiController extends Controller
         $message = 'senders get successful';
         return Helpers::success($senders, $message);
     }
+
     public function getBeneficiary(Request $request)
     {
         $customer = $request->customer;
@@ -123,21 +126,22 @@ class CustomerApiController extends Controller
 
         ], $message);
     }
+
     public function getCities(Request $request)
     {
         $customer = $request->customer;
-        if (!isset($request->codeiso2)) {
+        if (!isset($request->codeiso)) {
             return Helpers::error('code is missing');
         }
-        $country=Country::query()->firstWhere(['codeIso2'=>$request->codeiso2]);
+        $country = Country::query()->firstWhere(['codeIso2' => $request->codeiso]);
         if (is_null($country)) {
             return Helpers::error('country is missing');
         }
-        $countries_=[];
-        $countries = City::query()->where(['country_id'=>$country->id])->get();
+        $countries_ = [];
+        $countries = City::query()->where(['country_id' => $country->id])->get();
 
-        foreach ($countries as $item){
-            $countries_[]=[
+        foreach ($countries as $item) {
+            $countries_[] = [
                 'name' => $item->name,
                 'country' => $country->name,
 
@@ -146,14 +150,15 @@ class CustomerApiController extends Controller
         $message = 'cities get successful';
         return Helpers::success($countries_, $message);
     }
+
     public function getCountries(Request $request)
     {
         $customer = $request->customer;
-        $countries_=[];
+        $countries_ = [];
         $countries = Country::query()->where([])->get();
 
-        foreach ($countries as $item){
-            $countries_[]=[
+        foreach ($countries as $item) {
+            $countries_[] = [
                 'name' => $item->name,
                 'code_iso' => $item->codeIso2,
                 'currency' => $item->currency
@@ -163,30 +168,49 @@ class CustomerApiController extends Controller
         $message = 'senders get successful';
         return Helpers::success($countries_, $message);
     }
-
-    public function getBanks(Request $request)
+    public function getNetworks(Request $request)
     {
         $customer = $request->customer;
-        if (!isset($request->codeiso2)) {
+        if (!isset($request->codeiso)) {
             return Helpers::error('code is missing');
         }
-        $country=Country::query()->firstWhere(['codeIso2'=>$request->codeiso2]);
+        $country = Country::query()->firstWhere(['codeIso2' => $request->codeiso]);
         if (is_null($country)) {
             return Helpers::error('country is missing');
         }
-        $countries_=[];
-        $countries = Gateway::query()->where(['country_id'=>$country->id])->get();
-
-        foreach ($countries as $item){
-            $countries_[]=[
+        $countries_ = [];
+        $countries = Gateway::query()->where(['method' => $country->code_gateway_mobil, 'country_id' => $country->id])->get();
+        foreach ($countries as $item) {
+            $countries_[] = [
                 'name' => $item->name,
                 'country' => $country->name,
-
+            ];
+        }
+        $message = 'networks get successful';
+        return Helpers::success($countries_, $message);
+    }
+    public function getBanks(Request $request)
+    {
+        $customer = $request->customer;
+        if (!isset($request->codeiso)) {
+            return Helpers::error('code is missing');
+        }
+        $country = Country::query()->firstWhere(['codeIso2' => $request->codeiso]);
+        if (is_null($country)) {
+            return Helpers::error('country is missing');
+        }
+        $countries_ = [];
+        $countries = Gateway::query()->where(['method' => $country->code_gateway_bank, 'country_id' => $country->id])->get();
+        foreach ($countries as $item) {
+            $countries_[] = [
+                'name' => $item->name,
+                'country' => $country->name,
             ];
         }
         $message = 'banks get successful';
         return Helpers::success($countries_, $message);
     }
+
     public function postSenders(Request $request)
     {
         $customer = $request->customer;
@@ -214,17 +238,17 @@ class CustomerApiController extends Controller
             }
             return Helpers::error($err);
         }
-        $country=Country::query()->firstWhere(['codeIso2'=>$request->country_code]);
-        if (is_null($country)){
+        $country = Country::query()->firstWhere(['codeIso2' => $request->country_code]);
+        if (is_null($country)) {
             return Helpers::error('country not found');
         }
-        $city=City::query()->firstWhere(['name'=>$request->city,'country_id'=>$country->id]);
-        if (is_null($city)){
+        $city = City::query()->firstWhere(['name' => $request->city, 'country_id' => $country->id]);
+        if (is_null($city)) {
             return Helpers::error('city not found');
         }
-        $sender_email=Sender::query()->firstWhere(['email'=>$request->email]);
-        if (!is_null($sender_email)){
-            return Helpers::error('Duplicate entry :'.$request->email);
+        $sender_email = Sender::query()->firstWhere(['email' => $request->email]);
+        if (!is_null($sender_email)) {
+            return Helpers::error('Duplicate entry :' . $request->email);
         }
         DB::beginTransaction();
         $body = [
@@ -249,7 +273,7 @@ class CustomerApiController extends Controller
         try {
             $sender = new Sender($body);
             $sender->save($body);
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             return Helpers::error($exception->getMessage());
         }
 
@@ -268,6 +292,7 @@ class CustomerApiController extends Controller
             'document_number' => $sender->num_document
         ], 'sender created successful');
     }
+
     public function postBeneficiaries(Request $request)
     {
         $customer = $request->customer;
@@ -295,12 +320,12 @@ class CustomerApiController extends Controller
             }
             return Helpers::error($err);
         }
-        $country=Country::query()->firstWhere(['codeIso2'=>$request->country_code]);
-        if (is_null($country)){
+        $country = Country::query()->firstWhere(['codeIso2' => $request->country_code]);
+        if (is_null($country)) {
             return Helpers::error('country not found');
         }
-        $city=City::query()->firstWhere(['name'=>$request->city,'country_id'=>$country->id]);
-        if (is_null($city)){
+        $city = City::query()->firstWhere(['name' => $request->city, 'country_id' => $country->id]);
+        if (is_null($city)) {
             return Helpers::error('city not found');
         }
         DB::beginTransaction();

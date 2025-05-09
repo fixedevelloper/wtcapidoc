@@ -33,6 +33,7 @@
         <a class="nav-link" href="#countries">Countries</a>
         <a class="nav-link" href="#cities">Cities</a>
         <a class="nav-link" href="#banks">Banks</a>
+        <a class="nav-link" href="#networks">Networks</a>
         <a class="nav-link nav-link-toggle">Senders ▾</a>
         <div class="submenu">
             <a class="nav-link" href="#get-senders">GET /api/senders</a>
@@ -129,7 +130,10 @@ X-Signature: {HMAC-SHA256 du payload signé avec la clé secrète}
         </ul>
         <h5>Recuperer ses identifiants</h5>
         <p> Dans le menu "Accounts , copier vos identifiants"</p>
-        <img src="{{asset('assets/img/sandboxj.png')}}" class="img-rounded">
+        <div class="container-fluid">
+            <img src="{{asset('assets/img/sandboxj.png')}}" class="img-responsive" alt="">
+        </div>
+
        <p>La clé vous sera affichée une seule fois : copiez-la et stockez-la en lieu sûr</p>
         <H4> Environnement sandbox</H4>
         <ul>
@@ -147,7 +151,7 @@ X-Signature: {HMAC-SHA256 du payload signé avec la clé secrète}
         <h2><span class="h4 text-danger">III-1</span> Authentification</h2>
         <p>L'API utilise un token JWT dans l'en-tête <code>Authorization</code>.</p>
         <pre>Authorization: Bearer &lt;votre_access_token&gt;</pre>
-        <h2 class="mt-5"><span class="text-primary">GET</span> /api/login</h2>
+        <h2 class="mt-5"><span class="text-success">POST</span> /api/login</h2>
         <h4 class="mt-3"><span class="h4 text-danger">III-2</span>🎯 Authentifie un utilisateur avec ses identifiants</h4>
         <p>Ce endpoint permet à un utilisateur de se connecter en envoyant son email et son mot de passe.
             En cas de succès, un token d’accès est renvoyé pour les appels API futurs..</p>
@@ -211,7 +215,7 @@ X-Signature: {HMAC-SHA256 du payload signé avec la clé secrète}
 
     </section>
     <section id="cities" class="mt-5">
-        <h2><span class="text-primary">GET</span> /api/cities?codeiso2={country_code}</h2>
+        <h2><span class="text-primary">GET</span> /api/cities</h2>
         <p>permet d’obtenir la liste des villes disponibles pour un pays donné, identifié par son code ISO à deux lettres.
             </p>
         <p>Il est généralement utilisé pour filtrer les zones de destination lors de l’envoi d’argent.</p>
@@ -265,7 +269,7 @@ X-Signature: {HMAC-SHA256 du payload signé avec la clé secrète}
         </div>
     </section>
     <section id="banks" class="mt-5">
-        <h2><span class="text-primary">GET</span> /api/banks?codeiso={country_code}</h2>
+        <h2><span class="text-primary">GET</span> /api/banks</h2>
         <p>Ce endpoint permet d’obtenir la liste des banques disponibles dans un pays donné, identifié par son code ISO. </p>
         <p>Il est essentiel pour que l’utilisateur sélectionne la banque du bénéficiaire lors d’un transfert d’argent vers un compte bancaire.</p>
         <ul>
@@ -301,6 +305,45 @@ X-Signature: {HMAC-SHA256 du payload signé avec la clé secrète}
                 <li> 200 OK : Liste des banques retournée avec succès</li>
                 <li>400 Bad Request : Paramètre codeiso manquant ou invalide</li>
                 <li>404 Not Found : Aucune banque trouvée pour ce pays</li>
+            </ul>
+
+
+        </div>
+    </section>
+    <section id="networks" class="mt-5">
+        <h2><span class="text-primary">GET</span> /api/networks</h2>
+        <p>Ce endpoint permet d’obtenir la liste des operateurs MOMO disponibles dans un pays donné, identifié par son code ISO. </p>
+        <p>Il est essentiel pour que l’utilisateur sélectionne l'operateur du bénéficiaire lors d’un transfert d’argent vers un compte MOMO.</p>
+        <ul>
+            <li><strong>codeiso (obligatoire)</strong>– Code ISO alpha-2 du pays (ex. : CM pour le Cameroun, CI pour la Côte d’Ivoire)</li>
+        </ul>
+        <button class="btn btn-outline-primary mb-2" data-bs-toggle="collapse" data-bs-target="#networks_response">
+            Voir exemple
+        </button>
+        <div class="collapse" id="networks_response">
+            <h6>Requête :</h6>
+            <pre>GET /api/networks?codeiso=CM</pre>
+            <h6>Réponse :</h6>
+            <pre>
+ {
+  "message": "networks get successful",
+  "status": "success",
+  "data": [
+    {
+      "name": "MTN",
+      "country": "Cameroun"
+    },
+    {
+      "name": "Orange",
+      "country": "Cameroun"
+    }
+  ]
+}    </pre>
+            <h4>  Codes de réponse HTTP :</h4>
+            <ul>
+                <li> 200 OK : Liste des operateurs retourné avec succès</li>
+                <li>400 Bad Request : Paramètre codeiso manquant ou invalide</li>
+                <li>404 Not Found : Aucune operateur trouvée pour ce pays</li>
             </ul>
 
 
@@ -677,7 +720,7 @@ X-Signature: {HMAC-SHA256 du payload signé avec la clé secrète}
         </ul>
     </section>
     <section id="get-transfer-status" class="mt-5">
-        <h2><span class="text-primary">GET</span> /api/transactions/{transaction_id}</h2>
+        <h2><span class="text-primary">GET</span> /api/transactions/status/:transaction_id</h2>
         <p>Ce endpoint permet de récupérer le statut actuel d’une transaction donnée à l’aide de son identifiant unique.</p>
         <p> Il est utile pour les utilisateurs finaux ou les agents afin de suivre l’évolution d’un envoi (bancaire, mobile ou en espèces).</p>
 

@@ -13,7 +13,7 @@ use App\Http\Controllers\Secure\StaticSecureController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::domain('doc.agensic.com')->group(function () {
+//Route::domain('doc.agensic.com')->group(function () {
 
     Route::get('/', [DefaultController::class, 'documentation'])->name('documentation');
     Route::get('/home', [DefaultController::class, 'home'])->name('home');
@@ -25,7 +25,7 @@ Route::domain('doc.agensic.com')->group(function () {
     Route::get('/transfert/mobil', [DefaultController::class, 'transfert_mobil'])->name('transfert_mobil');
     Route::get('/senders', [DefaultController::class, 'create_sender'])->name('create_sender');
     Route::get('/beneficiaries', [DefaultController::class, 'create_beneficiary'])->name('create_beneficiary');
-});
+//});
 
 
 Route::domain('sandbox.agensic.com')->group(function () {

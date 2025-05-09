@@ -22,6 +22,7 @@ Route::middleware('customer.jwt')->group(function () {
         Route::get('/transaction/status/{transaction_id}', [TransactionApiController::class, 'getTransaction']);
         Route::post('/transactions/bank', [TransactionApiController::class, 'postBankTransaction']);
         Route::get('/banks', [CustomerApiController::class, 'getBanks']);
+        Route::get('/networks', [CustomerApiController::class, 'getNetworks']);
         Route::get('/countries', [CustomerApiController::class, 'getCountries']);
         Route::get('/cities', [CustomerApiController::class, 'getCities']);
         Route::get('/senders', [CustomerApiController::class, 'getSenders']);
