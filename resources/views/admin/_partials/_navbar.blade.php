@@ -128,11 +128,11 @@
 
                                     <span class="nk-menu-text">Cities</span></a>
                             </li>
-                         {{--   <li class="nk-menu-item">
-                                <a href="{{route('admin.rates')}}" class="nk-menu-link">
-                                    <span class="nk-menu-icon"><em class="icon ni ni-percent"></em></span>
-                                    <span class="nk-menu-text">Rates</span></a>
-                            </li>--}}
+                           <li class="nk-menu-item">
+                                <a href="{{route('admin.whitelistIp')}}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-wifi"></em></span>
+                                    <span class="nk-menu-text">WhitelistIp</span></a>
+                            </li>
                         </ul><!-- .nk-menu-sub -->
                     </li><!-- .nk-menu-item -->
                 </ul><!-- .nk-menu -->

@@ -78,12 +78,14 @@ Route::domain('secure.agensic.com')->group(function () {
     });
 });
 
-Route::domain('manage.agensic.com')->group(function () {
+//Route::domain('manage.agensic.com')->group(function () {
     Route::match(["POST", "GET"], '/', [SecurityAdminController::class, 'adminLogin'])->name('admin.login');
     Route::match(["POST", "GET"], '/register', [SecurityAdminController::class, 'register'])->name('admin.register');
 Route::match(["POST", "GET"], '/logout', [SecurityAdminController::class, 'logout'])->name('admin.logout');
     Route::group(['middleware' => ['isAdmin']], function () {
         Route::match(["POST", "GET"], '/dashboard', [BasicController::class, 'dashboard'])->name('admin.dashboard');
+        Route::match(["POST", "GET"], '/whitelistIp', [SettingController::class, 'whitelistIp'])->name('admin.whitelistIp');
+        Route::match(["POST", "GET"], '/delet_whitelistIp/{id}', [SettingController::class, 'removeWhitelistIp'])->name('admin.delete.whitelistIp');
         Route::match(["POST", "GET"], '/customers', [BasicController::class, 'customers'])->name('admin.customers');
         Route::match(["POST", "GET"], '/customers/add', [SecurityAdminController::class, 'create_customer_direct'])->name('admin.add.customer');
         Route::match(["POST", "GET"], '/senders', [BasicController::class, 'senders'])->name('admin.senders');
@@ -106,4 +108,4 @@ Route::match(["POST", "GET"], '/logout', [SecurityAdminController::class, 'logou
         Route::match(["POST", "GET"], '/beneficiaries/detail/{code}', [BasicController::class, 'beneficiary_detail'])->name('admin.beneficiary_detail');
    Route::get('/countries/gateway/{id}',[SettingController::class,'paymentGateway'])->name('admin.countries.gateway');
     });
-});
+//});
