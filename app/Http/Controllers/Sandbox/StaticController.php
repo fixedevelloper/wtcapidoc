@@ -269,6 +269,7 @@ class StaticController extends Controller
             $transaction->iban=$request->get('iban');
             $transaction->rounting_number=$request->get('routing_number');
             $transaction->ifsc_code=$request->get('ifsc');
+            $transaction->swift=$request->get('swift');
             $transaction->branch_number=$request->get('branch_number');
             $transaction->beneficiary_id=$request->get('beneficiary_id');
             $transaction->gateway_id=$request->get('gateway_id');

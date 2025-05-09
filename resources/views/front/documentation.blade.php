@@ -27,6 +27,8 @@
     <h4 class="px-3">Docs API</h4>
     <nav class="nav flex-column px-3">
         <a class="nav-link" href="#intro">Introduction</a>
+        <a class="nav-link" href="#webhooks">Webhooks</a>
+        <a class="nav-link" href="#apikeys">API Keys</a>
         <a class="nav-link" href="#auth">Authentification</a>
         <a class="nav-link" href="#countries">Countries</a>
         <a class="nav-link" href="#cities">Cities</a>
@@ -54,13 +56,21 @@
 <!-- Main Content -->
 <div class="content mt-5">
     <section id="intro">
-        <h2>Introduction</h2>
+        <h2><span class="h4 text-danger">I-1</span> Introduction</h2>
         <p>Bienvenue dans l’API d’envoi d’argent. Cette API permet aux développeurs d’intégrer facilement des fonctionnalités de transfert de fonds dans leurs applications web ou mobiles. Elle prend en charge l’envoi d’argent entre utilisateurs, les paiements vers des comptes bancaires ou des portefeuilles mobiles, et fournit un suivi en temps réel des transactions.
 
         </p><p> L’API est sécurisée, rapide et conçue pour répondre aux besoins des plateformes fintech, des services de paiement et des applications de commerce en ligne. Elle s’intègre facilement à votre infrastructure existante grâce à une architecture RESTful, une authentification basée sur les tokens, et une documentation claire.</p>
-   <h4>Code erreur pour un Ip non authorize</h4>
+   <h4><span class="h4 text-danger">I-2</span> Restriction d’adresses IP dans l’API</h4>
+        <p>Cette fonctionnalité permet de limiter l'accès à l’API uniquement à certaines adresses IP autorisées, renforçant ainsi la sécurité</p>
+        <ul>
+            <li>
+                Les requêtes provenant d’une IP non autorisée reçoivent un code HTTP 403 Forbidden
+            </li>
+            <li>Les IP autorisées peuvent accéder normalement aux endpoints protégés</li>
+        </ul>
+        <h5><span class="h4 text-danger">I-3</span> Reponse de l erreur </h5>
     <pre>
-        {
+{
   "data": {
     "ip": "127.0.0.1"
   },
@@ -68,13 +78,77 @@
 }
     </pre>
     </section>
+    <section id="webhooks" class="mt-5">
+        <h2><span class="h4 text-danger">II-1</span> Webhooks</h2>
+        <p>
+            L’API prend en charge l’envoi automatique de notifications par webhook à chaque mise à jour critique du statut d’une transaction.
+            Cela permet aux systèmes partenaires d’être notifiés en temps réel, sans avoir à interroger en boucle l’API (polling).
+        </p>
+        <h4><span class="h4 text-danger">II-2</span> Quand un webhook est-il déclenché ?</h4>
+        <p>Un webhook est déclenché à chaque changement de statut d’une transaction, notamment :</p>
+        <pre>
+pending → processing
+processing → success
+processing → failed
+success → refunded (le cas échéant)
+        </pre>
+        <h4><span class="h4 text-danger">II-3</span> Format de la requête webhook</h4>
+        <p>En-têtes :</p>
+        <pre>
+Content-Type: application/json
+X-Signature: {HMAC-SHA256 du payload signé avec la clé secrète}
 
+        </pre>
+        <p>Payload JSON envoyé :</p>
+        <pre>
+{
+  "transaction_id": "TXN-123456",
+  "status": "success",
+  "amount": 250.00,
+  "currency": "USD",
+  "timestamp": "2025-01-09T01:42:54+00:00"
+}
+
+        </pre>
+        <h4><span class="h4 text-danger">II-4</span> Sécurité</h4>
+        <p>Chaque webhook est signé avec un HMAC SHA256 dans le header X-Signature, généré à l’aide d’une clé secrète partagée. Le destinataire doit vérifier cette signature pour garantir l’intégrité de la notification.</p>
+        <pre>$expectedSignature = hash_hmac('sha256', $payload, $secret);
+</pre>
+    </section>
+    <section id="apikeys" class="mt-5">
+        <h2><span class="h4 text-danger">III-1</span> Récupération de la clé API (private_key,secret_key) pour l’environnement Sandbox</h2>
+        <p>Pour interagir avec notre API en mode test (sandbox), chaque développeur doit disposer d’une clé API dédiée, générée via son compte développeur.
+            Cette clé permet d’effectuer des appels simulés sans déclencher de transactions réelles.</p>
+      <h4>  🧭 Étapes pour obtenir la clé API Sandbox</h4>
+
+        <h5>Créer un compte développeur</h5>
+        <ul>
+            <li>Accédez à https://xxxxxxxxxxxxxx.com/register</li>
+            <li>Remplissez les informations demandées (email, nom, mot de passe)</li>
+            <li> Confirmez votre email via le lien reçu</li>
+        </ul>
+        <h5>Recuperer ses identifiants</h5>
+        <p> Dans le menu "Accounts , copier vos identifiants"</p>
+        <img src="{{asset('assets/img/sandboxj.png')}}" class="img-rounded">
+       <p>La clé vous sera affichée une seule fois : copiez-la et stockez-la en lieu sûr</p>
+        <H4> Environnement sandbox</H4>
+        <ul>
+            <li>Tous les appels dans le sandbox sont simulés</li>
+            <li>Aucun transfert d’argent réel n’est effectué</li>
+            <li>Les statuts de transaction sont automatisés ou contrôlables via les endpoints de test</li>
+        </ul>
+
+
+
+
+
+    </section>
     <section id="auth" class="mt-5">
-        <h2>Authentification</h2>
+        <h2><span class="h4 text-danger">III-1</span> Authentification</h2>
         <p>L'API utilise un token JWT dans l'en-tête <code>Authorization</code>.</p>
         <pre>Authorization: Bearer &lt;votre_access_token&gt;</pre>
         <h2 class="mt-5"><span class="text-primary">GET</span> /api/login</h2>
-        <h4 class="mt-3">🎯 Authentifie un utilisateur avec ses identifiants</h4>
+        <h4 class="mt-3"><span class="h4 text-danger">III-2</span>🎯 Authentifie un utilisateur avec ses identifiants</h4>
         <p>Ce endpoint permet à un utilisateur de se connecter en envoyant son email et son mot de passe.
             En cas de succès, un token d’accès est renvoyé pour les appels API futurs..</p>
         <h4>Corps JSON attendu :</h4>
@@ -96,7 +170,6 @@
 }</pre>
         </div>
     </section>
-
     <section id="countries" class="mt-5">
         <h2><span class="text-primary">GET</span> /api/countries</h2>
         <p>permet de récupérer la liste des pays disponibles pour l’envoi ou la réception d’argent via la plateforme.</p>
@@ -500,7 +573,6 @@
             </p><p>Il vérifie les informations du client, le solde, applique les frais, et génère une référence de transaction.</p>
         <h6>Corps JSON attendu :</h6>
         <pre>{"country_code":"FR",
-"gateway":"AGENSICPAY_ALL",
 "bank":"BANQUE POPULAIRE VAL DE FRANCE",
 "sender_code":"25042521022068963666512",
 "beneficiary_code":"25042553551393640666986",
@@ -508,12 +580,18 @@
 "amount":"80000",
 "raison_transaction":"Business Profits to Parents",
 "origin_fond":"Donation",
-"iban":"CH9300762011623852957",
+"iban":"xxxxxxxxxxxxxxxxxxxxxxx",
 "relation":"Brother",
-"accountNumber":"011623852957"
+"accountNumber":"xxxxxxxxxxxxxxxxxxxxxxxx",
+"swift_code":"xxxxxxxxxxxxxxxxxxxxxxxx",
 "callback_url":"https://xxxx/webhook"
 }</pre>
-        <button class="btn btn-outline-success mb-2" data-bs-toggle="collapse" data-bs-target="#beneficiaries_create_response">
+        <p class="text-danger text-ellipsis">Remplacer iban par :</p>
+        <ul>
+            <li><span class="text-primary">routing_number</span> pour US,CA</li>
+            <li><span class="text-primary">ifsc_code</span> pour IN</li>
+        </ul>
+        <button class="btn btn-outline-success mb-2 mt-2" data-bs-toggle="collapse" data-bs-target="#beneficiaries_create_response">
             Voir réponse
         </button>
         <div class="collapse" id="beneficiaries_create_response">
@@ -530,12 +608,12 @@
         </div>
        <h4>Champs de réponse :</h4>
         <ul>
-            <li> transaction_id : Identifiant unique de la transaction</li>
+            <li>transaction_id : Identifiant unique de la transaction</li>
             <li>status : Statut initial (pending, processing, completed, failed)</li>
-            <li> fees : Frais appliqués</li>
+            <li>fees : Frais appliqués</li>
             <li>total_debited : Montant total débité à l’expéditeur (montant + frais)</li>
             <li>created_at : Date de création de la transaction</li>
-            <li> message : Message de confirmation</li>
+            <li>message : Message de confirmation</li>
         </ul>
         <h4> Codes de réponse HTTP :</h4>
         <ul>
@@ -562,7 +640,8 @@
 "raison_transaction":"Business Profits to Parents",
 "origin_fond":"Donation",
 "relation":"Brother",
-"accountNumber":"237675066919"
+"accountNumber":"237675066919",
+"callback_url":"https://xxxx/webhook"
 }</pre>
         <button class="btn btn-outline-success mb-2" data-bs-toggle="collapse" data-bs-target="#beneficiaries_create_response">
             Voir réponse
