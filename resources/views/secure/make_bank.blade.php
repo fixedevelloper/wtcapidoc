@@ -56,7 +56,7 @@
                                                     <select required name="countryCode" class="form-control" id="country">
                                                         <option>Choose Country</option>
                                                         @foreach($countries as $item)
-                                                            <option data-currency="{{$item->country->currency}}" value="{{$item->country->id}}">{{$item->country->name}}</option>
+                                                            <option data-code="{{$item->country->codeIso2}}" data-currency="{{$item->country->currency}}" value="{{$item->country->id}}">{{$item->country->name}}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -147,18 +147,51 @@
                                     </div>
                                 </div>
                                 <div class="row p-0">
-                                    <div class="col-md-6">
+                                    <div class="col-md-6" id="iban_code">
                                         <div class="form-control-wrap">
-                                            <label class="form-label" for="default-06">Iban</label>
+                                            <label class="form-label" for="iban">IBAN</label>
                                             <div class="input-group input-group-lg">
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text" id="inputGroup-sizing-lg"><em class="icon ni ni-inbox"></em></span>
                                                 </div>
-                                                <input required name="iban" type="text" id="iban" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm">
+                                                <input name="iban" type="text" id="iban" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6" id="routing_number_code">
+                                        <div class="form-control-wrap">
+                                            <label class="form-label" for="routing_number">Routing Number</label>
+                                            <div class="input-group input-group-lg">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="inputGroup-sizing-lg"><em class="icon ni ni-inbox"></em></span>
+                                                </div>
+                                                <input name="routing_number" type="text" id="routing_number" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6" id="ifsc_code">
+                                        <div class="form-control-wrap">
+                                            <label class="form-label" for="ifsc">IFSC code</label>
+                                            <div class="input-group input-group-lg">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="inputGroup-sizing-lg"><em class="icon ni ni-inbox"></em></span>
+                                                </div>
+                                                <input name="ifsc" type="text" id="ifsc" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
+                                        <div class="form-control-wrap">
+                                            <label class="form-label" for="swift_code">Swift Code</label>
+                                            <div class="input-group input-group-lg">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="inputGroup-sizing-lg"><em class="icon ni ni-file-code"></em></span>
+                                                </div>
+                                                <input required name="swift_code" type="text" id="swift_code" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
                                         <div class="form-control-wrap">
                                             <label class="form-label" for="default-06">Account number</label>
                                             <div class="input-group input-group-lg">
@@ -304,6 +337,9 @@
 @push('js')
     <script type="text/javascript">
         $(function () {
+            $('#iban_code').show();
+            $('#routing_number_code').hide();
+            $('#ifsc_code').hide();
             $('#sender').change(function () {
 
                 $.ajax({
@@ -326,7 +362,20 @@
                 });
             })
             $('#country').change(function () {
-
+                let arrayRouting = ['US', 'CA'];
+                if (arrayRouting.includes($("select[id=country] :selected").data('code'))){
+                    $('#iban_code').hide();
+                    $('#routing_number_code').show();
+                    $('#ifsc_code').hide();
+                }else if($("select[id=country] :selected").data('code')==='IN'){
+                    $('#iban_code').hide();
+                    $('#routing_number_code').hide();
+                    $('#ifsc_code').show();
+                }else{
+                    $('#iban_code').show();
+                    $('#routing_number_code').hide();
+                    $('#ifsc_code').hide();
+                }
                 $.ajax({
                     url: configs.routes.get_ajax_cities,
                     type: "GET",

@@ -18,7 +18,7 @@ Route::middleware('customer.jwt')->group(function () {
             'customer' => $request->customer
         ]);
     });
-    Route::group(['middleware' => ['logs.api']], function () {
+    Route::group(['middleware' => ['logs.api','restrict.ip.sandbox']], function () {
         Route::get('/transaction/status/{transaction_id}', [TransactionApiController::class, 'getTransaction']);
         Route::post('/transactions/bank', [TransactionApiController::class, 'postBankTransaction']);
         Route::get('/banks', [CustomerApiController::class, 'getBanks']);

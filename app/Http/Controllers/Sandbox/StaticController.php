@@ -216,7 +216,6 @@ class StaticController extends Controller
         if ($request->method() == 'POST') {
             $validator = Validator::make($request->all(), [
                 'countryCode' => 'required',
-                'wallet' => 'required',
                 'gateway_id' => 'required',
                 'numSender' => 'required',
                 'numBeneficiary' => 'required',
@@ -245,10 +244,20 @@ class StaticController extends Controller
                 return redirect()->back()->withInput();
             }
             $amount_total=$rate['total'];
-            if ($customer->balance_sandbox<$rate['total_local']){
+            if ($customer->balance<$rate['total_local']){
                 notify()->error('Balance Insufficient');
                 return redirect()->back()->withInput();
             }
+            $startOfMonth = Carbon::now()->startOfMonth();
+            $endOfMonth = Carbon::now()->endOfMonth();
+            $sender=Sender::query()->find($request->get('numSender'));
+/*            $sumCurrentMonthTransactions = Transaction::query()->where('type',Helper::TYPESANDBOX)->where('sender_id',$sender->id)
+                ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+                ->sum('amount');
+            if ($sumCurrentMonthTransactions+$amount>=$sender->max_transaction){
+                notify()->error('Limit transaction','Transaction status');
+                return redirect()->back()->withInput();
+            }*/
             DB::beginTransaction();
             $transaction=new Transaction();
             $transaction->sender_id=$request->get('numSender');
@@ -258,6 +267,9 @@ class StaticController extends Controller
             $transaction->accountNumber=$request->get('accountNumber');
             $transaction->wallet=$request->get('wallet');
             $transaction->iban=$request->get('iban');
+            $transaction->rounting_number=$request->get('routing_number');
+            $transaction->ifsc_code=$request->get('ifsc');
+            $transaction->branch_number=$request->get('branch_number');
             $transaction->beneficiary_id=$request->get('beneficiary_id');
             $transaction->gateway_id=$request->get('gateway_id');
             $transaction->beneficiary_id=$request->get('numBeneficiary');
@@ -423,9 +435,15 @@ class StaticController extends Controller
 
     public function getCitiesAjax(Request $request)
     {
+        $country=Country::query()->find($request->get('country_id'));
         $cities = City::query()->where(['country_id'=>$request->get('country_id')])->get();
+        if ($request->get('type')=='mobil'){
+            $gateways=Gateway::query()->where(['method'=>$country->code_gateway_mobil,'country_id'=>$country->id])->get();
+        }else{
+            $gateways=Gateway::query()->where(['method'=>$country->code_gateway_bank,'country_id'=>$country->id])->get();
+        }
 
-        return response()->json(['data' => $cities, 'status' => true]);
+        return response()->json(['data' => $cities, 'gateways'=>$gateways, 'status' => true]);
     }
     public function getRateAjax(Request $request)
     {

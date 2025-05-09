@@ -4,6 +4,8 @@ use App\Http\Middleware\EnsureIsAdmin;
 use App\Http\Middleware\EnsureRemoteApiAvailable;
 use App\Http\Middleware\EnsureRemoteSandboxApiAvailable;
 use App\Http\Middleware\LogFilteredApiRequests;
+use App\Http\Middleware\RestrictIpAddress;
+use App\Http\Middleware\RestrictIpAddressSandbox;
 use App\Http\Middleware\VerifyCustomerJwt;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -18,12 +20,14 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
     $middleware->alias([
-
         'logs.api' => LogFilteredApiRequests::class,
         'remote.api' => EnsureRemoteApiAvailable::class,
         'sandbox.api' => EnsureRemoteSandboxApiAvailable::class,
         'isAdmin' => EnsureIsAdmin::class,
         'customer.jwt' => VerifyCustomerJwt::class,
+        'restrict.ip.sandbox' => RestrictIpAddressSandbox::class,
+        'restrict.ip.secure' => RestrictIpAddress::class,
+
     ]);
 })
     ->withExceptions(function (Exceptions $exceptions) {

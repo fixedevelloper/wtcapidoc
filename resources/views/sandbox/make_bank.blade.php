@@ -56,7 +56,7 @@
                                                     <select required name="countryCode" class="form-control" id="country">
                                                         <option>Choose Country</option>
                                                         @foreach($countries as $item)
-                                                            <option data-currency="{{$item->country->currency}}" value="{{$item->country->id}}">{{$item->country->name}}</option>
+                                                            <option data-code="{{$item->country->codeIso2}}" data-currency="{{$item->country->currency}}" value="{{$item->country->id}}">{{$item->country->name}}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -124,19 +124,19 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="wallet">Choose Wallet</label>
-                                    <div class="form-control-wrap ">
-                                        <div class="form-control-select">
-                                            <select required name="wallet" class="form-control" id="wallet">
-                                                <option >Choose wallet</option>
-                                                @foreach($wallets as $item)
-                                                    <option value="{{$item}}">{{$item}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
+                                {{--              <div class="form-group">
+                                                  <label class="form-label" for="wallet">Choose Wallet</label>
+                                                  <div class="form-control-wrap ">
+                                                      <div class="form-control-select">
+                                                          <select required name="wallet" class="form-control" id="wallet">
+                                                              <option >Choose wallet</option>
+                                                              @foreach($wallets as $item)
+                                                                  <option value="{{$item}}">{{$item}}</option>
+                                                              @endforeach
+                                                          </select>
+                                                      </div>
+                                                  </div>
+                                              </div>--}}
                                 <div class="form-group">
                                     <label class="form-label" for="operator">Choose bank</label>
                                     <div class="form-control-wrap ">
@@ -147,18 +147,51 @@
                                     </div>
                                 </div>
                                 <div class="row p-0">
-                                    <div class="col-md-6">
+                                    <div class="col-md-6" id="iban_code">
                                         <div class="form-control-wrap">
-                                            <label class="form-label" for="default-06">Iban</label>
+                                            <label class="form-label" for="iban">IBAN</label>
                                             <div class="input-group input-group-lg">
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text" id="inputGroup-sizing-lg"><em class="icon ni ni-inbox"></em></span>
                                                 </div>
-                                                <input required name="iban" type="text" id="iban" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm">
+                                                <input name="iban" type="text" id="iban" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6" id="routing_number_code">
+                                        <div class="form-control-wrap">
+                                            <label class="form-label" for="routing_number">Routing Number</label>
+                                            <div class="input-group input-group-lg">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="inputGroup-sizing-lg"><em class="icon ni ni-inbox"></em></span>
+                                                </div>
+                                                <input name="routing_number" type="text" id="routing_number" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6" id="ifsc_code">
+                                        <div class="form-control-wrap">
+                                            <label class="form-label" for="ifsc">IFSC code</label>
+                                            <div class="input-group input-group-lg">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="inputGroup-sizing-lg"><em class="icon ni ni-inbox"></em></span>
+                                                </div>
+                                                <input name="ifsc" type="text" id="ifsc" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
+                                        <div class="form-control-wrap">
+                                            <label class="form-label" for="swift_code">Swift Code</label>
+                                            <div class="input-group input-group-lg">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="inputGroup-sizing-lg"><em class="icon ni ni-file-code"></em></span>
+                                                </div>
+                                                <input required name="swift_code" type="text" id="swift_code" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
                                         <div class="form-control-wrap">
                                             <label class="form-label" for="default-06">Account number</label>
                                             <div class="input-group input-group-lg">
@@ -304,6 +337,9 @@
 @push('js')
     <script type="text/javascript">
         $(function () {
+            $('#iban_code').show();
+            $('#routing_number_code').hide();
+            $('#ifsc_code').hide();
             $('#sender').change(function () {
 
                 $.ajax({
@@ -326,19 +362,37 @@
                 });
             })
             $('#country').change(function () {
-
+                let arrayRouting = ['US', 'CA'];
+                if (arrayRouting.includes($("select[id=country] :selected").data('code'))){
+                    $('#iban_code').hide();
+                    $('#routing_number_code').show();
+                    $('#ifsc_code').hide();
+                }else if($("select[id=country] :selected").data('code')==='IN'){
+                    $('#iban_code').hide();
+                    $('#routing_number_code').hide();
+                    $('#ifsc_code').show();
+                }else{
+                    $('#iban_code').show();
+                    $('#routing_number_code').hide();
+                    $('#ifsc_code').hide();
+                }
                 $.ajax({
                     url: configs.routes.get_ajax_cities,
                     type: "GET",
                     dataType: "JSON",
                     data: {
-                        'country_id': $('#country').val()
+                        'country_id': $('#country').val(),
+                        'type':'bank',
                     },
                     success: function (data) {
                         $('#city').html('')
                         $('#city').append('<option>Choose city</option>')
                         $.each(data.data, function (index, item) {
                             $('#city').append('<option value="'+item["name"]+'">'+item["name"]+'</option>')
+                        })
+                        $('#operator').html('')
+                        $.each(data.gateways, function (index, item) {
+                            $('#operator').append('<option value="'+item["id"]+'">'+item["name"]+'</option>')
                         })
                     },
                     error: function (err) {
@@ -368,7 +422,7 @@
                 });
             })
             $('#amount').keyup(function () {
-                $('#amount_text').text($('#amount').val())
+                // $('#amount_text').text($('#amount').val().toLocaleString())
                 $.ajax({
                     url: configs.routes.get_ajax_rate,
                     type: "GET",
@@ -381,6 +435,7 @@
                         if (data.data['status']===0){
                             toastr.error('unauthorized for this country', '503!')
                         }
+                        $('#amount_text').text(data.data['value']['amount'])
                         $('#exchange_rate_text').text(data.data['value']['rate'])
                         $('#fees').text(data.data['value']['costs'])
                         $('#payable').text(data.data['value']['total_local'])

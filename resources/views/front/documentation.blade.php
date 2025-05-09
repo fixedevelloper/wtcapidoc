@@ -58,6 +58,15 @@
         <p>Bienvenue dans l’API d’envoi d’argent. Cette API permet aux développeurs d’intégrer facilement des fonctionnalités de transfert de fonds dans leurs applications web ou mobiles. Elle prend en charge l’envoi d’argent entre utilisateurs, les paiements vers des comptes bancaires ou des portefeuilles mobiles, et fournit un suivi en temps réel des transactions.
 
         </p><p> L’API est sécurisée, rapide et conçue pour répondre aux besoins des plateformes fintech, des services de paiement et des applications de commerce en ligne. Elle s’intègre facilement à votre infrastructure existante grâce à une architecture RESTful, une authentification basée sur les tokens, et une documentation claire.</p>
+   <h4>Code erreur pour un Ip non authorize</h4>
+    <pre>
+        {
+  "data": {
+    "ip": "127.0.0.1"
+  },
+  "message": "Access denied. Unauthorized IP address."
+}
+    </pre>
     </section>
 
     <section id="auth" class="mt-5">
@@ -502,6 +511,7 @@
 "iban":"CH9300762011623852957",
 "relation":"Brother",
 "accountNumber":"011623852957"
+"callback_url":"https://xxxx/webhook"
 }</pre>
         <button class="btn btn-outline-success mb-2" data-bs-toggle="collapse" data-bs-target="#beneficiaries_create_response">
             Voir réponse

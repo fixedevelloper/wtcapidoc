@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Helpers\api\Helpers;
 use App\Helpers\Helper;
+use App\Jobs\SendTransactionWebhook;
 use App\Models\Customer;
 use App\Models\Transaction;
 use App\Services\AgensicService;
@@ -46,9 +47,11 @@ class ValidateTransfert extends Command
      */
     public function handle()
     {
-        $this->validateWace();
-        $this->validateAgensicPay();
-        $this->validatePaydunnya();
+        $transaction= Transaction::query()->firstWhere(['status'=>Helper::STATUSSUCCESS,'is_notifiable'=>true]);
+        SendTransactionWebhook::dispatch($transaction);
+       // $this->validateWace();
+      //  $this->validateAgensicPay();
+      //  $this->validatePaydunnya();
     }
     function validateWace(){
         $transactions=Transaction::query()->where('status','=',Helper::STATUSPENDING)
@@ -71,7 +74,10 @@ class ValidateTransfert extends Command
                     $transaction->status=Helper::STATUSPROCESSING;
                 }
                 $transaction->save();
-
+                //envoyer un callback au client
+                if ($transaction->is_notifiable){
+                    SendTransactionWebhook::dispatch($transaction);
+                }
             }
         }
         logger("####################END VALIDATION WACE################################");
@@ -96,6 +102,9 @@ class ValidateTransfert extends Command
                 $customer->save();
             }
             $transaction->save();
+            if ($transaction->is_notifiable){
+                SendTransactionWebhook::dispatch($transaction);
+            }
         }
     }
     function validatePaydunnya(){
@@ -115,6 +124,10 @@ class ValidateTransfert extends Command
                 $customer->save();
             }
             $transaction->save();
+            if ($transaction->is_notifiable){
+                SendTransactionWebhook::dispatch($transaction);
+            }
+
         }
     }
 }

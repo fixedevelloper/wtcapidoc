@@ -379,6 +379,9 @@ class StaticSecureController extends Controller
             $transaction->accountNumber=$request->get('accountNumber');
             $transaction->wallet=$request->get('wallet');
             $transaction->iban=$request->get('iban');
+            $transaction->rounting_number=$request->get('routing_number');
+            $transaction->ifsc_code=$request->get('ifsc');
+            $transaction->branch_number=$request->get('branch_number');
             $transaction->beneficiary_id=$request->get('beneficiary_id');
             $transaction->gateway_id=$request->get('gateway_id');
             $transaction->beneficiary_id=$request->get('numBeneficiary');

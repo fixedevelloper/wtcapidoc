@@ -28,7 +28,7 @@ Route::domain('doc.agensic.com')->group(function () {
 });
 
 
-Route::domain('sandbox.agensic.com')->group(function () {
+//Route::domain('sandbox.agensic.com')->group(function () {
     Route::match(["POST", "GET"], '/logout', [SecurityController::class, 'logout'])->name('sandbox.logout');
     Route::match(["POST", "GET"], '/', [SecurityController::class, 'sandboxLogin'])->name('sandbox.login');
     Route::match(["POST", "GET"], '/register', [SecurityController::class, 'register'])->name('sandbox.register');
@@ -48,7 +48,7 @@ Route::domain('sandbox.agensic.com')->group(function () {
         Route::match(["POST", "GET"], '/get_ajax_operators', [StaticController::class, 'getOperatorsAjax'])->name('sandbox.get_ajax_operators');
         Route::match(["POST", "GET"], '/get_ajax_rate', [StaticController::class, 'getRateAjax'])->name('sandbox.get_ajax_rate');
     });
-});
+//});
 Route::domain('secure.agensic.com')->group(function () {
     Route::match(["POST", "GET"], '/', [SecuritySecureController::class, 'secureLogin'])->name('secure.login');
     Route::match(["POST", "GET"], '/register', [SecuritySecureController::class, 'secureRegister'])->name('secure.register');

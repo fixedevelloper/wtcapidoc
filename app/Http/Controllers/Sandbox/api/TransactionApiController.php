@@ -92,6 +92,7 @@ class TransactionApiController extends Controller
             'origin_fond' => 'required',
             'relation' => 'required',
             'accountNumber' => 'required',
+            'callback_url' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -150,6 +151,8 @@ class TransactionApiController extends Controller
         $transaction->gateway_id=$gateway->id;
         $transaction->city=$city->id;
         $transaction->amount=$request->get('amount');
+        $transaction->callback_url=$request->get('callback_url');
+        $transaction->is_notifiable=true;
         $transaction->code=Helper::generatenumber();
         $transaction->number_transaction='wtc_'.Helper::generateTransactionNumber(20);
         $transaction->amount_total=$amount_total;
@@ -183,6 +186,7 @@ class TransactionApiController extends Controller
             'origin_fond' => 'required',
             'relation' => 'required',
             'accountNumber' => 'required',
+            'callback_url' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -241,6 +245,8 @@ class TransactionApiController extends Controller
         $transaction->gateway_id=$gateway->id;
         $transaction->city=$city->id;
         $transaction->amount=$request->get('amount');
+        $transaction->callback_url=$request->get('callback_url');
+        $transaction->is_notifiable=true;
         $transaction->code=Helper::generatenumber();
         $transaction->number_transaction='wtc_'.Helper::generateTransactionNumber(20);
         $transaction->amount_total=$amount_total;
