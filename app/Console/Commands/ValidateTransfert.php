@@ -47,11 +47,9 @@ class ValidateTransfert extends Command
      */
     public function handle()
     {
-        $transaction= Transaction::query()->firstWhere(['status'=>Helper::STATUSSUCCESS,'is_notifiable'=>true]);
-        SendTransactionWebhook::dispatch($transaction);
-       // $this->validateWace();
-      //  $this->validateAgensicPay();
-      //  $this->validatePaydunnya();
+        $this->validateWace();
+        $this->validateAgensicPay();
+       $this->validatePaydunnya();
     }
     function validateWace(){
         $transactions=Transaction::query()->where('status','=',Helper::STATUSPENDING)
