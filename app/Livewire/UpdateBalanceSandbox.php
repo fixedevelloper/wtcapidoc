@@ -23,13 +23,17 @@ class UpdateBalanceSandbox extends Component
     {
 
         $custome=Customer::query()->find($this->customer->id);
-        $custome->balance+=$this->balance;
+        $custome->balance_sandbox+=$this->balance;
 
         $this->balance_old+=$this->balance;
         $custome->save();
         $this->reset('balance');
-        session()->flash('message', 'Post successfully updated.');
-        notify()->success('Data has been saved successfully!');
+
+        $this->dispatch('alert', [
+            'type' => 'success',
+            'message' => 'Date successfully updated!'
+        ]);
+
         $this->showModal = false;
     }
     public function render()

@@ -111,7 +111,7 @@ class StaticController extends Controller
         if ($request->method() == 'POST') {
             $validator = Validator::make($request->all(), [
                 'countryCode' => 'required',
-                'wallet' => 'required',
+                //'wallet' => 'required',
                 'gateway_id' => 'required',
                 'numSender' => 'required',
                 'numBeneficiary' => 'required',

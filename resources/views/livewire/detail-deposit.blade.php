@@ -50,8 +50,9 @@
                     </div>
 
                 </div>
+               {{$deposit->status}}
                 <div class="modal-footer">
-                    @if($deposit->status!=\App\Helpers\Helper::STATUSSUCCESS || $deposit->status!=\App\Helpers\Helper::STATUSREJECTED|| $deposit->status!=\App\Helpers\Helper::STATUSFAILD)
+                    @if($deposit->status == \App\Helpers\Helper::STATUSPENDING)
                     <button type="button" class="btn btn-success" wire:click="validateDeposit" data-bs-dismiss="modal">Validate</button>
 
                     <button type="button" class="btn btn-danger" wire:click="cancelDeposit" data-bs-dismiss="modal">Cancel</button>

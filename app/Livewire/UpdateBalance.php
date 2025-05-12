@@ -39,9 +39,8 @@ class UpdateBalance extends Component
         $this->reset('balance');
         $this->dispatch('alert', [
             'type' => 'success',
-            'message' => 'Données enregistrées avec succès !'
+            'message' => 'Date successfully updated!'
         ]);
-
         $this->showModal = false;
     }
     public function render()

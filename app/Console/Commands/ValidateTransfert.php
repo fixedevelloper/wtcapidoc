@@ -48,8 +48,6 @@ class ValidateTransfert extends Command
     public function handle()
     {
         $this->validateTransaction();
-/*        $this->validateAgensicPay();
-       $this->validatePaydunnya();*/
     }
     function validateTransaction(){
         $transactions=Transaction::query()->where('status','=',Helper::STATUSPENDING)
@@ -62,7 +60,8 @@ class ValidateTransfert extends Command
             if (isset($response->status) && $response->status == 2000) {
                 if ($response->transaction->Status=='PAID'){
                     $transaction->status=Helper::STATUSSUCCESS;
-                }elseif ($response->transaction->Status=='CANCELED'){
+                }
+                elseif ($response->transaction->Status=='CANCELED'){
                     $transaction->status=Helper::STATUSFAILD;
                     $customer=Customer::query()->find($transaction->customer_id);
                     Helper::create_journal_transfer_cancel($transaction->amount+$transaction->rate,$customer->id,$customer->balance);
