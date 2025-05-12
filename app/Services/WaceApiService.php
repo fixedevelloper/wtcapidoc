@@ -244,7 +244,7 @@ class WaceApiService
         $endpoint = 'api/v1/sender/create';
         $sender = $transaction->sender;
         $sender = [
-            'type' => 'P',
+            'type' => 'P2P',
             'dob' => $sender->date_birth,
             'expire_date' => $sender->expired_document,
             "firstName" => $sender->first_name,
@@ -279,7 +279,7 @@ class WaceApiService
         $endpoint = 'api/v1/beneficiary/create';
         $beneficiary_ = $transaction->beneficiary;
         $beneficiary = [
-            'type' => 'P',
+            'type' => 'P2P',
             'dob' => $beneficiary_->date_birth,
             'expire_date' =>$beneficiary_->expired_document,
             'dateOfBirth' => $beneficiary_->date_birth,

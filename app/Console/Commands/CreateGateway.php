@@ -48,7 +48,7 @@ class CreateGateway extends Command
 
     function bankGateway()
     {
-        $countries = Country::all();
+        $countries = Country::query()->latest()->get();
         foreach ($countries as $country) {
             $resp = $this->waceService->getPayercodeWacePay($country->codeIso2, $country->currency);
             if ($resp->status==2000){
@@ -81,9 +81,9 @@ class CreateGateway extends Command
     {
         $countries = [
             ['code' => 'CM',
-                'method' => 'AGENSICPAY',
+                'method' => 'FLUTTERWAVE',
                 'carries' => [
-                    'MTN', 'Orange'
+                    'MTN', 'ORANGEMONEY'
                 ]
             ],
            ['code' => 'CG',
@@ -96,6 +96,12 @@ class CreateGateway extends Command
                 'method' => 'AGENSICPAY',
                 'carries' => [
                     'Orange',
+                ]
+            ],
+            ['code' => 'SN',
+                'method' => 'PAYDUNYA',
+                'carries' => [
+                    'ORANGE MONEY SENEGAL', 'EXPRESSO SN', 'FREE MONEY SENEGAL', 'WAVE SENEGAL'
                 ]
             ],
             ['code' => 'SN',
