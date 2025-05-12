@@ -51,7 +51,7 @@ class ValidateTransfert extends Command
     }
     function validateTransaction(){
         $transactions=Transaction::query()->where('status','=',Helper::STATUSPENDING)
-            ->orWhere(['status'=>Helper::STATUSPROCESSING])->where(['type'=>Helper::TYPESECURE,'wallet'=>'WACEPAY'])->get();
+            ->orWhere(['status'=>Helper::STATUSPROCESSING])->where(['type'=>Helper::TYPESECURE])->get();
         logger("####################BEGIN VALIDATION WACE################################");
         foreach ($transactions as $transaction){
             if ($transaction->gatewayItem->method==='WACEPAY'){
