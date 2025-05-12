@@ -68,6 +68,12 @@ class ValidateTransfert extends Command
                     Helper::create_journal_transfer_cancel($transaction->amount+$transaction->rate,$customer->id,$customer->balance);
                     $customer->balance+=$transaction->amount+$transaction->rate;
                     $customer->save();
+                }elseif ($response->transaction->Status=='LOCKED'){
+                    $transaction->status=Helper::STATUSHOLD;
+                    $customer=Customer::query()->find($transaction->customer_id);
+                    Helper::create_journal_transfer_cancel($transaction->amount+$transaction->rate,$customer->id,$customer->balance);
+                    $customer->balance+=$transaction->amount+$transaction->rate;
+                    $customer->save();
                 }else{
                     $transaction->status=Helper::STATUSPROCESSING;
                 }
