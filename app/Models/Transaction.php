@@ -47,7 +47,7 @@ class Transaction extends Model
             ];
         }else if($status == Helper::STATUSHOLD) {
             $data = [
-                'class'     => "badge rounded-pill bg-warning",
+                'class'     => "badge rounded-pill bg-danger",
                 'value'     => "Hold",
             ];
         }else if($status == Helper::STATUSREJECTED) {
@@ -57,7 +57,7 @@ class Transaction extends Model
             ];
         }else if($status == Helper::STATUSWAITING) {
             $data = [
-                'class'     => "badge rounded-pill bg-danger",
+                'class'     => "badge rounded-pill bg-warning",
                 'value'     => "Waiting",
             ];
         }else if($status == Helper::STATUSFAILD) {
