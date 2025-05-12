@@ -78,7 +78,7 @@ Route::domain('secure.agensic.com')->group(function () {
     });
 });
 
-//Route::domain('manage.agensic.com')->group(function () {
+Route::domain('manage.agensic.com')->group(function () {
     Route::match(["POST", "GET"], '/', [SecurityAdminController::class, 'adminLogin'])->name('admin.login');
     Route::match(["POST", "GET"], '/register', [SecurityAdminController::class, 'register'])->name('admin.register');
 Route::match(["POST", "GET"], '/logout', [SecurityAdminController::class, 'logout'])->name('admin.logout');
@@ -107,5 +107,5 @@ Route::match(["POST", "GET"], '/logout', [SecurityAdminController::class, 'logou
         Route::match(["POST", "GET"], '/senders/detail/{code}', [BasicController::class, 'sender_detail'])->name('admin.sender_detail');
         Route::match(["POST", "GET"], '/beneficiaries/detail/{code}', [BasicController::class, 'beneficiary_detail'])->name('admin.beneficiary_detail');
    Route::get('/countries/gateway/{id}',[SettingController::class,'paymentGateway'])->name('admin.countries.gateway');
-   // });
+    });
 });
