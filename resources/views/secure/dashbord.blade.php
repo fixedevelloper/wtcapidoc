@@ -138,10 +138,10 @@
                             <div class="nk-tb-col tb-col-sm">
                                 <div class="user-card">
                                     <div class="user-avatar sm bg-gray-dim">
-                                        <span>{{ substr($item['beneficiary']['first_name'],0,1) }}{{ substr($item['sender']['last_name'],0,1) }}</span>
+                                        <span>{{ substr($item['beneficiary']['first_name'],0,1) }}{{ substr($item['beneficiary']['last_name'],0,1) }}</span>
                                     </div>
                                     <div class="user-name">
-                                        <span class="tb-lead">{{$item['beneficiary']['first_name']}} {{$item['sender']['last_name']}}</span>
+                                        <span class="tb-lead">{{$item['beneficiary']['first_name']}} {{$item['beneficiary']['last_name']}}</span>
                                     </div>
                                 </div>
                             </div>
