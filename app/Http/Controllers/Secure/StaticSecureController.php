@@ -364,10 +364,10 @@ class StaticSecureController extends Controller
             $startOfMonth = Carbon::now()->startOfMonth();
             $endOfMonth = Carbon::now()->endOfMonth();
             $sender=Sender::query()->find($request->get('numSender'));
-            $sumCurrentMonthTransactions = Transaction::query()->where('type',Helper::TYPESECURE)->where('sender_id',$sender->id)
+            $sumCurrentMonthTransactions = Transaction::query()->where('type',Helper::TYPESECURE)
+                ->where('sender_id',$sender->id)->where('status',Helper::STATUSSUCCESS)
                 ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
                 ->sum('amount');
-            logger($sumCurrentMonthTransactions+$amount);
             if ($sumCurrentMonthTransactions+$amount>$sender->max_transaction){
                 notify()->error('Limit transaction','Transaction status');
                 return redirect()->back()->withInput();
