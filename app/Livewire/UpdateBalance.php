@@ -37,6 +37,10 @@ class UpdateBalance extends Component
         $this->balance_old+=$this->balance;
         DB::commit();
         $this->reset('balance');
+        $this->dispatch('alert', [
+            'type' => 'success',
+            'message' => 'Données enregistrées avec succès !'
+        ]);
 
         $this->showModal = false;
     }

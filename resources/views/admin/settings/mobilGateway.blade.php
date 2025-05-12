@@ -19,3 +19,12 @@
         </div><!-- .nk-block -->
     </div>
 @endsection
+@push('js')
+    <script>
+        Livewire.on('alert', data => {
+            console.log(data[0])
+            toastr.success(data[0].message, '200!')
+            //alert(data[0].message); // Ou utilise Toastify, SweetAlert, etc.
+        });
+    </script>
+@endpush

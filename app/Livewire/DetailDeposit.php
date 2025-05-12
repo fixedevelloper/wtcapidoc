@@ -35,6 +35,11 @@ class DetailDeposit extends Component
         Helper::create_journal_deposit($this->deposit->amount,$custome->id,$balance_old);
         $this->deposit->save();
         DB::commit();
+        $this->dispatch('alert', [
+            'type' => 'success',
+            'message' => 'Données enregistrées avec succès !'
+        ]);
+
         $this->redirect('/deposits');
     }
     public function cancelDeposit()
@@ -47,6 +52,11 @@ class DetailDeposit extends Component
         Helper::create_journal_deposit_cancel($this->deposit->amount,$custome->id,$balance_old);
         $this->deposit->save();
         DB::commit();
+        $this->dispatch('alert', [
+            'type' => 'success',
+            'message' => 'Données enregistrées avec succès !'
+        ]);
+
         $this->redirect('/deposits');
     }
 

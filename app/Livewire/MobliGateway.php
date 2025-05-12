@@ -37,18 +37,31 @@ class MobliGateway extends Component
         logger($this->activate);
         $this->country->active=$this->activate==1?1:0;
         $this->country->update();
+        $this->dispatch('alert', [
+            'type' => 'success',
+            'message' => 'Données enregistrées avec succès !'
+        ]);
+
     }
     public function saveGatewaymobil()
     {
         $this->country->code_gateway_mobil=$this->gatewaymobil;
         $this->country->update();
-        notify('Just a heads-up.', 'info');
+        $this->dispatch('alert', [
+            'type' => 'success',
+            'message' => 'Données enregistrées avec succès !'
+        ]);
+
     }
     public function saveGatewaybank()
     {
         $this->country->code_gateway_bank=$this->gatewaybank;
         $this->country->update();
-        notify('Just a heads-up.', 'info');
+        $this->dispatch('alert', [
+            'type' => 'success',
+            'message' => 'Données enregistrées avec succès !'
+        ]);
+
     }
     public function render()
     {

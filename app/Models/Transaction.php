@@ -17,7 +17,7 @@ class Transaction extends Model
     }
     public function beneficiary()
     {
-        return $this->belongsTo(Beneficiary::class,'customer_id','id');
+        return $this->belongsTo(Beneficiary::class,'beneficiary_id','id');
     }
     public function gatewayItem()
     {
