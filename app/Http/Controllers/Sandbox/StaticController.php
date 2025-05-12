@@ -27,17 +27,27 @@ class StaticController extends Controller
     public function dashboard(Request $request)
     {
         $customer=Customer::query()->firstWhere(['user_id'=>\auth()->user()->id]);
-        $last_transactions=Transaction::query()->where(['type'=>Helper::TYPESANDBOX])->where('customer_id',$customer->id)->latest()->limit(5)->get();
+        $last_transactions=Transaction::query()->where(['type'=>Helper::TYPESANDBOX])
+            ->where('status',Helper::STATUSSUCCESS)
+            ->where('customer_id',$customer->id)->latest()->limit(5)->get();
         $startOfWeekend = Carbon::now()->startOfWeek()->addDay(5); // Samedi
         $endOfWeekend = Carbon::now()->startOfWeek()->addDay(6)->endOfDay();
-        $sumWeekendTransactions = Transaction::query()->where('customer_id',$customer->id)->where('type',Helper::TYPESANDBOX)->whereBetween('created_at', [$startOfWeekend, $endOfWeekend])
+        $sumWeekendTransactions = Transaction::query()->where('customer_id',$customer->id)
+            ->where('status',Helper::STATUSSUCCESS)
+            ->where('type',Helper::TYPESANDBOX)->whereBetween('created_at', [$startOfWeekend, $endOfWeekend])
             ->sum('amount');
-        $sumTotal=Transaction::query()->where('customer_id',$customer->id)->where('type',Helper::TYPESANDBOX)->sum('amount');
+        $sumTotal=Transaction::query()->where('customer_id',$customer->id)
+            ->where('status',Helper::STATUSSUCCESS)
+            ->where('type',Helper::TYPESANDBOX)->sum('amount');
         $startOfMonth = Carbon::now()->startOfMonth();
         $endOfMonth = Carbon::now()->endOfMonth();
-        $sumCurrentMonthTransactions = Transaction::query()->where('customer_id',$customer->id)->where('type',Helper::TYPESANDBOX)->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+        $sumCurrentMonthTransactions = Transaction::query()->where('customer_id',$customer->id)
+            ->where('status',Helper::STATUSSUCCESS)
+            ->where('type',Helper::TYPESANDBOX)->whereBetween('created_at', [$startOfMonth, $endOfMonth])
             ->sum('amount');
-        $sumDepositTotal=DepositRequest::query()->where('customer_id',$customer->id)->sum('amount');
+        $sumDepositTotal=DepositRequest::query()
+            ->where('status',Helper::STATUSSUCCESS)
+            ->where('customer_id',$customer->id)->sum('amount');
         return view('sandbox.dashbord', [
             'customer'=>$customer,
             'last_transactions'=>$last_transactions,

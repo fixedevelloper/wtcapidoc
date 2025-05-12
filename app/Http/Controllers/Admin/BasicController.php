@@ -30,24 +30,25 @@ class BasicController extends Controller
         $last_deposits=DepositRequest::query()->where([])->latest()->limit(5)->get();
         $startOfWeekend = Carbon::now()->startOfWeek()->addDay(5); // Samedi
         $endOfWeekend = Carbon::now()->startOfWeek()->addDay(6)->endOfDay();
-        $sumWeekendTransactions = Transaction::query()->where('type',Helper::TYPESECURE)->whereBetween('created_at', [$startOfWeekend, $endOfWeekend])
+        $sumWeekendTransactions = Transaction::query()->where('type',Helper::TYPESECURE) ->where('status',Helper::STATUSSUCCESS)->whereBetween('created_at', [$startOfWeekend, $endOfWeekend])
             ->sum('amount');
         $startOfMonth = Carbon::now()->startOfMonth();
         $endOfMonth = Carbon::now()->endOfMonth();
-        $sumCurrentMonthTransactions = Transaction::query()->where('type',Helper::TYPESECURE)->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+        $sumCurrentMonthTransactions = Transaction::query() ->where('status',Helper::STATUSSUCCESS)->where('type',Helper::TYPESECURE)->whereBetween('created_at', [$startOfMonth, $endOfMonth])
             ->sum('amount');
-        $sumTotal=Transaction::query()->where('type',Helper::TYPESECURE)->sum('amount');
+        $sumTotal=Transaction::query() ->where('status',Helper::STATUSSUCCESS)->where('type',Helper::TYPESECURE)->sum('amount');
 
         $sumDepositTotal=DepositRequest::query()->sum('amount');
-        $sumCurrentMonthDeposits = DepositRequest::whereBetween('created_at', [$startOfMonth, $endOfMonth])
+        $sumCurrentMonthDeposits = DepositRequest::whereBetween('created_at', [$startOfMonth, $endOfMonth]) ->where('status',Helper::STATUSSUCCESS)
             ->sum('amount');
-        $sumWeekendDeposits = DepositRequest::query()->whereBetween('created_at', [$startOfWeekend, $endOfWeekend])
+        $sumWeekendDeposits = DepositRequest::query() ->where('status',Helper::STATUSSUCCESS)->whereBetween('created_at', [$startOfWeekend, $endOfWeekend])
             ->sum('amount');
 
         $sumWithdrawTotal=WithdrawRequest::query()->sum('amount');
         $sumCurrentMonthWithdraws = WithdrawRequest::whereBetween('created_at', [$startOfMonth, $endOfMonth])
+            ->where('status',Helper::STATUSSUCCESS)
             ->sum('amount');
-        $sumWeekendWithdraws = WithdrawRequest::query()->whereBetween('created_at', [$startOfWeekend, $endOfWeekend])
+        $sumWeekendWithdraws = WithdrawRequest::query() ->where('status',Helper::STATUSSUCCESS)->whereBetween('created_at', [$startOfWeekend, $endOfWeekend])
             ->sum('amount');
         return view('admin.dashbord', [
             'transactions'=>$last_transactions,
