@@ -231,7 +231,8 @@ class StaticSecureController extends Controller
             $sumCurrentMonthTransactions = Transaction::query()->where('type',Helper::TYPESECURE)->where('sender_id',$sender->id)
                 ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
                 ->sum('amount');
-            if ($sumCurrentMonthTransactions+$amount>=$sender->max_transaction){
+
+            if ($sumCurrentMonthTransactions+$amount>$sender->max_transaction){
                 notify()->error('Limit transaction','Transaction status');
                 return redirect()->back()->withInput();
             }
@@ -366,7 +367,8 @@ class StaticSecureController extends Controller
             $sumCurrentMonthTransactions = Transaction::query()->where('type',Helper::TYPESECURE)->where('sender_id',$sender->id)
                 ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
                 ->sum('amount');
-            if ($sumCurrentMonthTransactions+$amount>=$sender->max_transaction){
+            logger($sumCurrentMonthTransactions+$amount);
+            if ($sumCurrentMonthTransactions+$amount>$sender->max_transaction){
                 notify()->error('Limit transaction','Transaction status');
                 return redirect()->back()->withInput();
             }
