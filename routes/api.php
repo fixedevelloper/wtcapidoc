@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Http\Controllers\Admin\WhatsAppController;
 use App\Http\Controllers\Sandbox\api\AuthApiController;
 use App\Http\Controllers\Sandbox\api\CustomerApiController;
 use App\Http\Controllers\Sandbox\api\TransactionApiController;
@@ -35,4 +36,7 @@ Route::middleware('customer.jwt')->group(function () {
     });
 });
 
+Route::domain('chatbot.agensic.com')->group(function () {
+    Route::match(["POST", "GET"], '/webhook', [WhatsAppController::class, 'webhook']);
+});
 
