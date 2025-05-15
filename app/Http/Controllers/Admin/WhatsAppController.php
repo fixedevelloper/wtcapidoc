@@ -33,9 +33,9 @@ class WhatsAppController extends Controller
 
     private function sendMessage($to, $message)
     {
-        $sid = config('services.twilio.sid');
-        $token = config('services.twilio.token');
-        $from = config('services.twilio.whatsapp');
+        $sid = config('app.TWILIO_ACCOUNT_SID');
+        $token = config('app.TWILIO_AUTH_TOKEN');
+        $from = config('app.TWILIO_WHATSAPP_NUMBER');
 
         $client = new Client($sid, $token);
         $client->messages->create($to, [
