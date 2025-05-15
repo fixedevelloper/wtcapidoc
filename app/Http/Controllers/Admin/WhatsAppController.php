@@ -11,11 +11,11 @@ class WhatsAppController extends Controller
 {
     public function webhook(Request $request)
     {
-        logger($request->all());
+        logger(config('app.TWILIO_WHATSAPP_NUMBER'));
         $from = $request->input('From');
         $body = strtolower(trim($request->input('Body')));
 
-        $response = "Bienvenue sur MoneyBot 💸\n";
+        $response = "Bienvenue sur WTC agensic 💸\n";
         if (in_array($body, ['menu', 'bonjour', 'salut'])) {
             $response .= "1️⃣ Voir solde\n2️⃣ Envoyer argent\n3️⃣ Historique";
         } elseif ($body === '1') {
