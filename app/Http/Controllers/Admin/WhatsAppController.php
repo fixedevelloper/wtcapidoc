@@ -11,6 +11,7 @@ class WhatsAppController extends Controller
 {
     public function webhook(Request $request)
     {
+        logger($request->all());
         $from = $request->input('From');
         $body = strtolower(trim($request->input('Body')));
 
