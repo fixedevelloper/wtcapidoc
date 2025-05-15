@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\BasicController;
 use App\Http\Controllers\Admin\SecurityAdminController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\TransactionController;
+use App\Http\Controllers\Admin\WhatsAppController;
 use App\Http\Controllers\DefaultController;
 use App\Http\Controllers\Sandbox\SecurityController;
 use App\Http\Controllers\Sandbox\StaticController;
@@ -108,4 +109,7 @@ Route::match(["POST", "GET"], '/logout', [SecurityAdminController::class, 'logou
         Route::match(["POST", "GET"], '/beneficiaries/detail/{code}', [BasicController::class, 'beneficiary_detail'])->name('admin.beneficiary_detail');
    Route::get('/countries/gateway/{id}',[SettingController::class,'paymentGateway'])->name('admin.countries.gateway');
     });
+});
+Route::domain('chatbot.agensic.com')->group(function () {
+    Route::match(["POST", "GET"], '/webhook', [WhatsAppController::class, 'webhook'])->name('admin.webhook');
 });
