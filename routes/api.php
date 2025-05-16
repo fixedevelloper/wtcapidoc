@@ -36,7 +36,7 @@ Route::middleware('customer.jwt')->group(function () {
     });
 });
 
-//Route::domain('chatbot.agensic.com')->group(function () {
+Route::domain('chatbot.agensic.com')->group(function () {
     Route::match(["POST", "GET"], '/webhook', [WhatsAppController::class, 'webhook']);
-//});
+});
 
