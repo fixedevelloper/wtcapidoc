@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Http\Controllers\Sandbox\api;
+namespace App\Http\Controllers\Secure\api;
 
 
 use App\Helpers\api\Helpers;
@@ -14,14 +14,28 @@ use App\Models\Gateway;
 use App\Models\Rate;
 use App\Models\Sender;
 use App\Models\Transaction;
+use App\Services\PaymentMobilService;
+use App\Services\WaceApiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-class TransactionApiController extends Controller
+class TransactionApisecureController extends Controller
 {
+    protected $waceService;
+    protected $paymentMobileService;
 
+    /**
+     * StaticSecureController constructor.
+     * @param WaceApiService $waceService
+     * @param PaymentMobilService $paymentMobileService
+     */
+    public function __construct(WaceApiService $waceService,PaymentMobilService $paymentMobileService)
+    {
+        $this->waceService = $waceService;
+        $this->paymentMobileService=$paymentMobileService;
+    }
     public function getTransaction(Request $request,$number_transaction)
     {
         $customer = $request->customer;
@@ -126,12 +140,12 @@ class TransactionApiController extends Controller
             return Helpers::error('city not found');
         }
         $rate=$this->calculRate($country->id,$customer->id,$request->amount);
-       if ($rate['status']==0){
-           return Helpers::unauthorized('unauthorized for this country');
-       }
+        if ($rate['status']==0){
+            return Helpers::unauthorized('unauthorized for this country');
+        }
         $amount_total=$rate['total'];
         if ($customer->balance_sandbox<$rate['total_local']){
-          return Helpers::error('Balance Insufficient');
+            return Helpers::error('Balance Insufficient');
         }
         $startOfMonth = Carbon::now()->startOfMonth();
         $endOfMonth = Carbon::now()->endOfMonth();
@@ -161,18 +175,17 @@ class TransactionApiController extends Controller
         $transaction->amount_total=$amount_total;
         $transaction->rate=$rate['costs'];
         $transaction->customer_id=$customer->id;
-        $transaction->type=Helper::TYPESANDBOX;
+        $transaction->type=Helper::TYPESECURE;
         $transaction->method=Helper::METHODBANK;
-        $transaction->status=Helper::STATUSSUCCESS;
-       $transaction->save();
+        $transaction->status=Helper::STATUSPENDING;
+        $transaction->save();
         $customer->balance_sandbox-=$rate['total_local'];
-       $customer->save();
+        $customer->save();
         DB::commit();
         return Helpers::success([
             'transaction_id'=>$transaction->code,
             'fees'=>$transaction->rate,
-            'amount'=>$transaction->amount_total,
-            'status'=>$transaction->stringStatus->value
+            'amount'=>$transaction->amount_total
         ], 'transaction created successful');
     }
     public function postMobilTransaction(Request $request)
@@ -233,7 +246,7 @@ class TransactionApiController extends Controller
         }
         $startOfMonth = Carbon::now()->startOfMonth();
         $endOfMonth = Carbon::now()->endOfMonth();
-        $sumCurrentMonthTransactions = Transaction::query()->where('type',Helper::TYPESANDBOX)->where('sender_id',$sender->id)
+        $sumCurrentMonthTransactions = Transaction::query()->where('type',Helper::TYPESECURE)->where('sender_id',$sender->id)
             ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
             ->sum('amount');
         if ($sumCurrentMonthTransactions+$request->amount>=$sender->max_transaction){
@@ -266,6 +279,34 @@ class TransactionApiController extends Controller
         $customer->balance_sandbox-=$rate['total_local'];
         $customer->save();
         DB::commit();
+        try {
+            $response=$this->paymentMobileService->makePayment($transaction);
+            if (!$response['status']){
+                $transaction->status=Helper::STATUSFAILD;
+                Helper::create_journal_transfer_cancel($rate['total_local'],$customer->id,$customer->balance);
+                $customer->balance+=$rate['total_local'];
+                $customer->save();
+                $transaction->save();
+                return Helpers::error('transaction failed! contact support',[
+                    'transaction_id'=>$transaction->code,
+                    'fees'=>$transaction->rate,
+                    'amount'=>$transaction->amount_total,
+                    'status'=>$transaction->stringStatus->value
+                ]);
+            }
+        }catch (\Exception $exception){
+            $transaction->status=Helper::STATUSFAILD;
+            Helper::create_journal_transfer_cancel($rate['total_local'],$customer->id,$customer->balance);
+            $customer->balance+=$rate['total_local'];
+            $customer->save();
+            $transaction->save();
+            return Helpers::error('transaction failed! ',[
+                'transaction_id'=>$transaction->code,
+                'fees'=>$transaction->rate,
+                'amount'=>$transaction->amount_total,
+                'status'=>$transaction->stringStatus->value
+            ]);
+        }
         return Helpers::success([
             'transaction_id'=>$transaction->code,
             'fees'=>$transaction->rate,
@@ -296,7 +337,7 @@ class TransactionApiController extends Controller
     {
         $data = $request->all();
         logger($data);
-        $paymentStatus = $data['status'] ?? null;
+        //$paymentStatus = $data['status'] ?? null;
 
         return response()->json(['data' => [$data],'status' => true]);
     }

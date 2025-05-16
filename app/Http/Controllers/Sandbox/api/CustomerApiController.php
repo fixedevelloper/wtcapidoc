@@ -165,7 +165,7 @@ class CustomerApiController extends Controller
 
             ];
         }
-        $message = 'senders get successful';
+        $message = 'countries get successful';
         return Helpers::success($countries_, $message);
     }
     public function getNetworks(Request $request)

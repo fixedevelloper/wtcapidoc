@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ChatbotSession;
 use App\Models\Country;
 use App\Models\Customer;
+use App\Models\Gateway;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,7 +27,7 @@ class WhatsAppController extends Controller
             case 'start':
                 $session->step = 'choose_service';
                 $session->save();
-                return $this->reply("Bienvenue ! Que voulez-vous faire ?\n1. Consulter le solde\n2. Transférer de l'argent\n3. Recharge du compte",$from);
+                return $this->reply("Bienvenue sur WTC agensic ! 💸\nQue voulez-vous faire ?\n1. Consulter le solde\n2. Transférer de l'argent\n3. Recharge du compte",$from);
 
             case 'choose_service':
                 if ($body == '1') {
@@ -50,24 +51,24 @@ class WhatsAppController extends Controller
 
             case 'choose_sender':
                 if (!in_array(strtolower($body), ['orange', 'mtn'])) {
-                    return $this->reply("Choix invalide. Tapez Orange ou MTN.");
+                    return $this->reply("Choix invalide. Tapez Orange ou MTN.",$from);
                 }
                 $session->sender = ucfirst(strtolower($body));
                 if ($session->service == 'balance') {
                     $session->step = 'completed';
                     $session->save();
-                    return $this->reply("Le solde de votre compte {$session->sender} est de 23 000 FCFA.");
+                    return $this->reply("Le solde de votre compte {$session->sender} est de 23 000 FCFA.",$from);
                 } else {
                     $session->step = 'awaiting_beneficiary';
                     $session->save();
-                    return $this->reply("Entrez le numéro du bénéficiaire :");
+                    return $this->reply("Entrez le numéro du bénéficiaire :",$from);
                 }
 
             case 'awaiting_beneficiary':
                 $session->beneficiary = $body;
                 $session->step = 'awaiting_amount';
                 $session->save();
-                return $this->reply("Quel montant souhaitez-vous envoyer à {$body} ?");
+                return $this->reply("Quel montant souhaitez-vous envoyer à {$body} ?",$from);
             case 'choose_country':
                 if ($body== 'exit'){
                     $session->is_delete=true;
@@ -82,7 +83,7 @@ class WhatsAppController extends Controller
                 $session->country_code = $body;
                 $session->step = 'awaiting_amount_prefunding';
                 $session->save();
-                return $this->reply("Quel montant souhaitez-vous ajouter à votre cmopte ?",$from);
+                return $this->reply("Quel montant souhaitez-vous ajouter à votre compte ?",$from);
             case 'awaiting_amount_prefunding':
                 if (!is_numeric($body)) {
                     return $this->reply("Montant invalide.",$from);
@@ -90,10 +91,20 @@ class WhatsAppController extends Controller
                 $session->amount = $body;
                 $session->step = 'choose_operator_prefunding';
                 $session->save();
-                return $this->reply("Choisissez l'operateur de la transaction :\n- Orange\n- MTN\".",$from);
+                $country=Country::query()->firstWhere(['codeIso2'=>$session->country_code]);
+                $geteways=Gateway::query()->where(['method' => $country->code_gateway_mobil, 'country_id' => $country->id])->get(['id','name']);
+                $msg="Choisissez l'operateur de la transaction :\n";
+                foreach ($geteways as $index => $element) {
+                    if ($index > 0) {
+                        $msg .= "\n"; // Ajoute une virgule et un espace entre les éléments
+                    }
+                    $msg .= $element->id.'-'.$element->name;
+                }
+                return $this->reply($msg,$from);
             case 'choose_operator_prefunding':
-                if (!in_array(strtolower($body), ['orange', 'mtn'])) {
-                    return $this->reply("Choix invalide. Tapez Orange ou MTN.",$from);
+                $geteways=Gateway::query()->find($body);
+                if (is_null($geteways)) {
+                    return $this->reply("Choix invalide. Tapez de nouveau.",$from);
                 }else{
                     $session->gateway = ucfirst(strtolower($body));
                     $session->step = 'password_prefunding';
@@ -102,11 +113,15 @@ class WhatsAppController extends Controller
                     return $this->reply("Entrez votre mot de passe.",$from);
                 }
             case 'password_prefunding':
+                if ($body== 'exit'){
+                    $session->is_delete=true;
+                    $session->save();
+                }
                 $customer=Customer::query()->firstWhere(['phone'=>$phone_number]);
                 if (is_null($customer)){
                     $session->is_delete=true;
                     $session->save();
-                    return $this->reply("compte invalide. Aller au menu",$from);
+                    return $this->reply("Compte invalide. Allez au menu",$from);
                 }
                 if (!Auth::attempt(['email' => $customer->user->email, 'password' => $body])) {
                     return $this->reply("Mot de passe invalide. Tapez de nouveau.",$from);
@@ -114,13 +129,14 @@ class WhatsAppController extends Controller
                     $session->beneficiary = $customer->id;
                     $session->step = 'awaiting_otp_prefunding';
                     $session->save();
-                    return $this->reply("Un OTP vous a été envoyé. Veuillez le saisir pour confirmer la recharge.",$from);
+                    return $this->reply("La transaction a été initieé vers ce Numero. Veuillez confirmer la recharge.",$from);
                 }
             case 'awaiting_otp_prefunding':
-                $msg = "Recharge de {$session->amount} FCFA via {$session->gateway} effectué.";
+                $gateway=Gateway::query()->find($session->gateway);
+                $msg = "Recharge de {$session->amount} FCFA via {$gateway->name} effectué.";
                 $session->is_delete=true;
                 $session->save();
-                return $this->reply($msg);
+                return $this->reply($msg,$from);
             case 'awaiting_amount':
                 if (!is_numeric($body)) {
                     return $this->reply("Montant invalide.",$from);
@@ -146,7 +162,7 @@ class WhatsAppController extends Controller
             default:
                 $session->step = 'start';
                 $session->save();
-                return $this->reply("Redémarrage du menu...",$from);
+                return $this->reply("Redémarrage du menu... 💸\nEntrez une touche pour recommencer",$from);
         }
     }
 
@@ -154,7 +170,7 @@ class WhatsAppController extends Controller
     {
        /* return response("<Response><Message>{$msg}</Message></Response>", 200)
             ->header('Content-Type', 'text/xml');*/
-        //return response($msg, 200);
+       // return response($msg, 200);
         $this->sendMessage($to,$msg);
     }
 

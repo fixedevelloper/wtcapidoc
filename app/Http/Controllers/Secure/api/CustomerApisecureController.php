@@ -16,7 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-class CustomerApiController extends Controller
+class CustomerApisecureController extends Controller
 {
     public function getSenders(Request $request)
     {
@@ -159,33 +159,51 @@ class CustomerApiController extends Controller
 
             ];
         }
-        $message = 'senders get successful';
+        $message = 'countries get successful';
+        return Helpers::success($countries_, $message);
+    }
+    public function getNetworks(Request $request)
+    {
+        $customer = $request->customer;
+        if (!isset($request->codeiso)) {
+            return Helpers::error('code is missing');
+        }
+        $country = Country::query()->firstWhere(['codeIso2' => $request->codeiso]);
+        if (is_null($country)) {
+            return Helpers::error('country is missing');
+        }
+        $countries_ = [];
+        $countries = Gateway::query()->where(['method' => $country->code_gateway_mobil, 'country_id' => $country->id])->get();
+        foreach ($countries as $item) {
+            $countries_[] = [
+                'name' => $item->name,
+                'country' => $country->name,
+            ];
+        }
+        $message = 'networks get successful';
         return Helpers::success($countries_, $message);
     }
     public function getBanks(Request $request)
     {
         $customer = $request->customer;
-        if (!isset($request->codeiso2)) {
+        if (!isset($request->codeiso)) {
             return Helpers::error('code is missing');
         }
-        $country=Country::query()->firstWhere(['codeIso2'=>$request->codeiso2]);
+        $country = Country::query()->firstWhere(['codeIso2' => $request->codeiso]);
         if (is_null($country)) {
             return Helpers::error('country is missing');
         }
-        $countries_=[];
-        $countries = Gateway::query()->where(['country_id'=>$country->id])->get();
-
-        foreach ($countries as $item){
-            $countries_[]=[
+        $countries_ = [];
+        $countries = Gateway::query()->where(['method' => $country->code_gateway_bank, 'country_id' => $country->id])->get();
+        foreach ($countries as $item) {
+            $countries_[] = [
                 'name' => $item->name,
                 'country' => $country->name,
-
             ];
         }
         $message = 'banks get successful';
         return Helpers::success($countries_, $message);
     }
-
     public function postSenders(Request $request)
     {
         $customer = $request->customer;
@@ -213,13 +231,17 @@ class CustomerApiController extends Controller
             }
             return Helpers::error($err);
         }
-        $country=Country::query()->firstWhere(['codeIso2'=>$request->country_code]);
-        if (is_null($country)){
+        $country = Country::query()->firstWhere(['codeIso2' => $request->country_code]);
+        if (is_null($country)) {
             return Helpers::error('country not found');
         }
-        $city=City::query()->firstWhere(['name'=>$request->city,'country_id'=>$country->id]);
-        if (is_null($city)){
+        $city = City::query()->firstWhere(['name' => $request->city, 'country_id' => $country->id]);
+        if (is_null($city)) {
             return Helpers::error('city not found');
+        }
+        $sender_email = Sender::query()->firstWhere(['email' => $request->email]);
+        if (!is_null($sender_email)) {
+            return Helpers::error('Duplicate entry for sender :' . $request->email);
         }
         DB::beginTransaction();
         $body = [
@@ -237,16 +259,34 @@ class CustomerApiController extends Controller
             'expired_document' => $request->expired_document,
             'code' => Helper::generatenumber(),
             'address' => $request->address,
-            'city' => $request->numCity,
+            'city' => $request->city,
             'customer_id' => $customer->id
 
         ];
-        $sender = new Sender($body);
-        $sender->save($body);
+        try {
+            $sender = new Sender($body);
+            $sender->save($body);
+        } catch (\Exception $exception) {
+            return Helpers::error($exception->getMessage());
+        }
+
         DB::commit();
-        return Helpers::success([], 'transaction created successful');
+        return Helpers::success([
+            'first_name' => $sender->first_name,
+            'last_name' => $sender->last_name,
+            'email' => $sender->email,
+            'phone' => $sender->phone,
+            'code' => $sender->code,
+            'occupation' => $sender->occupation,
+            'civility' => $sender->civility,
+            'gender' => $sender->gender,
+            'document_type' => $sender->identification_document,
+            'document_expired' => $sender->expired_document,
+            'document_number' => $sender->num_document
+        ], 'sender created successful');
     }
-    public function createBeneficiaries(Request $request)
+
+    public function postBeneficiaries(Request $request)
     {
         $customer = $request->customer;
 
@@ -273,13 +313,17 @@ class CustomerApiController extends Controller
             }
             return Helpers::error($err);
         }
-        $country=Country::query()->firstWhere(['codeIso2'=>$request->country_code]);
-        if (is_null($country)){
+        $country = Country::query()->firstWhere(['codeIso2' => $request->country_code]);
+        if (is_null($country)) {
             return Helpers::error('country not found');
         }
-        $city=City::query()->firstWhere(['name'=>$request->city,'country_id'=>$country->id]);
-        if (is_null($city)){
+        $city = City::query()->firstWhere(['name' => $request->city, 'country_id' => $country->id]);
+        if (is_null($city)) {
             return Helpers::error('city not found');
+        }
+        $beneficiary = Beneficiary::query()->firstWhere(['email' => $request->email]);
+        if (!is_null($beneficiary)) {
+            return Helpers::error('email address is already used for a recipient');
         }
         DB::beginTransaction();
         $body = [
@@ -297,13 +341,26 @@ class CustomerApiController extends Controller
             'expired_document' => $request->expired_document,
             'code' => Helper::generatenumber(),
             'address' => $request->address,
-            'city' => $request->numCity,
+            'city' => $request->city,
             'customer_id' => $customer->id
 
         ];
-        $sender = new Sender($body);
-        $sender->save($body);
+        $item = new Beneficiary($body);
+        $item->save($body);
         DB::commit();
-        return Helpers::success([], 'transaction created successful');
+        return Helpers::success([
+            'first_name' => $item->first_name,
+            'last_name' => $item->last_name,
+            'email' => $item->email,
+            'phone' => $item->phone,
+            'code' => $item->code,
+            'occupation' => $item->occupation,
+            'civility' => $item->civility,
+            'gender' => $item->gender,
+            'document_type' => $item->identification_document,
+            'document_expired' => $item->expired_document,
+            'document_number' => $item->num_document
+
+        ], 'beneficiary created successful');
     }
 }
