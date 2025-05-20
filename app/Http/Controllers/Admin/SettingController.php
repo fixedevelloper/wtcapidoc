@@ -42,4 +42,16 @@ class SettingController extends Controller
         return redirect()->route('admin.whitelistIp');
 
     }
+    public function bannedAccount(Request $request,$id)
+    {
+        $customer=Customer::query()->find($id);
+        if ($customer->activated){
+            $customer->activated=false;
+        }else{
+            $customer->activated=true;
+        }
+        $customer->save();
+        return redirect()->route('admin.customers');
+
+    }
 }

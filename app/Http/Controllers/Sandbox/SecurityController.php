@@ -50,10 +50,7 @@ class SecurityController extends Controller
             if (Auth::attempt(['email' => $request->email, 'password' => $request->password], $request->remember)) {
                 notify()->success("Authentication successful", 'Request success', ["Success loggedIn"]);
                 $request->session()->regenerate();
-
                     return redirect()->route('sandbox.dashboard');
-
-
             }
             notify()->error("User not found or User not activate", 'Request failed', ["Failed loggedIn"]);
             return redirect()->route('sandbox.login');

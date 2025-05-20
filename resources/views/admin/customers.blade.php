@@ -100,6 +100,7 @@
                             <div class="nk-tb-col tb-col-xxl"><span class="sub-text">Company</span></div>
                             <div class="nk-tb-col"><span class="sub-text">Balance</span></div>
                             <div class="nk-tb-col"><span class="sub-text">Balance sandbox</span></div>
+                            <div class="nk-tb-col"><span class="sub-text">Status</span></div>
                             <div class="nk-tb-col nk-tb-col-tools text-end">
                             </div>
                         </div>
@@ -139,6 +140,9 @@
                             <div class="nk-tb-col">
                                 <span>{{number_format($item->balance_sandbox,2)}} XAF</span>
                             </div>
+                            <div class="nk-tb-col tb-col-lg">
+                                <span class="tb-status @if($item->activated)text-success @else text-danger @endif">@if($item->activated) Active  @else Suspended @endif</span>
+                            </div>
                             <div class="nk-tb-col nk-tb-col-tools">
                                 <ul class="nk-tb-actions gx-2">
                                     <li>
@@ -149,7 +153,7 @@
                                                     <li><a rel="modal:open" href="{{route('admin.customer_detail',['code'=>$item->id])}}"><em class="icon ni ni-eye"></em><span>View Details</span></a></li>
                                                     <li><a href="{{route('admin.addrates',['id'=>$item->id])}}"><em class="icon ni ni-repeat"></em><span>Rates</span></a></li>
                                                     <li class="divider"></li>
-                                                    <li><a href="#"><em class="icon ni ni-na"></em><span>Suspend User</span></a></li>
+                                                    <li><a href="{{route('admin.bannedAccount',['id'=>$item->id])}}"><em class="icon ni ni-na"></em><span>Suspend User</span></a></li>
                                                 </ul>
                                             </div>
                                         </div>
