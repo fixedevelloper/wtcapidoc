@@ -70,6 +70,7 @@ class CreateGateway extends Command
                                 $gateway->country_id = $country->id;
                                 $gateway->save();
                             }
+                            $gateway->code = $datum->BankCode;
                             $gateway->payer_code=$code->PayerCode;
                             $gateway->save();
                         }
