@@ -54,6 +54,7 @@ class CreateGateway extends Command
             if ($resp->status==2000){
                 $payers = $resp->transaction;
                 if (count($payers) > 0) {
+                    logger($payers);
                     $code = $payers[0];
                     $banks = $this->waceService->getBankWacePay($country->codeIso2, $code->PayerCode);
                     logger(json_encode($banks));
