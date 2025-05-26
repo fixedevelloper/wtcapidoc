@@ -56,23 +56,26 @@ class CreateGateway extends Command
                 if (count($payers) > 0) {
                     logger($payers);
                     $code = $payers[0];
-                    $banks = $this->waceService->getBankWacePay($country->codeIso2, $code->PayerCode);
-                    logger(json_encode($banks));
-                    foreach ($banks->data as $datum) {
-                        $gateway = Gateway::query()->firstWhere(['name' => $datum->BankName, 'country_id' => $country->id]);
-                        if (is_null($gateway)) {
-                            $gateway = new Gateway();
-                            $gateway->name = $datum->BankName;
-                            $gateway->code = $datum->BankCode;
-                            $gateway->method = 'WACEPAY';
-                            $gateway->type = 'BANK';
-                            $gateway->country_id = $country->id;
+                    if (!is_null($code->PayerCode)){
+                        $banks = $this->waceService->getBankWacePay($country->codeIso2, $code->PayerCode);
+                        logger(json_encode($banks));
+                        foreach ($banks->data as $datum) {
+                            $gateway = Gateway::query()->firstWhere(['name' => $datum->BankName, 'country_id' => $country->id]);
+                            if (is_null($gateway)) {
+                                $gateway = new Gateway();
+                                $gateway->name = $datum->BankName;
+                                $gateway->code = $datum->BankCode;
+                                $gateway->method = 'WACEPAY';
+                                $gateway->type = 'BANK';
+                                $gateway->country_id = $country->id;
+                                $gateway->save();
+                            }
+                            $gateway->payer_code=$code->PayerCode;
                             $gateway->save();
                         }
-                        $gateway->payer_code=$code->PayerCode;
-                        $gateway->save();
+                        $this->createCity($code->PayerCode,$country->id);
                     }
-                    $this->createCity($code->PayerCode,$country->id);
+
                 }
             }
 
