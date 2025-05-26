@@ -56,6 +56,7 @@ class CreateGateway extends Command
                 if (count($payers) > 0) {
                     $code = $payers[0];
                     $banks = $this->waceService->getBankWacePay($country->codeIso2, $code->PayerCode);
+                    logger($banks);
                     foreach ($banks->data as $datum) {
                         $gateway = Gateway::query()->firstWhere(['name' => $datum->BankName, 'country_id' => $country->id]);
                         if (is_null($gateway)) {
