@@ -156,3 +156,30 @@
         </div>
     </div>
 @endsection
+@push('js')
+    <script type="text/javascript">
+        $(function () {
+            $('.js-select2').on("select2:select", function (e) { log("select2:select", e); });
+            $('#country').on('change', function(e) {
+                $.ajax({
+                    url: configs.routes.get_ajax_cities,
+                    type: "GET",
+                    dataType: "JSON",
+                    data: {
+                        'country_id': $('#country option:selected').data('id')
+                    },
+                    success: function (data) {
+                        $('#city-select').html('')
+                        $('#city-select').append('<option>Choose city</option>')
+                        $.each(data.data, function (index, item) {
+                            $('#city-select').append('<option value="'+item["name"]+'">'+item["name"]+'</option>')
+                        })
+                    },
+                    error: function (err) {
+                        alert("An error ocurred while loading data ...");
+                    }
+                });
+            })
+        })
+    </script>
+@endpush
